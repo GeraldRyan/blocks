@@ -9,6 +9,6 @@
     </head>
     <body>
         <h1>Hello blockchain world!</h1>
-        <p>This is the homepage!</p>
+        <p>This is the future site of beancoin!</p>
     </body>
 </html>
