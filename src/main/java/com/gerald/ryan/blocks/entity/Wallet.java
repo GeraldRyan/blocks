@@ -18,6 +18,7 @@ import java.security.SignatureException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.ECGenParameterSpec;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Set;
@@ -31,12 +32,7 @@ import com.google.gson.Gson;
 
 /**
  * An individual wallet for a miner. Keeps track of miner's balance. Allows
- * miner to authorize Transactions. Will be stored in a user db as an embedded
- * object, accessed as a session model attribute upon login. user can create one
- * wallet at any time but is not required to do so in which case his field will
- * be null
- * 
- * Open to expansion of greater possibilities but this is a great first step.
+ * miner to authorize Transactions.
  * 
  * NOTE- HAVING A SETTER FOR ADDRESS FIELD WILL BREAK THIS BEAN at present
  * related to instantiating new transactions with request param page.
@@ -45,7 +41,7 @@ import com.google.gson.Gson;
  *
  * 
  * 
- * @author User
+ * @author Gerald Ryan
  *
  */
 @Embeddable
@@ -151,9 +147,6 @@ public class Wallet {
 		return sig.verify(signatureBytes);
 	}
 
-	/*
-	 * Verifies without having to convert data to byte array on client side
-	 */
 	public static boolean verifySignature(byte[] signatureBytes, String[] dataStr, PublicKey publickey)
 			throws SignatureException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException,
 			IOException {
@@ -164,9 +157,6 @@ public class Wallet {
 		return sig.verify(signatureBytes);
 	}
 
-	/**
-	 * Verifies without having to convert data to byte array on client side
-	 */
 	public static boolean verifySignature(byte[] signatureBytes, Object obj, PublicKey publickey)
 			throws SignatureException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException,
 			IOException {
@@ -184,7 +174,6 @@ public class Wallet {
 		System.out.println(wallet1);
 		System.out.println("_________________-");
 		byte[] signatureBytes = wallet1.sign("CATSMEOW".getBytes("UTF-8"));
-//		System.out.println("Signature:" + new org.apache.commons.codec.binary.Base64().encodeToString(signatureBytes));
 		System.out.println("Was it signed properly? Expect true. Drumroll... -> "
 				+ wallet1.verifySignature(signatureBytes, "CATSMEOW".getBytes("UTF-8"), wallet1.getPublickey()));
 	}
@@ -194,24 +183,9 @@ public class Wallet {
 		Wallet.testSign();
 	}
 
-	public static void mainOff(String[] args)
-			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
-		Wallet wallet = Wallet.createWallet();
-		System.out.println(wallet.getBalance());
-		System.out.println(wallet.getAddress());
-		System.out.println(wallet.getPublickey());
-		Set<String> algorithms = Security.getAlgorithms("Signature");
-//		Security.get
-		algorithms.forEach(a -> System.out.println(a.toString()));
-		System.out.println("------------------");
-
-		System.out.println(Security.getProviders("AlgorithmParameters.EC")[0].getService("AlgorithmParameters", "EC")
-				.getAttribute("SupportedCurves"));
-	}
-
 	/**
-	 * Restores a public key object from either a string or a byte[] as transmitted
-	 * over the wire
+	 * Restores a public key object in your chosen language from either a Base64
+	 * String or a byte[] as received over the wire (contains X.509 standard)
 	 * 
 	 * @param pk
 	 * @return
@@ -229,8 +203,8 @@ public class Wallet {
 	public static PublicKey restorePK(String pk)
 			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException {
 		KeyFactory keyFactory = KeyFactory.getInstance("EC", "SunEC");
-		PublicKey pkRestored = keyFactory
-				.generatePublic(new X509EncodedKeySpec(pk.getBytes(StandardCharsets.UTF_8), "EC"));
+		KeySpec ks = new X509EncodedKeySpec(pk.getBytes(StandardCharsets.UTF_8), "EC");
+		PublicKey pkRestored = keyFactory.generatePublic(ks);
 		return pkRestored;
 	}
 
@@ -260,21 +234,6 @@ public class Wallet {
 	}
 
 	public PublicKey getPublickey() {
-
-//		System.err.println("GET PUBLIC KEY CALLED");
-//		System.err.println("GET PUBLIC KEY CALLED");
-//		System.err.println("GET PUBLIC KEY CALLED");
-//		System.err.println("GET PUBLIC KEY CALLED");
-//		System.out.println(publickey.getEncoded());
-//		System.out.println(Base64.getEncoder().encodeToString((publickey.getEncoded())));
-//		System.out.println(publickey.getEncoded());
-//		System.out.println(Base64.getEncoder().encodeToString((publickey.getEncoded())));
-//		System.out.println(publickey.getEncoded());
-//		System.out.println(Base64.getEncoder().encodeToString((publickey.getEncoded())));
-//		System.out.println(publickey.getAlgorithm());
-//		System.out.println(publickey.getEncoded());
-//		System.out.println(Base64.getEncoder().encodeToString(("Mary had a little lamb".getBytes())));
-
 		return publickey;
 	}
 
