@@ -14,7 +14,7 @@
 	<br>
 
 
-	<form action="/wallet/transaction">
+	<form action="./transaction">
 		<h1>Not broken yet</h1>
 		Address to send money to <input type="text" name="address"><br>
 		<br> Amount to send<input type="text" name="amount"><br>
