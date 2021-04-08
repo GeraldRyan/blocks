@@ -29,8 +29,6 @@ import javax.persistence.Entity;
 import com.gerald.ryan.blocks.utilities.StringUtils;
 import com.google.gson.Gson;
 
-
-
 /**
  * An individual wallet for a miner. Keeps track of miner's balance. Allows
  * miner to authorize Transactions. Will be stored in a user db as an embedded
@@ -262,6 +260,21 @@ public class Wallet {
 	}
 
 	public PublicKey getPublickey() {
+
+//		System.err.println("GET PUBLIC KEY CALLED");
+//		System.err.println("GET PUBLIC KEY CALLED");
+//		System.err.println("GET PUBLIC KEY CALLED");
+//		System.err.println("GET PUBLIC KEY CALLED");
+//		System.out.println(publickey.getEncoded());
+//		System.out.println(Base64.getEncoder().encodeToString((publickey.getEncoded())));
+//		System.out.println(publickey.getEncoded());
+//		System.out.println(Base64.getEncoder().encodeToString((publickey.getEncoded())));
+//		System.out.println(publickey.getEncoded());
+//		System.out.println(Base64.getEncoder().encodeToString((publickey.getEncoded())));
+//		System.out.println(publickey.getAlgorithm());
+//		System.out.println(publickey.getEncoded());
+//		System.out.println(Base64.getEncoder().encodeToString(("Mary had a little lamb".getBytes())));
+
 		return publickey;
 	}
 
