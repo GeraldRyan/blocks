@@ -26,7 +26,7 @@ import com.gerald.ryan.blocks.pubsub.PubNubApp;
 import com.pubnub.api.PubNubException;
 
 @Controller
-@SessionAttributes({ "blockchain" })
+@SessionAttributes({ "blockchain", "minedblock" })
 @RequestMapping("blockchain")
 public class BlockchainController {
 
@@ -69,7 +69,8 @@ public class BlockchainController {
 		return ((Blockchain) model.getAttribute("blockchain")).toJSONtheChain();
 	}
 
-	@GetMapping("/mine")
+	@RequestMapping(value = "mine", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
 	public String getMine(@ModelAttribute("blockchain") Blockchain blockchain, Model model)
 			throws NoSuchAlgorithmException, PubNubException, InterruptedException {
 
@@ -78,7 +79,8 @@ public class BlockchainController {
 		Block new_block = blockchainApp.addBlockService("beancoin", stubbedDataV);
 		model.addAttribute("foo", "Bar");
 		pnapp.broadcastBlock(new_block);
-		return "blockchain/mine";
+		model.addAttribute("minedblock", new_block);
+		return new_block.toJSONtheBlock();
 	}
 
 	public void refreshChain(Model model) {

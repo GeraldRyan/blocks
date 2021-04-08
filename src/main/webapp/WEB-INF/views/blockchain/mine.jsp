@@ -12,18 +12,20 @@
 </head>
 <body>
 
-	<h1>Welcome to our Node</h1>
 	<h2>The dwarves are hard at work mining your Block</h2>
 	<h3>
-		<%=request.getAttribute("foo")%>
 		<%
 		Blockchain bc = (Blockchain) request.getAttribute("blockchain");
+		Block mined_block = (Block) request.getAttribute("minedblock");
 		Block last_block = bc.getLastBlock();
+		Block second_last_block = bc.getNthBlock(-1);
 		%>
-		<%=bc.toJSONtheChain()%>
+		<!-- 	Really this is second to last -->
+		<%-- 		<%=bc.getLastBlock().toJSONtheBlock()%> --%>
+
 	</h3>
 
-	<h4>Most recent block</h4>
-	<%=bc.getLastBlock().toJSONtheBlock()%>
+	<h4>Newly Mined Block</h4>
+	<%=mined_block.toJSONtheBlock()%>
 </body>
 </html>

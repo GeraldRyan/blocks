@@ -31,8 +31,6 @@ import com.gerald.ryan.blocks.exceptions.ChainTooShortException;
 import com.gerald.ryan.blocks.exceptions.GenesisBlockInvalidException;
 import com.google.gson.Gson;
 
-
-
 /**
  * 
  * @author Gerald Ryan Blockchain class of blockchain app. Blockchain class.
@@ -51,7 +49,7 @@ public class Blockchain {
 	long date_created;
 	long date_last_modified;
 	int length_of_chain;
-	@OneToMany(targetEntity = Block.class, cascade = CascadeType.ALL, orphanRemoval=true)
+	@OneToMany(targetEntity = Block.class, cascade = CascadeType.ALL, orphanRemoval = true)
 //	@JoinTable(name = "blocks")
 	List<Block> chain; // The chain itself
 
@@ -66,7 +64,7 @@ public class Blockchain {
 		this.chain.add(Block.genesis_block());
 		this.length_of_chain = 1;
 	}
-	
+
 	/**
 	 * Zero arg constructor for java bean
 	 */
@@ -101,7 +99,8 @@ public class Blockchain {
 
 	/**
 	 * Adds block to blockchain by calling block class's static mine_block method.
-	 * This ensures block is valid in itself, and is attached to end of local chain, ensuring chain is valid.
+	 * This ensures block is valid in itself, and is attached to end of local chain,
+	 * ensuring chain is valid.
 	 * 
 	 * @param data
 	 * @return
@@ -117,7 +116,8 @@ public class Blockchain {
 
 	/**
 	 * Adds block to blockchain by calling block class's static mine_block method.
-	 * This ensures block is valid in itself, and is attached to end of local chain, ensuring chain is valid.
+	 * This ensures block is valid in itself, and is attached to end of local chain,
+	 * ensuring chain is valid.
 	 * 
 	 * @param data
 	 * @return
@@ -164,17 +164,20 @@ public class Blockchain {
 			System.out.println(e);
 		}
 	}
-	
+
 	/**
 	 * 
-	 * Sorts the arraylist by timestamp, putting it (back) in the order it should be in and naturally is in,
-	 * but sometimes network requets or database pulls with JPA can break the order. This fixes humpty dumpty where necessary.
+	 * Sorts the arraylist by timestamp, putting it (back) in the order it should be
+	 * in and naturally is in, but sometimes network requets or database pulls with
+	 * JPA can break the order. This fixes humpty dumpty where necessary.
 	 * 
-	 * As such, this is not an ideal method. It's a fixer method that shouldn't be needed, though if code gets fixed
-	 * Might still be worth keeping around in the toolbelt. 
+	 * As such, this is not an ideal method. It's a fixer method that shouldn't be
+	 * needed, though if code gets fixed Might still be worth keeping around in the
+	 * toolbelt.
 	 * 
-	 * If ArrayList<Block> is not in order, it's not a real blockchain, and even though you have the set of blocks in the chain
-	 * with enough info to make it recreatable, in the current form, replace_chain won't work
+	 * If ArrayList<Block> is not in order, it's not a real blockchain, and even
+	 * though you have the set of blocks in the chain with enough info to make it
+	 * recreatable, in the current form, replace_chain won't work
 	 */
 //	public static void sort_arrayList(Blockchain blockchain) {
 //		blockchain.getChain().sort((b1, b2) -> (int)(b1.getTimestamp() - b2.getTimestamp()));
@@ -231,17 +234,21 @@ public class Blockchain {
 //		}
 	}
 
-	/** 
-	 * This is a checker method that checks whether the chain will replace, in case it is required for lifecycle actions
-	 * In practice, this is used for flushing the databse's join table for JPA in the @OneToMany object due to fact no way was yet found
-	 * to update the chain by strict replacement [errors such as duplicate key are found if not flushed]
+	/**
+	 * This is a checker method that checks whether the chain will replace, in case
+	 * it is required for lifecycle actions In practice, this is used for flushing
+	 * the databse's join table for JPA in the @OneToMany object due to fact no way
+	 * was yet found to update the chain by strict replacement [errors such as
+	 * duplicate key are found if not flushed]
+	 * 
 	 * @param other_chain
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 * @throws GenesisBlockInvalidException
 	 * @throws BlocksInChainInvalidException
 	 */
-	public boolean willReplace(List<Block> other_chain) throws NoSuchAlgorithmException, GenesisBlockInvalidException, BlocksInChainInvalidException {
+	public boolean willReplace(List<Block> other_chain)
+			throws NoSuchAlgorithmException, GenesisBlockInvalidException, BlocksInChainInvalidException {
 		System.out.println(other_chain.size() + " " + this.chain.size());
 		if (other_chain.size() <= this.chain.size()) {
 			return false;
@@ -253,10 +260,11 @@ public class Blockchain {
 	}
 
 	/**
-	 * Setter method for chain of blockchain instance.
-	 * Probably should not exist. Probably a major blockchain security breech and definitely should not be necessary, but..
-	 * has been necessary for project for refreshing instance of blockchain in memory in Spring MVC controller for display in page.
-	 * If new way is found to sync, can maybe refactor this out. 
+	 * Setter method for chain of blockchain instance. Probably should not exist.
+	 * Probably a major blockchain security breech and definitely should not be
+	 * necessary, but.. has been necessary for project for refreshing instance of
+	 * blockchain in memory in Spring MVC controller for display in page. If new way
+	 * is found to sync, can maybe refactor this out.
 	 */
 	public void setChain(List<Block> chain) {
 		this.chain = chain;
@@ -289,7 +297,6 @@ public class Blockchain {
 		return true;
 	}
 
-
 	/**
 	 * Validate the incoming chain. Enforce the following rules: - the chain must
 	 * start with the genesis block - blocks must be formatted correctly
@@ -319,6 +326,7 @@ public class Blockchain {
 
 	/**
 	 * returns headerless console customized string output
+	 * 
 	 * @return
 	 */
 	public String toStringConsole() {
@@ -326,9 +334,9 @@ public class Blockchain {
 				length_of_chain, "length", "content");
 	}
 
-	
 	/**
 	 * Returns blockchain's metadata information as a string
+	 * 
 	 * @return
 	 */
 	public String toStringMeta() {
@@ -362,6 +370,22 @@ public class Blockchain {
 	 */
 	public Block getLastBlock() {
 		return this.getChain().get(getLength_of_chain() - 1);
+	}
+
+	public Block getNthBlock(int n) {
+		int last_index = this.getLength_of_chain() - 1;
+		if (n > last_index) {
+			return this.getChain().get(last_index);
+		} else if (n < 0) { // working backwards from end
+			if (n * -1 > last_index) {
+				return this.getChain().get(0);
+			} else {
+				return this.getChain().get(getLength_of_chain() + n);
+			}
+
+		} else {
+			return this.getChain().get(n);
+		}
 	}
 
 	public int getId() {
