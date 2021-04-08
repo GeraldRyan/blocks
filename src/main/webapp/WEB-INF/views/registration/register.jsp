@@ -41,7 +41,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td><a href="../">Home</a></td>
+				<td><a href="./">Home</a></td>
 			</tr>
 
 		</table>

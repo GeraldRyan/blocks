@@ -32,7 +32,7 @@
 			<tr></tr>
 			<tr>
 				<td></td>
-				<td><a href="/">Home</a></td>
+				<td><a href="./">Home</a></td>
 			</tr>
 		</table>
 	</form:form>

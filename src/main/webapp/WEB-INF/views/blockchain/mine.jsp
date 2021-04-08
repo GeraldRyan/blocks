@@ -25,7 +25,5 @@
 
 	<h4>Most recent block</h4>
 	<%=bc.getLastBlock().toJSONtheBlock()%>
-
-	<h3>${afb}</h3>
 </body>
 </html>
