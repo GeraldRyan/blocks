@@ -3,8 +3,12 @@
 	xmlns="http://xmlns.jcp.org/xml/ns/persistence"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
-	<persistence-unit name="blocks">
+<!-- 	<persistence-unit name="blocks">
 		<class>com.gerald.ryan.blocks.entity.Block</class>
+		<class>com.gerald.ryan.blocks.entity.Blockchain</class>
+		<class>com.gerald.ryan.blocks.entity.Transaction</class>
+		<class>com.gerald.ryan.blocks.entity.Wallet</class>
+		<class>com.gerald.ryan.blocks.entity.User</class>
 		<properties>
 			<property name="javax.persistence.jdbc.url"
 				value="jdbc:mysql://localhost:3306/blockchain?serverTimezone=UTC" />
@@ -19,5 +23,30 @@
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.format_sql" value="true" />
 		</properties>
+	</persistence-unit> -->
+	
+		<persistence-unit name="blocks">
+		<class>com.gerald.ryan.blocks.entity.Block</class>
+		<class>com.gerald.ryan.blocks.entity.Blockchain</class>
+		<class>com.gerald.ryan.blocks.entity.Transaction</class>
+		<class>com.gerald.ryan.blocks.entity.Wallet</class>
+		<class>com.gerald.ryan.blocks.entity.User</class>
+		<properties>
+			<property name="javax.persistence.jdbc.url"
+				value="jdbc:mysql://u3r5w4ayhxzdrw87.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/f5wvp1u840cyi24e?serverTimezone=UTC" />
+			<property name="javax.persistence.jdbc.user" value="e9hhcvg1kn3ik6cr" />
+			<property name="javax.persistence.jdbc.password"
+				value="hz4iiet6xn39gp4f" />
+			<property name="javax.persistence.jdbc.driver"
+				value="com.mysql.jdbc.Driver" />
+			<property
+				name="javax.persistence.schema-generation.database.action"
+				value="create" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true" />
+		</properties>
 	</persistence-unit>
+	
+	
+	
 </persistence>
