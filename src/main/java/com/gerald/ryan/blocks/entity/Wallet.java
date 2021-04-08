@@ -196,14 +196,17 @@ public class Wallet {
 	public static PublicKey restorePK(byte[] pk)
 			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException {
 		KeyFactory keyFactory = KeyFactory.getInstance("EC", "SunEC");
-		PublicKey pkRestored = keyFactory.generatePublic(new X509EncodedKeySpec(pk, "EC"));
+//		KeySpec ks = new X509EncodedKeySpec(pk, "EC");
+		KeySpec ks = new X509EncodedKeySpec(pk);
+		PublicKey pkRestored = keyFactory.generatePublic(ks);
 		return pkRestored;
 	}
 
 	public static PublicKey restorePK(String pk)
 			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException {
 		KeyFactory keyFactory = KeyFactory.getInstance("EC", "SunEC");
-		KeySpec ks = new X509EncodedKeySpec(pk.getBytes(StandardCharsets.UTF_8), "EC");
+//		KeySpec ks = new X509EncodedKeySpec(pk.getBytes(StandardCharsets.UTF_8), "EC");
+		KeySpec ks = new X509EncodedKeySpec(pk.getBytes(StandardCharsets.UTF_8));
 		PublicKey pkRestored = keyFactory.generatePublic(ks);
 		return pkRestored;
 	}
