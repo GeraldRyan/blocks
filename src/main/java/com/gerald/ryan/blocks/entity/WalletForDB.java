@@ -1,7 +1,7 @@
 package com.gerald.ryan.blocks.entity;
 
 import javax.persistence.Embeddable;
-
+// Wallet strategy is crap. Change this completely before presentation to change price
 @Embeddable
 public class WalletForDB {
 
