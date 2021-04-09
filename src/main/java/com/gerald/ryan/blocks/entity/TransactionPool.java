@@ -96,6 +96,9 @@ public class TransactionPool {
 	 * @return
 	 */
 	public String getMinableTransactionDataString() {
+		if (this.transactionMap.size() == 0) {
+			return null;
+		}
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");
 //		String transactionData = "[";

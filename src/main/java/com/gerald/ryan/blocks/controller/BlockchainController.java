@@ -83,18 +83,18 @@ public class BlockchainController {
 	public String getMine(@ModelAttribute("blockchain") Blockchain blockchain, Model model)
 			throws NoSuchAlgorithmException, PubNubException, InterruptedException {
 		pool = tService.getAllTransactionsAsTransactionPoolService(); // This is maybe expensive. Review for refactor
+		if (pool.getMinableTransactionDataString() == null) {
+			return "No data to mine. Tell your friends";
+		}
 		String transactionData = "MAIN INSTANCE STUBBED DATA"; // overruled -->>
 		transactionData = pool.getMinableTransactionDataString();
 		List<Transaction> tlist = tService.getAllTransactionsAsTransactionList();
-
-		System.err.println("TRANSACTION DATA Blockchain controller 84");
-		System.err.println("TRANSACTION DATA");
-		System.out.println(transactionData.toString());
-		System.err.println("TRANSACTION DATA");
-		System.err.println("TRANSACTION DATA");
 		Block new_block = blockchainApp.addBlockService("beancoin", transactionData);
 //		pnapp.broadcastBlock(new_block); TURN BACK ON LATER
 		model.addAttribute("minedblock", new_block);
+		blockchain = blockchainApp.getBlockchainService("beancoin"); // refresh. it's all about refreshing and syncing.
+																		// sync with db
+		model.addAttribute("blockchain", blockchain); // and refresh in memeory.
 		pool.refreshBlockchainTransactionPool(blockchain);
 //		pool = tService.getAllTransactionsAsTransactionPoolService(); // After potentially deleting, refresh, but should be necessary only on page load (lazy concept)
 		return new_block.webworthyJson(tlist); // This pollutes with escape chars \ because string
