@@ -51,6 +51,8 @@ public class SyncToNetwork {
 			BlocksInChainInvalidException, IllegalStateException, ClientProtocolException, IOException {
 		ArrayList<Block> chain;
 		CloseableHttpClient httpclient = HttpClients.createDefault();
+		
+		// DOES THIS BREAK HEROKU? 
 		HttpGet httpGet = new HttpGet("http://localhost:8080/CaseStudy/blockchain");
 		CloseableHttpResponse response;
 		String response_string = "";

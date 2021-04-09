@@ -142,6 +142,7 @@ public class PubNubSubCallback extends com.pubnub.api.callbacks.SubscribeCallbac
 				System.err.println("DID NOT REPLACE CHAIN. CHAIN TOO SHORT");
 			} catch (BlocksInChainInvalidException e) {
 				System.err.println("DID NOT REPLACE CHAIN. At least one of the blocks in the chain is not valid");
+				System.err.println("Ignore the above if you mined the block yourself and it's just an echo from remote channel you broadcast to. Chain most likely already up to date. ");
 			} catch (GenesisBlockInvalidException e) {
 				System.err.println("DID NOT REPLACE CHAIN. Genesis block invalid exception");
 			}

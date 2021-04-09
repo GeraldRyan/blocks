@@ -72,4 +72,14 @@ public class TransactionDao extends DBConnection implements TransactionDaoI {
 		return pool;
 	}
 
+	@Override
+	public List<Transaction> getAllTransactionsAsTransactionList() {
+		this.connect();
+		List<Transaction> resultsList = em.createQuery("select t from Transaction t").getResultList();
+		for (Transaction t : resultsList) {
+			t.rebuildOutputInput();
+		}
+		this.disconnect();
+		return resultsList;
+	}
 }

@@ -8,6 +8,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -59,6 +60,7 @@ public class TransactionPool {
 		return tp;
 	}
 
+
 	/**
 	 * Finds existing transaction of given Wallet if exists in pool, otherwise
 	 * returns null
@@ -93,11 +95,26 @@ public class TransactionPool {
 	 * @return
 	 */
 	public String getMinableTransactionDataString() {
-		String transactionData = "";
+		StringBuilder sb = new StringBuilder();
+		sb.append("[");
+//		String transactionData = "[";
+		this.transactionMap.forEach((uuid, t) -> {
+			sb.append(((Transaction) t).__repr__());
+			sb.append(",");
+		});
+		sb.deleteCharAt(sb.lastIndexOf(","));
+		sb.append("]");
+		System.out.println(sb.toString());
+		return sb.toString().replace("\\\\", "");
 
-		return transactionData;
 	}
 
+	/**
+	 * Main data payload of this class- the transaction map contains a HashMap of
+	 * all the transactions in this pool
+	 * 
+	 * @return
+	 */
 	public HashMap<String, Object> getTransactionMap() {
 		return transactionMap;
 	}

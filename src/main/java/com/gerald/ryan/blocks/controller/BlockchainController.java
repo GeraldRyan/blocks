@@ -4,6 +4,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,12 +20,14 @@ import com.gerald.ryan.blocks.Service.BlockchainService;
 import com.gerald.ryan.blocks.Service.TransactionService;
 import com.gerald.ryan.blocks.entity.Block;
 import com.gerald.ryan.blocks.entity.Blockchain;
+import com.gerald.ryan.blocks.entity.Transaction;
 import com.gerald.ryan.blocks.entity.TransactionPool;
 import com.gerald.ryan.blocks.exceptions.BlocksInChainInvalidException;
 import com.gerald.ryan.blocks.exceptions.ChainTooShortException;
 import com.gerald.ryan.blocks.exceptions.GenesisBlockInvalidException;
 import com.gerald.ryan.blocks.initializors.Initializer;
 import com.gerald.ryan.blocks.pubsub.PubNubApp;
+import com.google.gson.JsonElement;
 import com.pubnub.api.PubNubException;
 
 @Controller
@@ -79,12 +82,19 @@ public class BlockchainController {
 	public String getMine(@ModelAttribute("blockchain") Blockchain blockchain, Model model)
 			throws NoSuchAlgorithmException, PubNubException, InterruptedException {
 		pool = tService.getAllTransactionsAsTransactionPoolService(); // This is maybe expensive. Review for refactor
-		String transactionData = "MAIN INSTANCE STUBBED DATA";
+		String transactionData = "MAIN INSTANCE STUBBED DATA"; // overruled -->>
+		transactionData = pool.getMinableTransactionDataString();
+		List<Transaction> tlist = tService.getAllTransactionsAsTransactionList();
 
+		System.err.println("TRANSACTION DATA Blockchain controller 84");
+		System.err.println("TRANSACTION DATA");
+		System.out.println(transactionData.toString());
+		System.err.println("TRANSACTION DATA");
+		System.err.println("TRANSACTION DATA");
 		Block new_block = blockchainApp.addBlockService("beancoin", transactionData);
-		pnapp.broadcastBlock(new_block);
+//		pnapp.broadcastBlock(new_block); TURN BACK ON LATER
 		model.addAttribute("minedblock", new_block);
-		return new_block.toJSONtheBlock();
+		return new_block.webworthyJson(tlist); // This pollutes with escape chars \ because string
 	}
 
 	public void refreshChain(Model model) {

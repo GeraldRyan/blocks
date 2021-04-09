@@ -308,10 +308,9 @@ public class Transaction {
 	 */
 	public void rebuildOutputInput() {
 		if (this.output == null) {
-			System.err.println("I THOUGHT SO! Transaction line 310");
+			this.input = new Gson().fromJson(this.getInputjson(), HashMap.class);
+			this.output = new Gson().fromJson(this.getOutputjson(), HashMap.class);
 		}
-		this.input = new Gson().fromJson(this.getInputjson(), HashMap.class);
-		this.output = new Gson().fromJson(this.getOutputjson(), HashMap.class);
 	}
 
 	/**
@@ -320,12 +319,19 @@ public class Transaction {
 	 * is a quick and easy method to do so.
 	 */
 	public void updateOutputInputJson() {
-		if (this.output == null) {
-			System.err.println("I THOUGHT SO! Transaction line 310");
+		if (this.output != null) {
+			this.outputjson = new Gson().toJson(this.output);
+			this.inputjson = new Gson().toJson(this.input);
 		}
-		this.outputjson = new Gson().toJson(this.output);
-		this.inputjson = new Gson().toJson(this.input);
 	}
+
+	/**
+	 * jsonify only input output for blockchain itself. Calls a helper class that
+	 * strips off extraneous data (easiest cleanest way to implement and maintain
+	 * existing code
+	 * 
+	 * @return
+	 */
 
 	public static boolean is_valid_transactionReconstructPK(Transaction transaction)
 			throws InvalidTransactionException, InvalidKeyException, SignatureException, NoSuchAlgorithmException,
@@ -443,8 +449,29 @@ public class Transaction {
 		serializeThisBundle.put("amount", amount);
 		serializeThisBundle.put("recipientaddress", recipientAddress);
 		serializeThisBundle.put("senderaddress", senderAddress);
-
 		return new Gson().toJson(serializeThisBundle);
+	}
+
+	/**
+	 * Use this jsonifying method to get the final form for mining of transaction.
+	 * 
+	 * @return
+	 */
+	public String __repr__() {
+		if (this.getInput() == null) {
+			this.rebuildOutputInput();
+		}
+		HashMap<String, Object> serializeThisBundle = new HashMap<String, Object>();
+		HashMap<String, Object> inputClone = (HashMap<String, Object>) input.clone();
+		HashMap<String, Object> outputClone = (HashMap<String, Object>) output.clone();
+		inputClone.remove("wallet");
+		serializeThisBundle.put("input", inputClone);
+		serializeThisBundle.put("output", output);
+		serializeThisBundle.put("id", uuid);
+		return new Gson().toJson(serializeThisBundle);
+//		String withslashes = new Gson().toJson(serializeThisBundle);
+//		System.out.println(withslashes.replace("\\", ""));
+//		return withslashes.replace("\\", "");
 	}
 
 	/**
@@ -470,28 +497,21 @@ public class Transaction {
 		}
 		System.out.println(info.getClass());
 		System.out.println(info.get("input").getClass());
-//		HashMap<String, Object> hm = new Gson().fromJson(info, type)
+
 		LinkedTreeMap inputLTM = (LinkedTreeMap) info.get("input");
 		LinkedTreeMap outputLTM = (LinkedTreeMap) info.get("output");
 		HashMap<String, Object> input = new HashMap<String, Object>();
 		HashMap<String, Object> output = new HashMap<String, Object>();
 		// NEEDED BECAUSE GOOGLE GSON IS WIERD- RETURNS LINKEDHASHTREE
-//		System.err.println("Now input key value");
+
 		for (Object key : inputLTM.keySet()) {
-//			System.out.println("key: " + key);
-//			System.out.println("value: " + inputLTM.get(key));
 			input.put((String) key, inputLTM.get(key));
 		}
-//		System.err.println("Now output key value");
 		for (Object key : outputLTM.keySet()) {
-//			System.out.println("key: " + key);
-//			System.out.println("value: " + outputLTM.get(key));
 			output.put((String) key, outputLTM.get(key));
 		}
-		// NEEDED BECAUSE GOOGLE GSON IS WIERD- RETURNS LINKEDHASHTREE
+		// NEEDED BECAUSE GOOGLE GSON IS WEIRD- RETURNS LINKEDHASHTREE
 
-//		String senderAddress = (String) input.get("address");
-//		double senderWalletBalance = (double) output.get(senderAddress);
 		String recipientAddress = (String) info.get("address");
 		double amount = (double) info.get("amount");
 		String uuid = (String) info.get("UUID");

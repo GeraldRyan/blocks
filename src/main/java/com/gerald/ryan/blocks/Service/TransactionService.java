@@ -1,5 +1,7 @@
 package com.gerald.ryan.blocks.Service;
 
+import java.util.List;
+
 import com.gerald.ryan.blocks.Dao.TransactionDao;
 import com.gerald.ryan.blocks.entity.Transaction;
 import com.gerald.ryan.blocks.entity.TransactionPool;
@@ -50,5 +52,13 @@ public class TransactionService {
 	 */
 	public TransactionPool getAllTransactionsAsTransactionPoolService() {
 		return transactionD.getAllTransactionsAsTransactionPool();
+	}
+
+	/**
+	 * Gets all transactions in list format for convenience.
+	 * @return
+	 */
+	public List<Transaction> getAllTransactionsAsTransactionList() {
+		return transactionD.getAllTransactionsAsTransactionList();
 	}
 }

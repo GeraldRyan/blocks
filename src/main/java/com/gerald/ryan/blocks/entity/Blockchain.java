@@ -82,6 +82,16 @@ public class Blockchain {
 	 * @throws NoSuchAlgorithmException
 	 */
 	public Block add_block(String dataScalar) throws NoSuchAlgorithmException {
+		System.err.println("DATA SCALAR BLOCKCHAIN CLASS 85");
+		System.err.println("DATA SCALAR BLOCKCHAIN CLASS 85");
+		System.err.println("DATA SCALAR BLOCKCHAIN CLASS 85");
+		System.err.println("DATA SCALAR BLOCKCHAIN CLASS 85");
+		System.out.println(dataScalar);
+		System.err.println("DATA SCALAR BLOCKCHAIN CLASS 85");
+		System.err.println("DATA SCALAR BLOCKCHAIN CLASS 85");
+		System.err.println("DATA SCALAR BLOCKCHAIN CLASS 85");
+		System.err.println("DATA SCALAR BLOCKCHAIN CLASS 85");
+		// this is clean
 		Block new_block = Block.mine_block(this.chain.get(this.chain.size() - 1), dataScalar);
 		this.chain.add(new_block);
 		this.length_of_chain++;

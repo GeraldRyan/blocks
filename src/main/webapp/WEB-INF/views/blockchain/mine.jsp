@@ -26,6 +26,6 @@
 	</h3>
 
 	<h4>Newly Mined Block</h4>
-	<%=mined_block.toJSONtheBlock()%>
+	<%=mined_block.webworthyJson().getAsString()%>
 </body>
 </html>

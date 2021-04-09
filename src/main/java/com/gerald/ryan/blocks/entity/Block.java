@@ -1,10 +1,13 @@
 package com.gerald.ryan.blocks.entity;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -12,7 +15,10 @@ import javax.persistence.Transient;
 
 import com.gerald.ryan.blocks.Service.BlockService;
 import com.gerald.ryan.blocks.utilities.CryptoHash;
+import com.gerald.ryan.blocks.utilities.TransactionRepr;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 /**
  * 
@@ -33,14 +39,13 @@ public class Block {
 	long timestamp;
 	protected String hash;
 	protected String lastHash;
+	@Column(columnDefinition = "varchar(8000) default 'John Snow'")
 	String data;
 	int difficulty;
 	int nonce;
 	@Transient
 	static int GENESIS_DIFFICULTY = 10;
 	static long GENESIS_TS = 1;
-//	@Transient
-//	static String[] GENESIS_DATA = new String[] {"Dance","The", "Waltz"};
 	@Transient
 	static String GENESIS_HASH = "Genesis_Hash";
 	@Transient
@@ -114,9 +119,6 @@ public class Block {
 //	}
 //		
 
-	/**
-	 * Zero-arg block constructor for bean creation
-	 */
 	public Block() {
 	}
 
@@ -144,11 +146,35 @@ public class Block {
 		return String.format("%5s %10s %15s %15s %15s", timestamp, lastHash, hash, data, difficulty, nonce);
 	}
 
+	public String webworthyJson(List<Transaction> tlist) {
+		HashMap<String, Object> serializeThisBundle = new HashMap<String, Object>();
+		List<TransactionRepr> treprlist = new ArrayList();
+		for (Transaction t : tlist) {
+			treprlist.add(new TransactionRepr(t));
+		}
+		serializeThisBundle.put("timestamp", timestamp);
+		serializeThisBundle.put("hash", hash);
+		serializeThisBundle.put("lasthash", lastHash);
+		serializeThisBundle.put("difficulty", difficulty);
+		serializeThisBundle.put("nonce", nonce);
+
+		System.out.println(data);
+
+		serializeThisBundle.put("data", treprlist);
+		return new Gson().toJson(serializeThisBundle);
+//		return new Gson().toJsonTree(this, this.getClass());
+//		JsonElement jsonelement = new Gson().toJsonTree(serializeThisBundle, HashMap.class);
+	}
+
+	/**
+	 * convert the block to a serialized JSON representation
+	 * 
+	 * @return
+	 */
 	public String toJSONtheBlock() {
-		System.out.println("COMPARE THIS WITH MINEDINSTNACE");
-		String jsonBlock = new Gson().toJson(this);
-		System.out.println(jsonBlock);
-		return jsonBlock;
+
+		return new Gson().toJson(this);
+
 	}
 
 	/**

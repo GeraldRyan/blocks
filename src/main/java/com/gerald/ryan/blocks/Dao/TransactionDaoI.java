@@ -17,4 +17,6 @@ public interface TransactionDaoI {
 
 	public TransactionPool getAllTransactionsAsTransactionPool();
 
+	public List<Transaction> getAllTransactionsAsTransactionList();
+
 }
