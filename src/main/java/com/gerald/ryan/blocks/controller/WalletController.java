@@ -96,19 +96,26 @@ public class WalletController {
 	public String postTransact(Model model, @RequestBody Map<String, Object> body) throws InvalidKeyException,
 			NoSuchAlgorithmException, NoSuchProviderException, IOException, InvalidAlgorithmParameterException {
 
-		Wallet randomWallet = Wallet.createWallet(); // simulate random wallet on the wire, not saved in memory
-		// in future find way to overload this message with option
+		Wallet randomWallet = Wallet.createWallet(); // simulate anon wallet on the wire
 
-		Transaction t1 = new Transaction(randomWallet, (String) body.get("address"),
+		Transaction nu = new Transaction(randomWallet, (String) body.get("address"),
 				(double) ((Integer) body.get("amount")));
-		tService.addTransactionService(t1); // error here
-		try {
-			pnapp.broadcastTransaction(t1);
-		} catch (PubNubException e) {
-			System.err.println("Problem broadcasting the transaction.");
-			e.printStackTrace();
+		pool = tService.getAllTransactionsAsTransactionPoolService();
+		Transaction alt = pool.findExistingTransactionByWallet(nu.getSenderAddress());
+		if (alt == null) {
+			System.err.println("Transaction 2 is null. there is no existing transaction of that sender"
+					+ nu.getSenderAddress() + "==" + randomWallet.getAddress());
+			model.addAttribute("latesttransaction", nu);
+			tService.addTransactionService(nu);
+//			broadcastTransaction(nu);
+			return nu.toJSONtheTransaction();
+		} else {
+			System.out.println("Existing transaction found!");
+			Transaction updated = tService.updateTransactionService(nu, alt);
+			model.addAttribute("latesttransaction", updated);
+//			broadcastTransaction(updated);
+			return updated.toJSONtheTransaction();
 		}
-		return t1.toJSONtheTransaction();
 	}
 
 	@RequestMapping(value = "/transaction", method = RequestMethod.GET, produces = "application/json")
@@ -124,18 +131,24 @@ public class WalletController {
 					+ nu.getSenderAddress() + "==" + w.getAddress());
 			model.addAttribute("latesttransaction", nu);
 			tService.addTransactionService(nu);
+//			broadcastTransaction(nu);
 			return nu.toJSONtheTransaction();
 		} else {
 			System.out.println("Existing transaction found!");
 			Transaction updated = tService.updateTransactionService(nu, alt);
 			model.addAttribute("latesttransaction", updated);
+//			broadcastTransaction(updated);
 			return updated.toJSONtheTransaction();
 		}
-		// if transaction found in pool
-		// update service
+	}
 
-		// else
-
+	public void broadcastTransaction(Transaction t) {
+		try {
+			pnapp.broadcastTransaction(t);
+		} catch (PubNubException e) {
+			System.err.println("Problem broadcasting the transaction.");
+			e.printStackTrace();
+		}
 	}
 
 }
