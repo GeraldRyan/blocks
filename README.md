@@ -1,8 +1,8 @@
 # Yet another blockchain and crypto service! (beta)
 
-Create a new blockchain with your friends. Use it as a cryptocurrency or any other form of data store, where data is precious. 
+Create a new blockchain and Crypto ("Beancoin") with your friends, for your customers or for your company. Use our blockchain technology as a cryptocurrency or other form of transaction and record keeping where data is previous and veracity and publicity is a requirement. 
 
-A blockchain is basically an open source, secure and reliable (under the right conditions) ledger, that can store data- for instance transactions. 
+A blockchain is basically an open source, secure and reliable (under the right conditions) ledger, that can store data- for instance "transactions". See below for more facts. 
 
 A blockchain is a community affair. Multiple people contribute to the validation of chains by "mining" blocks and listening on the network to node broadcasts of others. That is optional. You can simply choose to transact, using such a technology platform as this, but mining (including for reward) is enabled. 
 
@@ -23,6 +23,28 @@ Your wallet is very important. It doesn't store your money. Your money exists as
 Your wallet is virtual and stored in our database, so all you have to do is log in, just like you would to a bank. In this way we can control security and prevent unauthorized access. Just guard your login information. If need be you can request a replacement wallet and we can transfer over the funds if you think you've been hacked. 
 
 There's not much else you need to know to get started. It's that simple. Just. Like. A. Bank. But cooler. 
+
+# Our offerings
+
+Our business is offering blockchain/crypto services, for all types of customers and all needs. Example uses can be as reward tokens for customer loyalty, or for serious person to person transfers of value. We provide the infrastructure, technology consultancy and support.   
+
+You can choose your coin name - e.g. "Beancoin" 
+
+You choose the level of difficulty (target time to processs new blocks- see below)
+
+How many coins will ever be in existence- or no limit. 
+
+Who can register- anyone, or select members. 
+
+We can also create wallets and services for existing coins, as well as tracking features of prices of popular coins (coming soon). 
+
+BE PART OF THE FUTURE!
+
+# NOTE ON BETA
+
+-- this site is in dev mode. Structure, UX/UI to come. Core functionality good. 
+
+-- Want to join our team? Connect with us here. 
 
 ## FAQ For the Curious
 
