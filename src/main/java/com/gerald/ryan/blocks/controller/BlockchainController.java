@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.gerald.ryan.blocks.Service.BlockService;
 import com.gerald.ryan.blocks.Service.BlockchainService;
+import com.gerald.ryan.blocks.Service.TransactionService;
 import com.gerald.ryan.blocks.entity.Block;
 import com.gerald.ryan.blocks.entity.Blockchain;
+import com.gerald.ryan.blocks.entity.TransactionPool;
 import com.gerald.ryan.blocks.exceptions.BlocksInChainInvalidException;
 import com.gerald.ryan.blocks.exceptions.ChainTooShortException;
 import com.gerald.ryan.blocks.exceptions.GenesisBlockInvalidException;
@@ -29,6 +31,9 @@ import com.pubnub.api.PubNubException;
 @SessionAttributes({ "blockchain", "minedblock" })
 @RequestMapping("blockchain")
 public class BlockchainController {
+
+	TransactionService tService = new TransactionService();
+	TransactionPool pool = tService.getAllTransactionsAsTransactionPoolService();
 
 	public BlockchainController() throws InterruptedException {
 	}
@@ -73,11 +78,10 @@ public class BlockchainController {
 	@ResponseBody
 	public String getMine(@ModelAttribute("blockchain") Blockchain blockchain, Model model)
 			throws NoSuchAlgorithmException, PubNubException, InterruptedException {
+		pool = tService.getAllTransactionsAsTransactionPoolService(); // This is maybe expensive. Review for refactor
+		String transactionData = "MAIN INSTANCE STUBBED DATA";
 
-		String stubbedData = "MAIN INSTANCE STUBBED DATA";
-		String[] stubbedDataV = { "MAIN INSTANCE STUBBED DATA" };
-		Block new_block = blockchainApp.addBlockService("beancoin", stubbedDataV);
-		model.addAttribute("foo", "Bar");
+		Block new_block = blockchainApp.addBlockService("beancoin", transactionData);
 		pnapp.broadcastBlock(new_block);
 		model.addAttribute("minedblock", new_block);
 		return new_block.toJSONtheBlock();

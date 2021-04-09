@@ -45,7 +45,7 @@ public class CryptoHash {
 
 	}
 
-	public static String getSHA256(long timestamp, String last_hash, String[] data, int difficulty, int nonce)
+	public static String getSHA256(long timestamp, String last_hash, String data, int difficulty, int nonce)
 			throws NoSuchAlgorithmException {
 		String s = "";
 

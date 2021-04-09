@@ -48,7 +48,7 @@ public class BlockchainService {
 	 * @param data
 	 * @return
 	 */
-	public Block addBlockService(String nameOfBlockchain, String[] data) {
+	public Block addBlockService(String nameOfBlockchain, String data) {
 		return blockchainD.addBlock(nameOfBlockchain, data);
 	}
 

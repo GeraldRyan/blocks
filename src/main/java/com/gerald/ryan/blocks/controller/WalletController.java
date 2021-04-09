@@ -32,7 +32,7 @@ import com.pubnub.api.PubNubException;
 
 @Controller
 @RequestMapping("wallet")
-@SessionAttributes({ "wallet", "latesttransaction" })
+@SessionAttributes({ "wallet", "latesttransaction", "pool" })
 public class WalletController {
 
 	PubNubApp pnapp = new PubNubApp();
@@ -43,17 +43,6 @@ public class WalletController {
 
 	}
 
-	/**
-	 * Preload site with wallet object
-	 * 
-	 * TODO - GET THIS WALLET FROM DATABASE. NULL IF NULL. OPTION TO CREATE, AND
-	 * THEN TO PERSIST BOTH TO DATABASE AND SESSION
-	 * 
-	 * @return
-	 * @throws NoSuchAlgorithmException
-	 * @throws NoSuchProviderException
-	 * @throws InvalidAlgorithmParameterException
-	 */
 	@ModelAttribute("wallet")
 	public Wallet addWallet()
 			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
@@ -101,19 +90,20 @@ public class WalletController {
 		Transaction nu = new Transaction(randomWallet, (String) body.get("address"),
 				(double) ((Integer) body.get("amount")));
 		pool = tService.getAllTransactionsAsTransactionPoolService();
+		model.addAttribute("pool", pool);
 		Transaction alt = pool.findExistingTransactionByWallet(nu.getSenderAddress());
 		if (alt == null) {
 			System.err.println("Transaction 2 is null. there is no existing transaction of that sender"
 					+ nu.getSenderAddress() + "==" + randomWallet.getAddress());
 			model.addAttribute("latesttransaction", nu);
 			tService.addTransactionService(nu);
-//			broadcastTransaction(nu);
+//			broadcastTransaction(nu);  // switch on and off as desired
 			return nu.toJSONtheTransaction();
 		} else {
 			System.out.println("Existing transaction found!");
 			Transaction updated = tService.updateTransactionService(nu, alt);
 			model.addAttribute("latesttransaction", updated);
-//			broadcastTransaction(updated);
+//			broadcastTransaction(updated); // switch on and off as desired
 			return updated.toJSONtheTransaction();
 		}
 	}
@@ -131,13 +121,13 @@ public class WalletController {
 					+ nu.getSenderAddress() + "==" + w.getAddress());
 			model.addAttribute("latesttransaction", nu);
 			tService.addTransactionService(nu);
-//			broadcastTransaction(nu);
+//			broadcastTransaction(nu);  // switch on and off as desired
 			return nu.toJSONtheTransaction();
 		} else {
 			System.out.println("Existing transaction found!");
 			Transaction updated = tService.updateTransactionService(nu, alt);
 			model.addAttribute("latesttransaction", updated);
-//			broadcastTransaction(updated);
+//			broadcastTransaction(updated); // switch on and off as desired
 			return updated.toJSONtheTransaction();
 		}
 	}

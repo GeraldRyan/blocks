@@ -33,7 +33,7 @@ public class Block {
 	long timestamp;
 	protected String hash;
 	protected String lastHash;
-	String[] data;
+	String data;
 	int difficulty;
 	int nonce;
 	@Transient
@@ -52,7 +52,7 @@ public class Block {
 		GENESIS_DATA.put("timestamp", Block.GENESIS_TS);
 		GENESIS_DATA.put("last_hash", "genesis_last_hash");
 		GENESIS_DATA.put("hash", "genesis_hash");
-		GENESIS_DATA.put("data", new String[] { "GENESIS", "GENESIS", "GENESIS" });
+		GENESIS_DATA.put("data", "GENESIS GENESIS GENESIS");
 		GENESIS_DATA.put("difficulty", 7);
 		GENESIS_DATA.put("nonce", 1);
 	}
@@ -81,7 +81,7 @@ public class Block {
 	 * @param difficulty
 	 * @param nonce
 	 */
-	public Block(long timestamp, String lastHash, String hash, String[] data, int difficulty, int nonce) {
+	public Block(long timestamp, String lastHash, String hash, String data, int difficulty, int nonce) {
 		super();
 //		this.id = this.blockcount;
 		this.timestamp = timestamp;
@@ -127,31 +127,21 @@ public class Block {
 	 * @return
 	 */
 	public String toStringConsole() {
-		String datastring = "";
-		for (String s : data) {
-			datastring = datastring + s + "|--|";
-		}
 		return "\n-----------BLOCK--------\ntimestamp: " + this.timestamp + "\nlastHash: " + this.lastHash + "\nhash: "
-				+ this.hash + "\ndifficulty: " + this.getDifficulty() + "\nData: " + datastring + "\nNonce: "
+				+ this.hash + "\ndifficulty: " + this.getDifficulty() + "\nData: " + this.data + "\nNonce: "
 				+ this.nonce + "\n-----------------------\n";
 	}
 
 	public String toStringWebAPI() {
-		String datastring = "";
-		for (String s : data) {
-			datastring = datastring + "-[" + s + "]-";
-		}
+
 		return String.format("timestamp: %s, lastHash:%s, hash:%s, data:[%s], difficulty:%s", timestamp, lastHash, hash,
-				datastring, difficulty, nonce);
+				data, difficulty, nonce);
 	}
 
 	public String toStringFormatted() {
 		String datastring = "";
-		for (String s : data) {
-			datastring = datastring + s + "|--|";
-		}
 
-		return String.format("%5s %10s %15s %15s %15s", timestamp, lastHash, hash, datastring, difficulty, nonce);
+		return String.format("%5s %10s %15s %15s %15s", timestamp, lastHash, hash, data, difficulty, nonce);
 	}
 
 	public String toJSONtheBlock() {
@@ -184,7 +174,7 @@ public class Block {
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 */
-	public static Block mine_block(Block last_block, String[] data) throws NoSuchAlgorithmException {
+	public static Block mine_block(Block last_block, String data) throws NoSuchAlgorithmException {
 		long timestamp = new Date().getTime();
 		String last_hash = last_block.getHash();
 		int difficulty = Block.adjust_difficulty(last_block, timestamp);
@@ -222,35 +212,35 @@ public class Block {
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 */
-	public static Block mine_block(Block last_block, String dataScalar) throws NoSuchAlgorithmException {
-		String[] data = new String[] { dataScalar };
-		long timestamp = new Date().getTime();
-		String last_hash = last_block.getHash();
-		int difficulty = Block.adjust_difficulty(last_block, timestamp);
-		int nonce = 0;
-		String hash = CryptoHash.getSHA256(timestamp, last_block.getHash(), data, difficulty, nonce);
-
-		String proof_of_work = CryptoHash.n_len_string('0', difficulty);
-		String binary_hash = CryptoHash.hex_to_binary(hash);
-		String binary_hash_work_end = binary_hash.substring(0, difficulty);
-		System.out.println("Difficulty: " + difficulty);
-		System.out.println("Working");
-		while (!proof_of_work.equalsIgnoreCase(binary_hash_work_end)) {
-			nonce += 1;
-			timestamp = new Date().getTime();
-			difficulty = Block.adjust_difficulty(last_block, timestamp);
-			hash = CryptoHash.getSHA256(timestamp, last_block.getHash(), data, difficulty, nonce);
-			proof_of_work = CryptoHash.n_len_string('0', difficulty);
-			binary_hash = CryptoHash.hex_to_binary(hash);
-			binary_hash_work_end = binary_hash.substring(0, difficulty);
-		}
-		System.out.println("Solved at Difficulty: " + difficulty);
-		System.out.println("Proof of work requirement " + proof_of_work);
-		System.out.println("binary_Hash_work_end " + binary_hash_work_end);
-		System.out.println("binary hash " + binary_hash);
-		System.out.println("BLOCK MINED");
-		return new Block(timestamp, last_hash, hash, data, difficulty, nonce);
-	}
+//	public static Block mine_block(Block last_block, String dataScalar) throws NoSuchAlgorithmException {
+//		String[] data = new String[] { dataScalar };
+//		long timestamp = new Date().getTime();
+//		String last_hash = last_block.getHash();
+//		int difficulty = Block.adjust_difficulty(last_block, timestamp);
+//		int nonce = 0;
+//		String hash = CryptoHash.getSHA256(timestamp, last_block.getHash(), data, difficulty, nonce);
+//
+//		String proof_of_work = CryptoHash.n_len_string('0', difficulty);
+//		String binary_hash = CryptoHash.hex_to_binary(hash);
+//		String binary_hash_work_end = binary_hash.substring(0, difficulty);
+//		System.out.println("Difficulty: " + difficulty);
+//		System.out.println("Working");
+//		while (!proof_of_work.equalsIgnoreCase(binary_hash_work_end)) {
+//			nonce += 1;
+//			timestamp = new Date().getTime();
+//			difficulty = Block.adjust_difficulty(last_block, timestamp);
+//			hash = CryptoHash.getSHA256(timestamp, last_block.getHash(), data, difficulty, nonce);
+//			proof_of_work = CryptoHash.n_len_string('0', difficulty);
+//			binary_hash = CryptoHash.hex_to_binary(hash);
+//			binary_hash_work_end = binary_hash.substring(0, difficulty);
+//		}
+//		System.out.println("Solved at Difficulty: " + difficulty);
+//		System.out.println("Proof of work requirement " + proof_of_work);
+//		System.out.println("binary_Hash_work_end " + binary_hash_work_end);
+//		System.out.println("binary hash " + binary_hash);
+//		System.out.println("BLOCK MINED");
+//		return new Block(timestamp, last_hash, hash, data, difficulty, nonce);
+//	}
 
 	/**
 	 * Generates Genesis block with hard coded data that will be identical for all
@@ -267,7 +257,7 @@ public class Block {
 		int nonce = 0;
 //		return new Block(timestamp, last_hash, hash, data, difficulty, nonce);
 		return new Block((Long) GENESIS_DATA.get("timestamp"), (String) GENESIS_DATA.get("last_hash"),
-				(String) GENESIS_DATA.get("hash"), (String[]) GENESIS_DATA.get("data"),
+				(String) GENESIS_DATA.get("hash"), (String) GENESIS_DATA.get("data"),
 				(Integer) GENESIS_DATA.get("difficulty"), (Integer) GENESIS_DATA.get("nonce"));
 	}
 
@@ -357,7 +347,7 @@ public class Block {
 		return lastHash;
 	}
 
-	public String[] getData() {
+	public String getData() {
 		return data;
 	}
 
@@ -369,10 +359,9 @@ public class Block {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + Arrays.hashCode(data);
+		result = prime * result + ((data == null) ? 0 : data.hashCode());
 		result = prime * result + difficulty;
 		result = prime * result + ((hash == null) ? 0 : hash.hashCode());
-//		result = prime * result + id;
 		result = prime * result + ((lastHash == null) ? 0 : lastHash.hashCode());
 		result = prime * result + nonce;
 		result = prime * result + (int) (timestamp ^ (timestamp >>> 32));
@@ -388,7 +377,10 @@ public class Block {
 		if (getClass() != obj.getClass())
 			return false;
 		Block other = (Block) obj;
-		if (!Arrays.equals(data, other.data))
+		if (data == null) {
+			if (other.data != null)
+				return false;
+		} else if (!data.equals(other.data))
 			return false;
 		if (difficulty != other.difficulty)
 			return false;

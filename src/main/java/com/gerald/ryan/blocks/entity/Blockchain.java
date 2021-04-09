@@ -51,11 +51,10 @@ public class Blockchain {
 	int length_of_chain;
 	@OneToMany(targetEntity = Block.class, cascade = CascadeType.ALL, orphanRemoval = true)
 //	@JoinTable(name = "blocks")
-	List<Block> chain; // The chain itself
+	List<Block> chain;
 
 	/**
-	 * Constructor function, initializes an ArrayList of Blocks with a valid genesis
-	 * block. Future blocks are to be mined.
+	 * To make a new blockchain all you need is a name.
 	 */
 	public Blockchain(String name) {
 		this.instance_name = name;
@@ -65,53 +64,12 @@ public class Blockchain {
 		this.length_of_chain = 1;
 	}
 
-	/**
-	 * Zero arg constructor for java bean
-	 */
 	public Blockchain() {
-//		this.chain = new ArrayList<Block>();
-//		this.chain.add(Block.genesis_block());
+
 	}
 
 	public static Blockchain createBlockchainInstance(String name) {
 		return new Blockchain(name);
-	}
-
-//	private ValueHolderInterface chainValueHolder;
-//
-//	// Use this get/set pair when configuring your Mapping
-//	public void setChainValueHolder(ValueHolderInterface value) {
-//		this.chainValueHolder = value;
-//	}
-//
-//	public ValueHolderInterface getChainValueHolder() {
-//		return this.chainValueHolder;
-//	}
-
-////	 Your application uses these methods to interact with Addresses
-//	public void setChain(ArrayList<Block> chain) {
-//		this.chainValueHolder.setValue(chain);
-//	}
-//
-//	public ArrayList<Block> getChain() {
-//		return (ArrayList<Block>) this.chainValueHolder.getValue();
-//	}
-
-	/**
-	 * Adds block to blockchain by calling block class's static mine_block method.
-	 * This ensures block is valid in itself, and is attached to end of local chain,
-	 * ensuring chain is valid.
-	 * 
-	 * @param data
-	 * @return
-	 * @throws NoSuchAlgorithmException
-	 */
-	public Block add_block(String[] data) throws NoSuchAlgorithmException {
-		Block new_block = Block.mine_block(this.chain.get(this.chain.size() - 1), data);
-		this.chain.add(new_block);
-		this.length_of_chain++;
-		this.date_last_modified = new Date().getTime();
-		return new_block;
 	}
 
 	/**
@@ -167,26 +125,17 @@ public class Blockchain {
 
 	/**
 	 * 
-	 * Sorts the arraylist by timestamp, putting it (back) in the order it should be
-	 * in and naturally is in, but sometimes network requets or database pulls with
-	 * JPA can break the order. This fixes humpty dumpty where necessary.
+	 * Orders chain of Blocks by timestamp, restoring original order if it had
+	 * gotten out of order somehow.
 	 * 
-	 * As such, this is not an ideal method. It's a fixer method that shouldn't be
-	 * needed, though if code gets fixed Might still be worth keeping around in the
-	 * toolbelt.
 	 * 
-	 * If ArrayList<Block> is not in order, it's not a real blockchain, and even
-	 * though you have the set of blocks in the chain with enough info to make it
-	 * recreatable, in the current form, replace_chain won't work
+	 * If ArrayList<Block> is not in order, it's a broken blockchain breaking
+	 * certain methods like replace chain, which causes a failed validation.
 	 */
-//	public static void sort_arrayList(Blockchain blockchain) {
-//		blockchain.getChain().sort((b1, b2) -> (int)(b1.getTimestamp() - b2.getTimestamp()));
-////		blockchain.getChain().get(0).getTimestamp()
-//	}
-//	
-//	public int compareTimestamps() {
-//		
-//	}
+	public static void restoreChainOrderByTimestamp(Blockchain blockchain) {
+		blockchain.getChain().sort((b1, b2) -> (int) (b1.getTimestamp() - b2.getTimestamp()));
+
+	}
 
 	/**
 	 * Replace the local chain with the incoming chain if the following apply: - the
@@ -201,8 +150,6 @@ public class Blockchain {
 	 */
 	public void replace_chain(List<Block> other_chain) throws NoSuchAlgorithmException, ChainTooShortException,
 			GenesisBlockInvalidException, BlocksInChainInvalidException {
-		// TODO how will I implement this? Different localhosts will have different
-		// chains?
 		System.out.println(other_chain.size() + " " + this.chain.size());
 		if (other_chain.size() <= this.chain.size()) {
 			throw new ChainTooShortException("Chain too short to replace");
@@ -223,23 +170,15 @@ public class Blockchain {
 		} catch (BlocksInChainInvalidException e) {
 			System.out.println(e);
 		}
-
-//		else {
-//			try {
-//				Blockchain.is_valid_chain(other_blockchain);
-//			} catch (Exception e) {
-//				throw new // exception
-//				// block of code to handle errors
-//			}
-//		}
 	}
 
 	/**
-	 * This is a checker method that checks whether the chain will replace, in case
-	 * it is required for lifecycle actions In practice, this is used for flushing
-	 * the databse's join table for JPA in the @OneToMany object due to fact no way
-	 * was yet found to update the chain by strict replacement [errors such as
-	 * duplicate key are found if not flushed]
+	 * Checker method as to whether the chain will be replace, in case it is
+	 * required for lifecycle actions. In practice, this is used for flushing the
+	 * database's join table for JPA in the @OneToMany entity, which itself is due
+	 * to ignorance about how to do it properly. New data doesn't strictly displace
+	 * old entries and duplicate key errors crash the process. So this is a method
+	 * that enables a temporary hack.
 	 * 
 	 * @param other_chain
 	 * @return
@@ -259,13 +198,6 @@ public class Blockchain {
 		return true;
 	}
 
-	/**
-	 * Setter method for chain of blockchain instance. Probably should not exist.
-	 * Probably a major blockchain security breech and definitely should not be
-	 * necessary, but.. has been necessary for project for refreshing instance of
-	 * blockchain in memory in Spring MVC controller for display in page. If new way
-	 * is found to sync, can maybe refactor this out.
-	 */
 	public void setChain(List<Block> chain) {
 		this.chain = chain;
 	}
@@ -325,7 +257,8 @@ public class Blockchain {
 	}
 
 	/**
-	 * returns headerless console customized string output
+	 * returns headerless console customized string output for use with an existing
+	 * header
 	 * 
 	 * @return
 	 */
