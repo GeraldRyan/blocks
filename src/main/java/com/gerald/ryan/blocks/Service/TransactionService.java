@@ -27,8 +27,8 @@ public class TransactionService {
 		return transactionD.addTransaction(t);
 	}
 
-	public Transaction updateTransactionService(Transaction transaction) {
-		return transactionD.updateTransaction(transaction);
+	public Transaction updateTransactionService(Transaction t1, Transaction t2) {
+		return transactionD.updateTransaction(t1, t2);
 	}
 
 	public Transaction removeTransactionService(String UUID) {

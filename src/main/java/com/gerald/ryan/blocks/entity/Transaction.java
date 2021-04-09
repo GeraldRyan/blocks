@@ -38,12 +38,6 @@ import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 
-/* TODO ? Stop serializing entire Wallet and Transaction objects here and elsewhere. Serialize only the necessary data - address, balance, public key
- * etc. Is this bad? Does it tightly couple? Does it break cross platform usage? The Java dependent wallet object is serialized and signed but 
- * what about when a python user is using the app? Suppose he has the keys and everything, and the address to send to. Can he properly sign it with his
- * pythonic implementation? Maybe or maybe it breaks code. Customize serialization. Just go for simple JSON.
- */
-
 /**
  * Document an exchange of currency from a sender to one or more recipients
  * 
@@ -55,12 +49,11 @@ import com.google.gson.reflect.TypeToken;
 public class Transaction {
 
 	@Id
-	String uuid; // could have also gone with timestamp
+	String uuid;
 	@Transient
-	Wallet senderWallet; // should this be transient? Can it be?
-
-	@Column(name = "address")
+	Wallet senderWallet;
 	String recipientAddress;
+	String senderAddress;
 	double amount;
 	/**
 	 * Data structure about who the recipients are in the transaction and how much
@@ -75,6 +68,11 @@ public class Transaction {
 	 */
 	@Transient
 	HashMap<String, Object> input; // like wire transfer document
+
+	@Column(columnDefinition = "varchar(2000) default 'John Snow'")
+	String outputjson;
+	@Column(columnDefinition = "varchar(2000) default 'John Snow'")
+	String inputjson;
 
 	/**
 	 * Default constructor is one with Wallet, String and double: both minimum and
@@ -108,13 +106,39 @@ public class Transaction {
 		try {
 			this.input = Transaction.createInput(senderWallet, this.output);
 		} catch (SignatureException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		this.senderWallet = senderWallet;
 		this.recipientAddress = recipientAddress;
+		this.senderAddress = senderWallet.getAddress();
+		this.outputjson = new Gson().toJson(output);
+		this.inputjson = new Gson().toJson(input);
 		this.amount = amount;
 		System.out.println("Valid New Transaction created");
+	}
+
+	public String getSenderAddress() {
+		return senderAddress;
+	}
+
+	public void setSenderAddress(String senderAddress) {
+		this.senderAddress = senderAddress;
+	}
+
+	public String getOutputjson() {
+		return outputjson;
+	}
+
+	public void setOutputjson(String outputjson) {
+		this.outputjson = outputjson;
+	}
+
+	public String getInputjson() {
+		return inputjson;
+	}
+
+	public void setInputjson(String inputjson) {
+		this.inputjson = inputjson;
 	}
 
 	// used for recreating a transaction instance without sender wallet
@@ -288,8 +312,9 @@ public class Transaction {
 		return true;
 	}
 
-	public static boolean is_valid_transactionReconstructPK(Transaction transaction) throws InvalidTransactionException,
-			InvalidKeyException, SignatureException, NoSuchAlgorithmException, NoSuchProviderException, IOException, InvalidKeySpecException {
+	public static boolean is_valid_transactionReconstructPK(Transaction transaction)
+			throws InvalidTransactionException, InvalidKeyException, SignatureException, NoSuchAlgorithmException,
+			NoSuchProviderException, IOException, InvalidKeySpecException {
 		StringUtils.mapKeyValue(transaction.getOutput(), "Line 289");
 
 		double sumOfTransactions = transaction.getOutput().values().stream().mapToDouble(t -> (double) t).sum();

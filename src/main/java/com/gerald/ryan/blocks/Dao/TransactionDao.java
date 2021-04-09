@@ -6,8 +6,6 @@ import com.gerald.ryan.blocks.dbConnection.DBConnection;
 import com.gerald.ryan.blocks.entity.Transaction;
 import com.gerald.ryan.blocks.entity.TransactionPool;
 
-
-
 public class TransactionDao extends DBConnection implements TransactionDaoI {
 
 	@Override
@@ -28,8 +26,12 @@ public class TransactionDao extends DBConnection implements TransactionDaoI {
 	}
 
 	@Override
-	public Transaction updateTransaction(Transaction transaction) {
-		// TODO Auto-generated method stub
+	public Transaction updateTransaction(Transaction t1, Transaction t2) {
+		this.connect();
+		em.getTransaction().begin();
+		Transaction TMerging = em.find(Transaction.class, t1.getUuid());
+		em.getTransaction().commit();
+		this.disconnect();
 		return null;
 	}
 
@@ -44,11 +46,13 @@ public class TransactionDao extends DBConnection implements TransactionDaoI {
 
 	@Override
 	public TransactionPool getAllTransactionsAsTransactionPool() {
+		this.connect();
 		TransactionPool pool = new TransactionPool();
-		List<Transaction> resultsList = em.createQuery("SELECT t FROM TRANSACTION t").getResultList();
+		List<Transaction> resultsList = em.createQuery("select t from Transaction t").getResultList();
 		for (Transaction t : resultsList) {
 			pool.putTransaction(t);
 		}
+		this.disconnect();
 		return pool;
 	}
 

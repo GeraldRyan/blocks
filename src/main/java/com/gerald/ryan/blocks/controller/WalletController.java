@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.gerald.ryan.blocks.Service.TransactionService;
 import com.gerald.ryan.blocks.entity.Transaction;
+import com.gerald.ryan.blocks.entity.TransactionPool;
 import com.gerald.ryan.blocks.entity.Wallet;
 import com.gerald.ryan.blocks.pubsub.PubNubApp;
 import com.pubnub.api.PubNubException;
@@ -35,6 +36,7 @@ public class WalletController {
 
 	PubNubApp pnapp = new PubNubApp();
 	TransactionService tService = new TransactionService();
+	TransactionPool pool = tService.getAllTransactionsAsTransactionPoolService();
 
 	public WalletController() throws InterruptedException {
 
@@ -70,7 +72,7 @@ public class WalletController {
 		return "wallet/transact";
 	}
 
-	/*
+	/**
 	 * TODO collect transactions in transaction pool. Where to store? Store each
 	 * transaction in database and the pool equals each one, just instantiate or
 	 * rebuild pool on app startup Make a service.
@@ -114,9 +116,13 @@ public class WalletController {
 			@RequestParam("address") String address, @RequestParam("amount") double amount, HttpServletRequest request)
 			throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, IOException {
 		Transaction t1 = new Transaction(w, address, amount);
+//		Transaction T2 = pool.findExistingTransactionByWallet(t1.get)
+		// if transaction found in pool
+		// update service
+
+		// else
 		tService.addTransactionService(t1);
-		System.err.println("Hit here");
-		System.out.println(t1.toJSONtheTransaction());
+
 		model.addAttribute("latesttransaction", t1);
 		return t1.toJSONtheTransaction();
 	}

@@ -9,6 +9,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author Gerald Ryan Natural constructor is zero arg
@@ -43,6 +44,14 @@ public class TransactionPool {
 
 	public void TransactionPool() {
 
+	}
+
+	public static TransactionPool fillTransactionPool(List<Transaction> transactionList) {
+		TransactionPool tp = new TransactionPool();
+		for (Transaction t : transactionList) {
+			tp.putTransaction(t);
+		}
+		return tp;
 	}
 
 	/**

@@ -14,8 +14,7 @@
 	<br>
 
 
-	<form action="./transaction">
-		<h1>Not broken yet</h1>
+	<form action="../transaction">
 		Address to send money to <input type="text" name="address"><br>
 		<br> Amount to send<input type="text" name="amount"><br>
 		<br> <input type="submit" name="submit">
