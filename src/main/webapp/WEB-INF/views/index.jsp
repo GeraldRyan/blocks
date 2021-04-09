@@ -14,7 +14,7 @@
 		<c:if test="${isloggedin == true }">
 			<a href="./logout">Logout</a>
 		</c:if>
-		<c:if class="text-red" test="${isloggedin == false}">
+		<c:if test="${isloggedin == false}">
 			<nav class="text-4xl flex justify-around">
 				<a class="" href="./login">Login</a> <a class="" href="./register">Register</a>
 			</nav>
@@ -23,10 +23,11 @@
 	</nav>
 	<c:if test="${isloggedin == false }">
 		<div class="m-auto text-center">
-			<h1 class="text-2xl m-auto text-center">You are not logged in.</h1>
+			<h1 class="text-2xl m-auto text-center text-red-700">You are not logged in. </h1>
 			<c:if test="${failed == true}">
-				<p>${msg}</p>
+				<p class="text-red-300">${msg}</p>
 			</c:if>
+			<div class="text-6xl">BeanCoin</div>
 			<br> <a class="mt-48 text-6xl" href="./blockchain">Explore
 				our version of the blockchain</a> <br>
 	</c:if>
@@ -38,13 +39,13 @@
 	<c:if test="${isloggedin == true }">
 		<h1>Welcome to the blockchain ${user.getUsername()}</h1>
 
-		<a href="./blockchain">See our version of the blockchain</a>
+		<a class="text-4xl text-green-700" href="./blockchain">See our version of the blockchain</a>
 		<br>
-		<a href="./blockchain/mine">Mine Block</a>
+		<a class="text-4xl text-green-700" href="./blockchain/mine">Mine Block</a>
 		<br>
-		<a href="./wallet/">Your wallet</a>
+		<a class="text-4xl text-green-700" href="./wallet/">Your wallet</a>
 		<br>
-		<a href="./wallet/transact">Transact on the blockchain</a>
+		<a class="text-4xl text-green-700" href="./wallet/transact">Transact on the blockchain</a>
 		<br>
 		<!-- 		<br>
 		<a href="./logout">Logout</a> -->
