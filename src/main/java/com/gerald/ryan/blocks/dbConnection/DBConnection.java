@@ -16,6 +16,8 @@ public abstract class DBConnection {
 	private String pUName = "blocks";
 
 	public void connect() {
+		System.err.println("Persistence Provider: " + Persistence.PERSISTENCE_PROVIDER);
+		System.err.println("Persistence Class: " + Persistence.class);
 		this.emf = Persistence.createEntityManagerFactory(pUName);
 		this.em = emf.createEntityManager();
 	}
@@ -31,6 +33,7 @@ public abstract class DBConnection {
 
 	/**
 	 * Heroku function in order to connect to jawsdb
+	 * 
 	 * @return
 	 * @throws URISyntaxException
 	 * @throws SQLException
