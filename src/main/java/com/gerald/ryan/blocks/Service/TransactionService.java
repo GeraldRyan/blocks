@@ -27,8 +27,16 @@ public class TransactionService {
 		return transactionD.addTransaction(t);
 	}
 
-	public Transaction updateTransactionService(Transaction t1, Transaction t2) {
-		return transactionD.updateTransaction(t1, t2);
+	/**
+	 * Updates Transaction of given wallet so that you can append recipients and
+	 * increase amounts to existing recipients
+	 * 
+	 * @param newT
+	 * @param original
+	 * @return
+	 */
+	public Transaction updateTransactionService(Transaction nu, Transaction alt) {
+		return transactionD.updateTransaction(nu, alt);
 	}
 
 	public Transaction removeTransactionService(String UUID) {

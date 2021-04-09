@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -115,16 +116,26 @@ public class WalletController {
 	public String postTransaction(@ModelAttribute("wallet") Wallet w, Model model,
 			@RequestParam("address") String address, @RequestParam("amount") double amount, HttpServletRequest request)
 			throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, IOException {
-		Transaction t1 = new Transaction(w, address, amount);
-//		Transaction T2 = pool.findExistingTransactionByWallet(t1.get)
+		Transaction nu = new Transaction(w, address, amount);
+		pool = tService.getAllTransactionsAsTransactionPoolService();
+		Transaction alt = pool.findExistingTransactionByWallet(nu.getSenderAddress());
+		if (alt == null) {
+			System.err.println("Transaction 2 is null. there is no existing transaction of that sender"
+					+ nu.getSenderAddress() + "==" + w.getAddress());
+			model.addAttribute("latesttransaction", nu);
+			tService.addTransactionService(nu);
+			return nu.toJSONtheTransaction();
+		} else {
+			System.out.println("Existing transaction found!");
+			Transaction updated = tService.updateTransactionService(nu, alt);
+			model.addAttribute("latesttransaction", updated);
+			return updated.toJSONtheTransaction();
+		}
 		// if transaction found in pool
 		// update service
 
 		// else
-		tService.addTransactionService(t1);
 
-		model.addAttribute("latesttransaction", t1);
-		return t1.toJSONtheTransaction();
 	}
 
 }

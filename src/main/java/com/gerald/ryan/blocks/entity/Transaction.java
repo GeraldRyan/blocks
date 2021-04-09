@@ -214,7 +214,6 @@ public class Transaction {
 		input.put("amount", senderWallet.getBalance());
 		input.put("address", senderWallet.getAddress());
 		input.put("publicKeyB64", publicKeyString);
-//		input.put("publicKeyByte", senderWallet.getPublickey().getEncoded());
 		input.put("publicKeyFormat", senderWallet.getPublickey().getFormat());
 		input.put("signatureB64", Base64.getEncoder().encodeToString(bytesignature));
 
@@ -246,11 +245,13 @@ public class Transaction {
 			this.output.put(recipientAddress, (double) this.output.get(recipientAddress) + amount);
 		} else {
 			this.output.put(recipientAddress, amount);
+			this.recipientAddress = "multiple";
 		}
 		this.output.put(senderWallet.getAddress(), (double) this.output.get(senderWallet.getAddress()) - amount);
 		this.amount += amount;
 		// sign input over again
 		this.input = this.createInput(senderWallet, output);
+		this.updateOutputInputJson();
 	}
 
 	/**
@@ -297,6 +298,33 @@ public class Transaction {
 			throw new InvalidTransactionException("Invalid Signature");
 		}
 		return true;
+	}
+
+	/**
+	 * HashMap<> Input, Output are not persisted to DB but JSON strings inputJson
+	 * and outputJson are. This method rebuilds them when called- for instance upon
+	 * retrieval from DB. It is self inflating, requiring no args, only a GSON
+	 * dependency.
+	 */
+	public void rebuildOutputInput() {
+		if (this.output == null) {
+			System.err.println("I THOUGHT SO! Transaction line 310");
+		}
+		this.input = new Gson().fromJson(this.getInputjson(), HashMap.class);
+		this.output = new Gson().fromJson(this.getOutputjson(), HashMap.class);
+	}
+
+	/**
+	 * For persistence, the output and input maps must be jsonified. As such, when
+	 * the maps themselves change in memory, they must be themselves updated. Here
+	 * is a quick and easy method to do so.
+	 */
+	public void updateOutputInputJson() {
+		if (this.output == null) {
+			System.err.println("I THOUGHT SO! Transaction line 310");
+		}
+		this.outputjson = new Gson().toJson(this.output);
+		this.inputjson = new Gson().toJson(this.input);
 	}
 
 	public static boolean is_valid_transactionReconstructPK(Transaction transaction)
@@ -413,7 +441,8 @@ public class Transaction {
 		serializeThisBundle.put("output", output);
 		serializeThisBundle.put("UUID", uuid);
 		serializeThisBundle.put("amount", amount);
-		serializeThisBundle.put("address", recipientAddress);
+		serializeThisBundle.put("recipientaddress", recipientAddress);
+		serializeThisBundle.put("senderaddress", senderAddress);
 
 		return new Gson().toJson(serializeThisBundle);
 	}
@@ -535,13 +564,7 @@ public class Transaction {
 		Wallet senderWallet = Wallet.createWallet();
 
 		Transaction t1 = new Transaction(senderWallet, "recipientWalletAddress1920", 15);
-//		System.out.println(t1.toString());
-//		t1.update(senderWallet, "recipientWalletAddress1920", 20);
-//		System.out.println(t1.toString());
-//		t1.update(senderWallet, "theneighbors", 99);
-//		System.out.println(t1.toString());
-////		t1.update(senderWallet, "place I can't afford", 999);
-//		System.out.println(t1.toString());
+
 		System.out.println("Is it valid?");
 		System.out.println(Transaction.is_valid_transaction(t1));
 		System.err.println("PRINTING t1.TOJSON");

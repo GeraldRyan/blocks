@@ -1,10 +1,17 @@
 package com.gerald.ryan.blocks.Dao;
 
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SignatureException;
 import java.util.List;
 
 import com.gerald.ryan.blocks.dbConnection.DBConnection;
 import com.gerald.ryan.blocks.entity.Transaction;
 import com.gerald.ryan.blocks.entity.TransactionPool;
+import com.gerald.ryan.blocks.entity.Wallet;
+import com.gerald.ryan.blocks.exceptions.TransactionAmountExceedsBalance;
 
 public class TransactionDao extends DBConnection implements TransactionDaoI {
 
@@ -26,13 +33,22 @@ public class TransactionDao extends DBConnection implements TransactionDaoI {
 	}
 
 	@Override
-	public Transaction updateTransaction(Transaction t1, Transaction t2) {
+	public Transaction updateTransaction(Transaction nu, Transaction alt) {
 		this.connect();
 		em.getTransaction().begin();
-		Transaction TMerging = em.find(Transaction.class, t1.getUuid());
+		Transaction merged = em.find(Transaction.class, alt.getUuid());
+		merged.rebuildOutputInput();
+		try {
+			merged.update(nu.getSenderWallet(), nu.getRecipientAddress(), nu.getAmount());
+		} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException | SignatureException
+				| TransactionAmountExceedsBalance | IOException e) {
+			e.printStackTrace();
+		} finally {
+
+		}
 		em.getTransaction().commit();
 		this.disconnect();
-		return null;
+		return merged;
 	}
 
 	@Override

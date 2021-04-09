@@ -11,6 +11,10 @@ import java.security.NoSuchProviderException;
 import java.util.HashMap;
 import java.util.List;
 
+import org.hibernate.mapping.Map;
+
+import com.google.gson.Gson;
+
 /**
  * @author Gerald Ryan Natural constructor is zero arg
  *
@@ -49,6 +53,7 @@ public class TransactionPool {
 	public static TransactionPool fillTransactionPool(List<Transaction> transactionList) {
 		TransactionPool tp = new TransactionPool();
 		for (Transaction t : transactionList) {
+			t.rebuildOutputInput();
 			tp.putTransaction(t);
 		}
 		return tp;
@@ -61,9 +66,20 @@ public class TransactionPool {
 	 * @return
 	 */
 	public Transaction findExistingTransactionByWallet(String walletAddress) {
-		for (String transkey : this.getTransactionMap().keySet()) {
-			Transaction t = (Transaction) this.getTransactionMap().get(transkey);
-			if (t.getInput().get("address") == walletAddress) {
+		if (this.getTransactionMap().keySet().size() == 0) {
+			System.err.println("KEYSET IS SIZE 00000000");
+			return null;
+		}
+		HashMap<String, Object> tmpinput;
+		for (String uuid : this.getTransactionMap().keySet()) {
+			System.err.println("UUID OF TRANSACTION IS " + uuid);
+			Transaction t = (Transaction) this.getTransactionMap().get(uuid);
+			System.err.println("INPUT JSON");
+			System.err.println(t.getInputjson());
+			System.err.println("OUTPUT JSON");
+			System.err.println(t.getOutputjson());
+			tmpinput = new Gson().fromJson(t.getInputjson(), HashMap.class);
+			if (tmpinput.get("address").equals(walletAddress)) {
 				return t;
 			}
 		}
