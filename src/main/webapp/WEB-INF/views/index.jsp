@@ -14,7 +14,7 @@
 		<c:if test="${isloggedin == true }">
 			<a href="./logout">Logout</a>
 		</c:if>
-		<c:if test="${isloggedin == false}">
+		<c:if class="text-red" test="${isloggedin == false}">
 			<nav class="text-4xl flex justify-around">
 				<a class="" href="./login">Login</a> <a class="" href="./register">Register</a>
 			</nav>

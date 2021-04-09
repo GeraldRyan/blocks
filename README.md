@@ -1,15 +1,17 @@
-# BEANCOIN IS HERE!
-(beta)
+# BEANCOIN IS HERE! (beta)
 
-Create a new blockchain and Crypto (e.g. "Beancoin") with your friends, for your customers or for your company. Use our blockchain technology as a cryptocurrency or other form of transaction and record keeping where data is previous and veracity and publicity is a requirement. 
+Create a new group blockchain / Crypto app (e.g. "beancoin") with your friends, for your business, or for your religious organization. Use our blockchain technology as a cryptocurrency or other form of transaction and record keeping where data is previous and veracity and publicity is a requirement. 
 
-A blockchain is basically an open source, secure and reliable (under the right conditions) ledger, that can store data- for instance "transactions". See below for more facts. 
+A blockchain structure is basically an open source, secure and reliable (under the right conditions) ledger, that can store certain types of data- for instance "transactions". 
 
-A blockchain is a community affair. Multiple people contribute to the validation of chains by "mining" blocks and listening on the network to node broadcasts of others. That is optional. You can simply choose to transact, using such a technology platform as this, but mining (including for reward) is enabled. 
+Blockchain is a community affair. Multiple parties (nodes on the network) contribute to the validation of chains by "mining" blocks and listening to other nodes' broadcasts on various channels. That is optional though. A user can simply choose to transact, trade, buy or spend. but mining (including for reward) is also possible (coming soon). 
+
+***Note to assessors***: See the  ***Deploy Instructions and Assessor Information*** below on how to get this app running and other important information. The next couple sections will be 'role play'. The idea is this company can offer coins to customers that they can use for whatever purpose they desire, serious or trivial, or just use the blockchain ledger as a public record]
+
 
 # Simple start
 
-Simply, go to the homepage (http://localhost:8080/blocks/). 
+Simply, go to the homepage (http://[localhost:8080]/blocks/). 
 
 You will find a link to the typical Login and registration page. If you don't have an account, or if you do, you konw the drill. Here is a link to the registration page. http://localhost:8080/blocks/register. Choose a user name, secure password- you know what to do. 
 
@@ -100,7 +102,13 @@ This is all part of just one block, having capacity to contain thousands of indi
 
 Great question. Because of the public/private key principle. This is done under the hood automatically by us so you don't have to worry about anything except keeping your login secure (and not overspending--https://www.ramseysolutions.com/). Like magic, one of the key pair can encrypt (or sign) and the other can decript (or verify a signature). They can actually serve either function, but one is arbitrarily chosen to be public and another private. Keep it private. And then everyone is given an address from a very very very large address space. Speaking of space- if you send to an address that no one owns- you can. Your transaction won't be rejected. These coins will be effectively lost to space, like precious jewels on the moon. In a way, this is a risk and could be a dangerous aspect of cryptocurrency, but it is also a virtue of it. There are no refunds or chargebacks--- but there are no refunds. What you do has permannce. That is both a good thing and a bad thing but the good side is it can bring other forms of security and anonymity, and there is always the traditional banking way. That will not go away. Private and public keys are very mathematical. Most people just trust they work but ther eis much reading you could do. Maybe you are the next Elon. or Satoshi. 
 
-# Key Endpoints
+
+### Why "beancoin"?
+
+Our stack was developed in Java, which has the concept of "java beans or enterprise beans- a form of programming 'objects', and we also love coffee, and it sounds like bitcoin- hence, beancoin". For your coin you can create whatever name you wish. HarryPotterCoin, VeryProfessionalBusinessCoin, whatever floats your boat. 
+
+
+# ENDPOINTS
 
 GET 
 http://[yourdomain]/blocks/blockchain -- Get our version of the chain in serialized form for syncing with your node
@@ -118,8 +126,41 @@ Pubnub.com -> blockchain_java
 Publish Key : pub-c-74f31a3f-e3da-4cbe-81a6-02e5b8744abd (fake for security)
 Subscribe Key : sub-c-1e6d4f2c-9012-11eb-968e-467c259650fa (real)
 
+## Deploy instructions and Assessor Information--
+
+This is a Spring MVC web application using Tomcat server, build with Maven without any non-Maven dependencies. It makes use of JPA for its persistence strategy.
+
+Maven should handle the build if you can set up Tomcat. 
+
+Importantly, you need to configure Persistence.xml in your own environment to create the databases. The tables should be self creating. Feel free as you explore the app to delete the tables to your heart's content. 
+You must always delete table blockchain_block; first as that is a dependent join table to blockchain and block. I usually follow it with deleting block and then blockchain, but you don't have to delete anything. 
+The app is designed and capable of handling most situations, but there are some situations which lead to crash, and others with lead to minor bad UX. It was a question of priority. 
+The app has some powerful and impressive features. I will walk you through them. 
+First of all you can register. When you register, you are auto logged in and led to a welcome page. A wallet is made for you with 1000 bean coin to spend as you will. The balance is not configured to update yet. Coming soon!
+
+In the wallet area you can send money to other addresses. Once there are transactions in the transaction pool, for instance by sending money,then you can mine blocks at the mine block endpoint. See what happens if you mine when there's no 
+transactions in the transaction table and how they get removed if you refresh the mine-block page (because they are already part of the chain. 
+
+The JSON definitely looks better with a Formatter plugin. STRONGLY recommended. 
+
+I am using Tailwind as my main CSS strategy but functionality has been my core focus. The registration form is not secure, obviously and some of the login and routing is buggy. While important, I feel I could have completed that at any time. 
+
+There are occasional crashes. It's a powerful app. There is room for signifant refactoring, changing of strategies like Annotations and addition of security and logging, but the blockchain is legitimate. 
+
+It really performs a SHA256 hash on the data, with an adjusting level of difficulty based on the target time for mining a block. (In our dev case that's 3 seconds and there's also not enough transactions to process). Try let the block get big. 
+
+You can also add transactions (send money to recipients) with Postman. See ENDPOINTS above. 
+
+The app also uses PublicKey and Private Key classes from Java Security as well as verification. It makes great use of Base64 encoding and serialization at many points. There is a lot of back and forth. 
+
+My strategy for working with data in the controller classes evolved midway or later to being to pull each time necessary from the database, and save to the same (syncing) and also refreshing the model in memory. First storage, and then memory, so both 
+of these sources of truth would be up to date. This would make it run better and crash less (null ptrs and indexes out of range and all). 
+
+It is not perfect and occasionally crashes and has some room for improvement in the UX, but under the hood it is a powerful app with a lot of potential and something I am really proud of. 
+It has been a tremendous growth experience for me. I have learned so much about both Java and Blockchain. 
 
 
-### Why "beancoin"?
+## TIPS 
 
-Our stack was developed in Java, which has the concept of "java beans or enterprise beans- a form of programming 'objects', and we also love coffee, and it sounds like bitcoin- hence, beancoin". For your coin you can create whatever name you wish. HarryPotterCoin, VeryProfessionalBusinessCoin, whatever floats your boat. 
+JSON formatter is a great extension for chrome that helps you view JSON objects in a pretty format. 
+https://chrome.google.com/webstore/detail/json-formatter/bcjindcccaagfpapjjmafapmmgkkhgoa
