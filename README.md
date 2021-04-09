@@ -1,6 +1,7 @@
-# Yet another blockchain and crypto service! (beta)
+# "Beancoin" crypto! 
+###(beta)
 
-Create a new blockchain and Crypto ("Beancoin") with your friends, for your customers or for your company. Use our blockchain technology as a cryptocurrency or other form of transaction and record keeping where data is previous and veracity and publicity is a requirement. 
+Create a new blockchain and Crypto (e.g. "Beancoin") with your friends, for your customers or for your company. Use our blockchain technology as a cryptocurrency or other form of transaction and record keeping where data is previous and veracity and publicity is a requirement. 
 
 A blockchain is basically an open source, secure and reliable (under the right conditions) ledger, that can store data- for instance "transactions". See below for more facts. 
 
@@ -58,6 +59,11 @@ This will sound silly but the blockchain is just a chain of blocks! Next questio
 
 Ok kidding. But it is though. Ok what is a block? A block is a data structure that contains key information, such as its timestamp, it's hash, it's data payload (oh that's where the good stuff is), level of difficulty, as well as the hash value of its immediate predecessor, terminating at the genesis block, which is constant for every instance (version) of this blockchain app. If the genesis block of someone's chain is not valid, then her chain is not valid. If the block's overall data doesn't hash to a certain value that matches what it claims (why people can't fake data), then the block is invalid and so is the chain. If the block is valid in itself but its last hash does not correspond to the hash of the block it is supposed to follow, the chain is invalid. If a chain of someone's instance is valid, but a longer also valid chain appears, even if they disagree on the blocks belonging in that chain, the shorter chain agrees to replace thir chain, because its no longer the truth to the community. This will be a very very rare case fwiw, and if it does happen and gets serious, that's when a 'fork" of a chain can occur, and two coins emerge from one, with people having a stake in each. Again this is rare. Now why can't SPECTRE make their own chain and claim it as truth? To do so they have to have a longer valid chainand we haven't even talked of mining difficulty. 
 
+
+HERE IS AN EXAMPLE OF A SIMPLE BLOCKCHAIN WITH DUMMY DATA. 
+Scroll down to see what type of structure that data portion would really include 
+![image of a simple blockchain](https://imgur.com/SNUtPL5 "Simple blockchain structure.")
+
 ### What makes it so difficult to mine? (Even more advanced)
 
 The level of difficulty is a number that can fluctuate, but the time it takes to process a block is set to a target- for example 10 minutes like blockchain. Well what if someone mines a block quicker? Simple- the system adjusts. It is dynamic and responsive. And if a block goes over the target, the difficulty adjust downward. 
@@ -85,6 +91,15 @@ Here is a good online coverter of hex to binary. https://www.binaryhexconverter.
 
 Everyone in the network is a peer. There is no central source of authority, although we are the hosts of the users and their databases. We created this app, this implementation of the blockchain, and we host users wallets and accounts on our secure databases, but nothing is stopping others from setting up their own wallets, if they have the know how. We are able to privde the private key data to its owners to do such things but the architecture of blockchain is peer to peer through and through. No one is ruler. You listen on the network, to the level you want to participate, on different channels (transaction updates on the TRANSACTIONS channel, and block updates on the BLOCK channel). On our server, which you will probably be useing, we give you the ability to mine, through us. We have our version of transactions just like anybody. They are stored in our database, as a Transaction Pool. From there when one of our users chooses to mine, they automatically select a batch of transactions and hash a block till they meet proof of work. Then they become part of the block and become removed from the database. Just as everyone has their source of the chain that syncs upregularily, they have a similar pool of transacitons. 
 
+HERE IS AN EXAMPLE OF THE REAL 'DATA' PART OF A BLOCKCHAIN. 
+This is all part of just one block, having capacity to contain thousands of individual transactions with money being directed to different wallets as signed by the the given address. 
+![Block with Transaction Data](https://imgur.com/ijoGvhr", Block with Transaction Data ")
+
+
 ### Why can't transactions be forged? 
 
 Great question. Because of the public/private key principle. This is done under the hood automatically by us so you don't have to worry about anything except keeping your login secure (and not overspending--https://www.ramseysolutions.com/). Like magic, one of the key pair can encrypt (or sign) and the other can decript (or verify a signature). They can actually serve either function, but one is arbitrarily chosen to be public and another private. Keep it private. And then everyone is given an address from a very very very large address space. Speaking of space- if you send to an address that no one owns- you can. Your transaction won't be rejected. These coins will be effectively lost to space, like precious jewels on the moon. In a way, this is a risk and could be a dangerous aspect of cryptocurrency, but it is also a virtue of it. There are no refunds or chargebacks--- but there are no refunds. What you do has permannce. That is both a good thing and a bad thing but the good side is it can bring other forms of security and anonymity, and there is always the traditional banking way. That will not go away. Private and public keys are very mathematical. Most people just trust they work but ther eis much reading you could do. Maybe you are the next Elon. or Satoshi. 
+
+### Why "beancoin"?
+
+Our stack was developed in Java, which has the concept of "java beans or enterprise beans- a form of programming 'objects', and we also love coffee, and it sounds like bitcoin- hence, beancoin". For your coin you can create whatever name you wish. HarryPotterCoin, VeryProfessionalBusinessCoin, whatever floats your boat. 
