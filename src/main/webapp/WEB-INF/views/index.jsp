@@ -6,32 +6,33 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Index Page</title>
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
+	rel="stylesheet">
 </head>
-<body>
+<body class="bg-gray-800 text-white">
 	<nav>
 		<c:if test="${isloggedin == true }">
 			<a href="./logout">Logout</a>
 		</c:if>
 		<c:if test="${isloggedin == false}">
-			<a href="./login">Login</a>
-
-			<a href="./register">Register</a>
+			<nav class="text-4xl flex justify-around">
+				<a class="" href="./login">Login</a> <a class="" href="./register">Register</a>
+			</nav>
 		</c:if>
 
 	</nav>
 	<c:if test="${isloggedin == false }">
-		<h1>You are not logged in.</h1>
-		<c:if test="${failed == true}">
-			<p>${msg}</p>
-		</c:if>
-		<!-- 		<a href="./login">Login</a>
-		<br> -->
-<!-- 		<a href="./register">Register</a>
-		<br> -->
-		<br>
-		<a href="./blockchain">Explore our version of the blockchain</a>
-		<br>
+		<div class="m-auto text-center">
+			<h1 class="text-2xl m-auto text-center">You are not logged in.</h1>
+			<c:if test="${failed == true}">
+				<p>${msg}</p>
+			</c:if>
+			<br> <a class="mt-48 text-6xl" href="./blockchain">Explore
+				our version of the blockchain</a> <br>
 	</c:if>
+	</div>
+	<img class="m-auto rounded-full" alt="coffee bean close up"
+		src="./resources/bean.png">
 
 
 	<c:if test="${isloggedin == true }">
@@ -45,7 +46,7 @@
 		<br>
 		<a href="./wallet/transact">Transact on the blockchain</a>
 		<br>
-<!-- 		<br>
+		<!-- 		<br>
 		<a href="./logout">Logout</a> -->
 
 	</c:if>
