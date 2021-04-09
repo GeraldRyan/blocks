@@ -1,5 +1,5 @@
-# "Beancoin" crypto! 
-###(beta)
+# BEANCOIN IS HERE!
+(beta)
 
 Create a new blockchain and Crypto (e.g. "Beancoin") with your friends, for your customers or for your company. Use our blockchain technology as a cryptocurrency or other form of transaction and record keeping where data is previous and veracity and publicity is a requirement. 
 
