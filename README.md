@@ -114,9 +114,9 @@ http://[yourdomain]/blocks/wallet/transact [POST] - send a POST request in follo
     "amount": 150
 }
 
-Pubnub.com (modfied)
-Publish Key : sub-c-1e6d4f2c-9012-11eb-968e-467c25650fa
-Subscribe Key : pub-c-74f31a3f-e3da-4cbe-81a6-02e2b8744bd
+Pubnub.com -> blockchain_java
+Publish Key : pub-c-74f31a3f-e3da-4cbe-81a6-02e5b8744abd (fake for security)
+Subscribe Key : sub-c-1e6d4f2c-9012-11eb-968e-467c259650fa (real)
 
 
 
