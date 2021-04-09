@@ -27,6 +27,7 @@ import com.gerald.ryan.blocks.exceptions.ChainTooShortException;
 import com.gerald.ryan.blocks.exceptions.GenesisBlockInvalidException;
 import com.gerald.ryan.blocks.initializors.Initializer;
 import com.gerald.ryan.blocks.pubsub.PubNubApp;
+import com.gerald.ryan.blocks.utilities.TransactionRepr;
 import com.google.gson.JsonElement;
 import com.pubnub.api.PubNubException;
 
@@ -94,6 +95,8 @@ public class BlockchainController {
 		Block new_block = blockchainApp.addBlockService("beancoin", transactionData);
 //		pnapp.broadcastBlock(new_block); TURN BACK ON LATER
 		model.addAttribute("minedblock", new_block);
+		pool.refreshBlockchainTransactionPool(blockchain);
+//		pool = tService.getAllTransactionsAsTransactionPoolService(); // After potentially deleting, refresh, but should be necessary only on page load (lazy concept)
 		return new_block.webworthyJson(tlist); // This pollutes with escape chars \ because string
 	}
 
@@ -118,6 +121,35 @@ public class BlockchainController {
 			System.out.println("CAN'T SORT IT FOR SOME REASON");
 			e.printStackTrace();
 		}
+	}
+
+	@RequestMapping(value = "see", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public String seeIf(@ModelAttribute("blockchain") Blockchain blockchain, Model model)
+			throws NoSuchAlgorithmException, PubNubException, InterruptedException {
+//		pool = tService.getAllTransactionsAsTransactionPoolService(); // This is maybe expensive. Review for refactor
+//		String transactionData = "MAIN INSTANCE STUBBED DATA"; // overruled -->>
+//		transactionData = pool.getMinableTransactionDataString();
+//		List<Transaction> tlist = tService.getAllTransactionsAsTransactionList();
+//
+//		System.err.println("TRANSACTION DATA Blockchain controller 84");
+//		System.err.println("TRANSACTION DATA");
+//		System.out.println(transactionData.toString());
+//		System.err.println("TRANSACTION DATA");
+//		System.err.println("TRANSACTION DATA");
+//		Block new_block = blockchainApp.addBlockService("beancoin", transactionData);
+////		pnapp.broadcastBlock(new_block); TURN BACK ON LATER
+//		model.addAttribute("minedblock", new_block);
+//		return new_block.webworthyJson(tlist); // This pollutes with escape chars \ because string
+		Block b = ((Blockchain) model.getAttribute("blockchain")).getNthBlock(10);
+		System.out.println(b.getData().getClass());
+		List<TransactionRepr> tr = b.deserializeTransactionData();
+		for (TransactionRepr r : tr) {
+			System.out.println(r.getClass());
+			System.out.println(r.getInput().get("address"));
+//			System.out.println();
+		}
+		return b.getData().toString();
 	}
 
 }

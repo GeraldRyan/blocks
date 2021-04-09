@@ -19,6 +19,7 @@ import com.gerald.ryan.blocks.utilities.TransactionRepr;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 /**
  * 
@@ -50,6 +51,8 @@ public class Block {
 	static String GENESIS_HASH = "Genesis_Hash";
 	@Transient
 	static String GENESIS_LAST_HASH = "Genesis_Last_Hash";
+	@Transient
+	List<TransactionRepr> transactionList;
 
 //	@Transient 
 	public static final HashMap<String, Object> GENESIS_DATA = new HashMap<String, Object>();
@@ -177,6 +180,21 @@ public class Block {
 
 	}
 
+	public List<TransactionRepr> deserializeTransactionData() {
+		List<TransactionRepr> lt = new ArrayList();
+		java.lang.reflect.Type t = new TypeToken<List<TransactionRepr>>() {
+		}.getType();
+		List<TransactionRepr> listTR = null;
+		System.out.println(this.getData());
+		listTR = new Gson().fromJson(this.getData(), t);
+		// try {
+//			listTR = new Gson().fromJson(this.getData(), t);
+//		} catch (Exception e) {
+//			System.out.println("Could not deserialize json at block 191)");
+//		}
+		return listTR;
+	}
+
 	/**
 	 * Deserialize a valid JSON string with GSON and convert it back into valid
 	 * block
@@ -188,7 +206,6 @@ public class Block {
 		Gson gson = new Gson();
 		Block block_restored = gson.fromJson(jsonel, Block.class);
 		return block_restored;
-
 	}
 
 	/**

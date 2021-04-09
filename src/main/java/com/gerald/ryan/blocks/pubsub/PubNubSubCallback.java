@@ -25,7 +25,6 @@ import com.pubnub.api.models.consumer.pubsub.PNSignalResult;
 import com.pubnub.api.models.consumer.pubsub.files.PNFileEventResult;
 import com.pubnub.api.models.consumer.pubsub.message_actions.PNMessageActionResult;
 
-
 import java.io.IOException;
 import java.nio.channels.Channels;
 import java.security.InvalidKeyException;
@@ -50,7 +49,8 @@ public class PubNubSubCallback extends com.pubnub.api.callbacks.SubscribeCallbac
 	Blockchain blockchain;
 	BlockchainService blockchainApp = new BlockchainService();
 	HashMap<String, String> CHANNELS;
-	TransactionPool transactionPool;
+	final TransactionService tService = new TransactionService();
+	TransactionPool pool;
 
 	public PubNubSubCallback(Blockchain blockchain, HashMap<String, String> CHANNELS, TransactionPool transactionPool) {
 		this.blockchain = blockchain;
@@ -117,6 +117,7 @@ public class PubNubSubCallback extends com.pubnub.api.callbacks.SubscribeCallbac
 	 */
 	@Override
 	public void message(PubNub pubnub, PNMessageResult message) {
+
 		System.out.println("-- Incoming Transmission -");
 		String messagePublisher = message.getPublisher();
 		System.out.println("Message publisher: " + messagePublisher);
@@ -135,14 +136,18 @@ public class PubNubSubCallback extends com.pubnub.api.callbacks.SubscribeCallbac
 			try {
 				this.blockchain.replace_chain(potential_chain);
 				blockchainApp.replaceChainService("beancoin", potential_chain);
+				pool = tService.getAllTransactionsAsTransactionPoolService(); // pool up to date each time message comes
 				System.out.println("SUCCESSFULLY REPLACED LOCAL CHAIN WITH BROADCAST CHAIN");
+				System.out.println("REFRESHING TRANSACTION POOL; SCANNING..\n ELIMINATING PROCESSED TRANSACTIONS");
+				pool.refreshBlockchainTransactionPool(blockchain);
 			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();
 			} catch (ChainTooShortException e) {
 				System.err.println("DID NOT REPLACE CHAIN. CHAIN TOO SHORT");
 			} catch (BlocksInChainInvalidException e) {
 				System.err.println("DID NOT REPLACE CHAIN. At least one of the blocks in the chain is not valid");
-				System.err.println("Ignore the above if you mined the block yourself and it's just an echo from remote channel you broadcast to. Chain most likely already up to date. ");
+				System.err.println(
+						"Ignore the above if you mined the block yourself and it's just an echo from remote channel you broadcast to. Chain most likely already up to date. ");
 			} catch (GenesisBlockInvalidException e) {
 				System.err.println("DID NOT REPLACE CHAIN. Genesis block invalid exception");
 			}

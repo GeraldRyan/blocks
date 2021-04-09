@@ -14,6 +14,8 @@ import java.util.List;
 
 import org.hibernate.mapping.Map;
 
+import com.gerald.ryan.blocks.Service.TransactionService;
+import com.gerald.ryan.blocks.utilities.TransactionRepr;
 import com.google.gson.Gson;
 
 /**
@@ -59,7 +61,6 @@ public class TransactionPool {
 		}
 		return tp;
 	}
-
 
 	/**
 	 * Finds existing transaction of given Wallet if exists in pool, otherwise
@@ -124,6 +125,34 @@ public class TransactionPool {
 		for (String id : this.getTransactionMap().keySet()) {
 			System.out.println("key: " + id + " value: " + this.getTransactionMap().get(id));
 		}
+	}
+
+	/**
+	 * Will delete blockchain recorded transactions from pool
+	 * 
+	 * @param blockchain
+	 */
+	public void refreshBlockchainTransactionPool(Blockchain blockchain) {
+		List<TransactionRepr> trList;
+		int i = 0;
+		for (Block b : blockchain.getChain()) {
+			i++;
+			if (i < 7) {
+				continue;
+			}
+			// skip first six blocks as they have dummy data. will cause gson type crash.
+			trList = b.deserializeTransactionData();
+			for (TransactionRepr t : trList) {
+				if (this.getTransactionMap().containsKey(t.getId())) {
+					System.out.println(
+							"A TRANSACTION IS IN THE POOL, LET'S REMOVE IT from DB and memory!!! TransactionPool");
+					new TransactionService().removeTransactionService(t.getId()); // delete it from database. refresh
+																					// local pool instance elsewhere.
+
+				}
+			}
+		}
+
 	}
 
 	public static void main(String[] args) throws InvalidKeyException, NoSuchAlgorithmException,

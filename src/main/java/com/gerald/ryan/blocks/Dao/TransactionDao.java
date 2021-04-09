@@ -54,10 +54,20 @@ public class TransactionDao extends DBConnection implements TransactionDaoI {
 	@Override
 	public Transaction removeTransaction(String UUID) {
 		this.connect();
-		Transaction t = em.find(Transaction.class, UUID);
-		em.remove(t);
+		em.getTransaction().begin();
+		try {
+			Transaction t = em.find(Transaction.class, UUID);
+			System.out.println("Removing Transaction " + UUID);
+			em.remove(t);
+			em.getTransaction().commit();
+			this.disconnect();
+			return t;
+
+		} catch (Exception e) {
+
+		}
 		this.disconnect();
-		return t;
+		return null;
 	}
 
 	@Override
