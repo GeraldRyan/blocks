@@ -213,23 +213,10 @@ public class Transaction {
 		input.put("timestamp", new Date().getTime());
 		input.put("amount", senderWallet.getBalance());
 		input.put("address", senderWallet.getAddress());
-//		input.put("publicKey", senderWallet.getPublickey()); // TODO make a function to restore public key
-		input.put("signature", bytesignature); // will remove also when can convert
 		input.put("publicKeyB64", publicKeyString);
-		System.err.println("PUBLIC KEY BYTE");
-		System.err.println("PUBLIC KEY BYTE");
-		System.err.println("PUBLIC KEY BYTE");
-		System.err.println("PUBLIC KEY BYTE");
-		byte[] encoded = senderWallet.getPublickey().getEncoded();
-		System.out.println(encoded);
-		System.out.println(Base64.getEncoder().encodeToString((encoded)));
-		System.out.println(Base64.getEncoder().encodeToString((encoded)));
-
-		input.put("publicKeyByte", senderWallet.getPublickey().getEncoded());
+//		input.put("publicKeyByte", senderWallet.getPublickey().getEncoded());
 		input.put("publicKeyFormat", senderWallet.getPublickey().getFormat());
-		// sign off on the transactions, by digitally signing the transactions.
-//		input.put("signatureByte", bytesignature); // cool to have but makes JSON display long vertical
-		input.put("signatureString", Base64.getEncoder().encodeToString(bytesignature));
+		input.put("signatureB64", Base64.getEncoder().encodeToString(bytesignature));
 
 		return input;
 	}
@@ -427,6 +414,7 @@ public class Transaction {
 		serializeThisBundle.put("UUID", uuid);
 		serializeThisBundle.put("amount", amount);
 		serializeThisBundle.put("address", recipientAddress);
+
 		return new Gson().toJson(serializeThisBundle);
 	}
 
