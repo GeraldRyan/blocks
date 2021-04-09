@@ -84,7 +84,18 @@ public class TransactionPool {
 			}
 		}
 		return null;
-//		return (Transaction) this.getTransactionMap().get(uuid);
+	}
+
+	/**
+	 * Return the transactions of the transaction pool as a string that is suited to
+	 * add to block data field, fit for mining, represented in json serialized form
+	 * 
+	 * @return
+	 */
+	public String getMinableTransactionDataString() {
+		String transactionData = "";
+
+		return transactionData;
 	}
 
 	public HashMap<String, Object> getTransactionMap() {
