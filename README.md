@@ -100,6 +100,26 @@ This is all part of just one block, having capacity to contain thousands of indi
 
 Great question. Because of the public/private key principle. This is done under the hood automatically by us so you don't have to worry about anything except keeping your login secure (and not overspending--https://www.ramseysolutions.com/). Like magic, one of the key pair can encrypt (or sign) and the other can decript (or verify a signature). They can actually serve either function, but one is arbitrarily chosen to be public and another private. Keep it private. And then everyone is given an address from a very very very large address space. Speaking of space- if you send to an address that no one owns- you can. Your transaction won't be rejected. These coins will be effectively lost to space, like precious jewels on the moon. In a way, this is a risk and could be a dangerous aspect of cryptocurrency, but it is also a virtue of it. There are no refunds or chargebacks--- but there are no refunds. What you do has permannce. That is both a good thing and a bad thing but the good side is it can bring other forms of security and anonymity, and there is always the traditional banking way. That will not go away. Private and public keys are very mathematical. Most people just trust they work but ther eis much reading you could do. Maybe you are the next Elon. or Satoshi. 
 
+# Key Endpoints
+
+GET 
+http://[yourdomain]/blocks/blockchain -- Get our version of the chain in serialized form for syncing with your node
+http://[yourdomain]/blocks/blockchain/mine -- logged in? Mine a block with your spare computer resources
+http://[yourdomain]/blocks/wallet/transact/ -- make a transaction via an online form (logged in)
+
+POST
+http://[yourdomain]/blocks/wallet/transact [POST] - send a POST request in following form with a logged in and authenticated system
+{
+    "address": "winona",
+    "amount": 150
+}
+
+Pubnub.com (modfied)
+Publish Key : sub-c-1e6d4f2c-9012-11eb-968e-467c25650fa
+Subscribe Key : pub-c-74f31a3f-e3da-4cbe-81a6-02e2b8744bd
+
+
+
 ### Why "beancoin"?
 
 Our stack was developed in Java, which has the concept of "java beans or enterprise beans- a form of programming 'objects', and we also love coffee, and it sounds like bitcoin- hence, beancoin". For your coin you can create whatever name you wish. HarryPotterCoin, VeryProfessionalBusinessCoin, whatever floats your boat. 
