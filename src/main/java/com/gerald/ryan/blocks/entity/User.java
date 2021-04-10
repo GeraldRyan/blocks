@@ -3,6 +3,8 @@ package com.gerald.ryan.blocks.entity;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 import com.gerald.ryan.blocks.Service.UserService;
 import com.google.gson.Gson;
@@ -15,8 +17,11 @@ public class User {
 	String hint;
 	String answer;
 	String email;
+	@OneToOne
+	@JoinColumn(name = "walletId")
+	Wallet wallet;
 	@Embedded
-	WalletForDB wallet;
+	WalletForDB walletForDB;
 
 	public User(String username, String password, String hint, String answer, String email, Wallet wallet) {
 		super();
@@ -25,7 +30,8 @@ public class User {
 		this.hint = hint;
 		this.answer = answer;
 		this.email = email;
-		this.wallet = new WalletForDB(wallet);
+		this.walletForDB = new WalletForDB(wallet);
+
 //		this.wallet = new Gson().toJson(wallet); // I think it will through an illegal serialization reflection error -
 		// they don't want serializing private stuff like private key
 	}
@@ -84,17 +90,20 @@ public class User {
 		this.answer = answer;
 	}
 
-	public WalletForDB getWallet() {
+	public Wallet getWallet() {
 		return wallet;
 	}
 
-	public void setWallet(WalletForDB wallet) {
+	public void setWallet(Wallet wallet) {
 		this.wallet = wallet;
 	}
 
-	public void setWallet(Wallet wallet) {
-		WalletForDB walletForDB = new WalletForDB(wallet);
-		this.wallet = walletForDB;
+	public WalletForDB getWalletForDB() {
+		return walletForDB;
+	}
+
+	public void setWalletForDB(WalletForDB walletForDB) {
+		this.walletForDB = walletForDB;
 	}
 
 	public static void main(String[] args) {

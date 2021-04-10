@@ -26,6 +26,10 @@ import java.util.UUID;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 
 import com.gerald.ryan.blocks.utilities.StringUtils;
 import com.google.gson.Gson;
@@ -44,16 +48,25 @@ import com.google.gson.Gson;
  * @author Gerald Ryan
  *
  */
-@Embeddable
+@Entity
 public class Wallet {
 	public PrivateKey getPrivatekey() {
 		return privatekey;
 	}
-
-	double balance;
-	PrivateKey privatekey;
+	
+	@Id
+	String ownerName; // maps to username
+	@Lob // just store in binary here for java users. See publickeybyte if language agnostic
+	PrivateKey privatekey;  //
+	@Lob
 	PublicKey publickey;
+	byte[] privatekeyByte; // for language agnosticism
+	byte[] publickeyByte; // for language agnosticism
+	double balance;
 	String address;
+	@OneToOne(mappedBy="username")
+	@JoinColumn()
+	User user;
 
 	static double STARTING_BALANCE = 1000;
 
