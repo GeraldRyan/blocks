@@ -36,6 +36,10 @@ nav {
 	font-size: 1.5rem;
 }
 
+#mySecretInput {
+	z-index: -10;
+}
+
 h1 {
 	font-size: 4rem;
 }
@@ -46,15 +50,22 @@ h3 {
 </style>
 <script type="text/javascript">
 	function cpytxt() {
-		var copyText = document.getElementById("address");
-		copyText.select();
-		copyText.setSelectionRange(0, 99999);
-		alert("Text copied");
-		document.execCommand("copy");
+	    var textArea = document.createElement("textarea");
+	    textArea.value = document.getElementById("address").innerText;
+	    document.body.appendChild(textArea);
+	    textArea.select();
+	    document.execCommand("Copy");
+	    textArea.remove();
+		console.log("Text copied to clipboard");
+	};
+	function handleClick(){
+		document.getElementById("cpy").addEventListener("click", ()=>{cpytxt()})	
 	}
+
+	
 </script>
 </head>
-<body>
+<body onload="handleClick()">
 	<nav>
 		<a href="/blocks">Home</a>
 	</nav>
@@ -65,7 +76,7 @@ h3 {
 			<p class="inline">
 				Address: <span id="address">${wallet.getAddress() }</span>
 			</p>
-			<button onclick="cpytxt()"
+			<button id="cpy"
 				class=" inline shadow bg-gray-500
 				ml-4 px-4 text-whitehover:bg-gray-400">copy
 				to clipboard</button>
