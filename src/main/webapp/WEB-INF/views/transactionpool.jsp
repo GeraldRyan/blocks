@@ -30,29 +30,45 @@ tr:nth-child(odd) {
 </style>
 <body>
 	<h1>Transaction Pool</h1>
-	<h2>Get as JSON by submitting POST request to this endpoint with
-		any payload {}</h2>
+	<h2>Note this displays transactions broken down by individual, for
+		uniform display in table format. It is not displayed in bundles of
+		multiple recipients per sender, as processed in the blockchain.</h2>
+	<h2>You can get the original JSON format by submitting a POST
+		request to this same endpoint with any given payload ||| {} |||</h2>
+
+
 
 
 	<table border="2">
 		<tr>
-			<td>Sender Beg Balance</td>
 			<td>Sender Address</td>
-			<td>Transaction ID</td>
+			<td>Beginning Balance</td>
+			<td>Recipient Address</td>
+			<td>Amount</td>
+			<td>Return balance</td>
 			<td>Timestamp</td>
-			<td>Sender End Balance</td>
+			<td>Transaction ID</td>
 		</tr>
 
 		<c:forEach items="${transactionpoollist}" var="t">
-			<tr>
-				<td>${t.getInput().get("amount")}</td>
-				<td>${t.getInput().get("address")}</td>
-				<td>${t.getInput().get("timestamp")}</td>
-				<td>${t.getUuid()}</td>
-				</td>
-				<td>
-			</tr>
+
+			String sAdds = ${t.getInput().get("address")};
+
+			<c:forEach items="${t.getOutput().keySet()}" var="rAdds">
+				<c:if test="${ !sAdds.equals(rAdds)}">
+					<tr>
+						<td>${t.getInput().get("address")}</td>
+						<td>${t.getInput().get("amount")}</td>
+						<td>${rAdds}</td>
+						<td>${t.getOutput().get(rAdds)}</td>
+						<td>${t.getInput().get("amount") - t.getOutput().get(rAdds)}</td>
+						<td>${t.getInput().get("timestamp")}</td>
+						<td>${t.getUuid()}</td>
+					</tr>
+				</c:if>
+			</c:forEach>
 		</c:forEach>
+
 	</table>
 	<br>
 	<p>TODO: Hard to display other important data columns for two
