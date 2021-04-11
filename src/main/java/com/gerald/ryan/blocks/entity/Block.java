@@ -153,7 +153,7 @@ public class Block {
 		HashMap<String, Object> serializeThisBundle = new HashMap<String, Object>();
 		List<TransactionRepr> treprlist = new ArrayList();
 		for (Transaction t : tlist) {
-			treprlist.add(new TransactionRepr(t));
+			treprlist.add(new TransactionRepr(t)); 
 		}
 		serializeThisBundle.put("timestamp", timestamp);
 		serializeThisBundle.put("hash", hash);

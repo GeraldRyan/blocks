@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -32,10 +33,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.gerald.ryan.blocks.Service.TransactionService;
 import com.gerald.ryan.blocks.Service.UserService;
 import com.gerald.ryan.blocks.Service.WalletService;
 import com.gerald.ryan.blocks.entity.Login;
 import com.gerald.ryan.blocks.entity.Message;
+import com.gerald.ryan.blocks.entity.Transaction;
 import com.gerald.ryan.blocks.entity.TransactionPool;
 import com.gerald.ryan.blocks.entity.User;
 import com.gerald.ryan.blocks.entity.Wallet;
@@ -170,6 +173,25 @@ public class HomeController {
 
 //		model.addAttribute("display", messages);
 		return "subscribe";
+	}
+
+	@GetMapping("/transactionpool")
+	public String getTransactionPool(Model model) {
+		List<Transaction> transactionList = new TransactionService().getAllTransactionsAsTransactionList();
+		model.addAttribute("transactionpoollist", transactionList);
+		return "transactionpool";
+	}
+
+	@PostMapping("/transactionpool")
+	@ResponseBody
+	public String postTransactionPool(Model model) {
+
+		TransactionPool pool = new TransactionService().getAllTransactionsAsTransactionPoolService();
+		if (pool.getMinableTransactionDataString() == null) {
+			return "No transactions in the pool. Tell your friends to make transactions";
+		}
+		String transactionData = pool.getMinableTransactionDataString();
+		return pool.getMinableTransactionDataString();
 	}
 
 	public String validateUserAndPassword(String username, String password) {

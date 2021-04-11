@@ -82,15 +82,17 @@ public class BlockchainController {
 	@ResponseBody
 	public String getMine(@ModelAttribute("blockchain") Blockchain blockchain, Model model)
 			throws NoSuchAlgorithmException, PubNubException, InterruptedException {
-		pool = tService.getAllTransactionsAsTransactionPoolService(); // This is maybe expensive. Review for refactor
+		pool = tService.getAllTransactionsAsTransactionPoolService(); 
 		if (pool.getMinableTransactionDataString() == null) {
-			return "No data to mine. Tell your friends";
+			return "No data to mine. Tell your friends to make transactions";
 		}
 		String transactionData = "MAIN INSTANCE STUBBED DATA"; // overruled -->>
 		transactionData = pool.getMinableTransactionDataString();
 		List<Transaction> tlist = tService.getAllTransactionsAsTransactionList();
 		Block new_block = blockchainApp.addBlockService("beancoin", transactionData);
-//		pnapp.broadcastBlock(new_block); TURN BACK ON LATER
+		if (false) { // CONFIGURE BROADCASTING VARIABLE TURN BACK ON LATER
+		pnapp.broadcastBlock(new_block); 			
+		}
 		model.addAttribute("minedblock", new_block);
 		blockchain = blockchainApp.getBlockchainService("beancoin"); // refresh. it's all about refreshing and syncing.
 																		// sync with db
