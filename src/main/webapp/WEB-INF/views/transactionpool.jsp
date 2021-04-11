@@ -7,6 +7,23 @@
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 </head>
+<!-- CSS style to set alternate table 
+            row using color -->
+<style>
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+th, td {
+	text-align: left;
+	padding: 8px;
+}
+
+tr:nth-child(even) {
+	background-color: Lightgreen;
+}
+</style>
 <body>
 	<h1>Transaction Pool</h1>
 	<h2>Get as JSON by submitting POST request to this site
@@ -28,6 +45,7 @@
 				<td>${t.getInput().get("address")}</td>
 				<td>${t.getInput().get("timestamp")}</td>
 				<td>${t.getUuid()}</td>
+				</td><td>
 			</tr>
 		</c:forEach>
 	</table>
