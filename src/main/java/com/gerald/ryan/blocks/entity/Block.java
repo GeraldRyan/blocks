@@ -10,6 +10,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -40,7 +41,9 @@ public class Block {
 	long timestamp;
 	protected String hash;
 	protected String lastHash;
-	@Column(columnDefinition = "varchar(8000) default 'John Snow'")
+	@Lob
+//	@Column(columnDefinition = "varchar(65535) default 'John Snow')
+	@Column(columnDefinition = "LONGTEXT")
 	String data;
 	int difficulty;
 	int nonce;
@@ -153,7 +156,7 @@ public class Block {
 		HashMap<String, Object> serializeThisBundle = new HashMap<String, Object>();
 		List<TransactionRepr> treprlist = new ArrayList();
 		for (Transaction t : tlist) {
-			treprlist.add(new TransactionRepr(t)); 
+			treprlist.add(new TransactionRepr(t));
 		}
 		serializeThisBundle.put("timestamp", timestamp);
 		serializeThisBundle.put("hash", hash);

@@ -46,6 +46,16 @@ import com.gerald.ryan.blocks.pubsub.PubNubApp;
 import com.google.gson.Gson;
 import com.pubnub.api.PubNubException;
 
+
+/*
+ * Key Data Model Session attributes:
+ * On register -- should be logged in, hence everything that login has plus ??
+ * On Login(success) -- Session: wallet, username, isloggedin=true, failed=false
+ * On Login(fail) -- Session: failed=true, msg="various string"
+ * On logout -- Session: wallet=null, username=null, isloggedin=false
+ * 
+ */
+
 //@RequestMapping("/admin")
 @Controller
 @SessionAttributes({ "blockchain", "wallet", "username", "isloggedin", "user", "msg", "transactionpool" })
@@ -107,8 +117,7 @@ public class HomeController {
 			model.addAttribute("isloggedin", true);
 			model.addAttribute("user", new UserService().getUserService(login.getUsername()));
 			model.addAttribute("failed", false);
-			Wallet w = new WalletService().getWalletService(login.getUsername());
-			model.addAttribute("wallet", w);
+			model.addAttribute("wallet", new WalletService().getWalletService(login.getUsername()));
 		} else if (result == "user not found") {
 			System.out.println("User not found in records");
 			model.addAttribute("failed", true);
@@ -118,8 +127,6 @@ public class HomeController {
 			model.addAttribute("failed", true);
 			model.addAttribute("msg", "Password incorrect. Please try again");
 		}
-		System.err.println("password" + login.getPassword());
-		System.err.println("username" + login.getUsername());
 		return "index";
 	}
 

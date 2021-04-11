@@ -1,10 +1,22 @@
 package com.gerald.ryan.blocks.initializors;
 
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 
 import com.gerald.ryan.blocks.Service.BlockchainService;
+import com.gerald.ryan.blocks.Service.TransactionService;
 import com.gerald.ryan.blocks.entity.Blockchain;
+import com.gerald.ryan.blocks.entity.Transaction;
+import com.gerald.ryan.blocks.entity.TransactionPool;
+import com.gerald.ryan.blocks.entity.Wallet;
 import com.gerald.ryan.blocks.utilities.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 // drop table blocksbychain; drop table block; drop table blockchain;
 public class Initializer {
@@ -38,13 +50,59 @@ public class Initializer {
 		return blockchain;
 	}
 
-	public static void main(String[] args) {
-		BlockchainService blockchainApp = new BlockchainService();
-		blockchainApp.newBlockchainService("beancoin");
-		blockchainApp.addBlockService("beancoin", "Dance The Quickstep");
-		blockchainApp.addBlockService("beancoin", "Dance The Waltz");
-		blockchainApp.addBlockService("beancoin", "Dance The Tango");
-		blockchainApp.addBlockService("beancoin", "Dance The Samba");
-		blockchainApp.addBlockService("beancoin", "Dance With Us America");
+	/**
+	 * Submits N number transactions to various addresses (from fixed wallet adds if
+	 * provided) to random wallet addresses
+	 * 
+	 * @throws InvalidAlgorithmParameterException
+	 * @throws NoSuchProviderException
+	 * @throws NoSuchAlgorithmException
+	 * @throws IOException
+	 * @throws InvalidKeyException
+	 */
+	public static List<Transaction> postNTransactions(int n) throws NoSuchAlgorithmException, NoSuchProviderException,
+			InvalidAlgorithmParameterException, InvalidKeyException, IOException {
+		List<Transaction> l = new ArrayList();
+		for (int i = 0; i < n; i++) {
+			String senderAddress = StringUtils.getUUID8();
+			Wallet w = new Wallet().createWallet(senderAddress);
+			String recipientAddress = StringUtils.getUUID8();
+			double amt = new Random().nextInt(900);
+			Transaction t = new Transaction(w, recipientAddress, amt);
+			new TransactionService().addTransactionService(t);
+			l.add(t);
+		}
+		return l;
+	}
+
+	public static List<Transaction> postNTransactions(int n, String senderAddress) throws NoSuchAlgorithmException,
+			NoSuchProviderException, InvalidAlgorithmParameterException, InvalidKeyException, IOException {
+		List<Transaction> l = new ArrayList();
+		Wallet w = new Wallet().createWallet(senderAddress);
+		for (int i = 0; i < n; i++) {
+			String recipientAddress = StringUtils.getUUID8();
+			double amt = new Random().nextInt(900);
+			Transaction t = new Transaction(w, recipientAddress, amt);
+			// Check if should post or update existing (will be lot of updating existing in
+			// this method. maybe a better method, but this is only dev anyway).
+			TransactionPool pool = new TransactionService().getAllTransactionsAsTransactionPoolService();
+			Transaction existing = pool.findExistingTransactionByWallet(t.getSenderAddress());
+			if (existing == null) {
+				new TransactionService().addTransactionService(t);
+				l.add(t);
+			} else {
+				Transaction updated = new TransactionService().updateTransactionService(t, existing);
+				l.add(updated);
+			}
+		}
+		return l;
+
+	}
+
+	public static void main(String[] args) throws InvalidKeyException, NoSuchAlgorithmException,
+			NoSuchProviderException, InvalidAlgorithmParameterException, IOException {
+//		postNTransactions(100);
+		postNTransactions(40, "OU812");
+		postNTransactions(4);
 	}
 }

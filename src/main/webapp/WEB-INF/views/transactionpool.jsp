@@ -23,14 +23,15 @@ th, td {
 tr:nth-child(even) {
 	background-color: Lightgreen;
 }
+
 tr:nth-child(odd) {
 	background-color: #EFEFEF;
 }
 </style>
 <body>
 	<h1>Transaction Pool</h1>
-	<h2>Get as JSON by submitting POST request to this site
-		{"transactionpool":"gimme"}</h2>
+	<h2>Get as JSON by submitting POST request to this endpoint with
+		payload {"transactionpool":"gimme"}</h2>
 
 
 	<table border="2">

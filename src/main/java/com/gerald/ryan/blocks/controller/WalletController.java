@@ -5,8 +5,11 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,13 +30,23 @@ import com.gerald.ryan.blocks.Service.TransactionService;
 import com.gerald.ryan.blocks.entity.Transaction;
 import com.gerald.ryan.blocks.entity.TransactionPool;
 import com.gerald.ryan.blocks.entity.Wallet;
+import com.gerald.ryan.blocks.initializors.Initializer;
 import com.gerald.ryan.blocks.pubsub.PubNubApp;
+import com.google.gson.Gson;
 import com.pubnub.api.PubNubException;
 
 @Controller
 @RequestMapping("wallet")
 @SessionAttributes({ "wallet", "latesttransaction", "pool" })
 public class WalletController {
+
+	/*
+	 * somewhat overloaded, the /transact page is for MAKING transactions, either
+	 * via GET, which brings you to a form to submit, or POST, which returns JSON.
+	 * Completing the form sends you to a /transaction GET page, and completes the
+	 * transaction through requestparams (i.e. URL parameters) POSTing to
+	 * /transaction
+	 */
 
 	PubNubApp pnapp = new PubNubApp();
 	TransactionService tService = new TransactionService();
@@ -114,15 +127,47 @@ public class WalletController {
 					+ nu.getSenderAddress() + "==" + w.getAddress());
 			model.addAttribute("latesttransaction", nu);
 			tService.addTransactionService(nu);
-//			broadcastTransaction(nu);  // switch on and off as desired
+			if (false) {
+				broadcastTransaction(nu); // TODO set up global variable to turn on and off broadcasting
+			}
 			return nu.toJSONtheTransaction();
 		} else {
 			System.out.println("Existing transaction found!");
 			Transaction updated = tService.updateTransactionService(nu, alt);
 			model.addAttribute("latesttransaction", updated);
-//			broadcastTransaction(updated); // switch on and off as desired
+			if (false) {
+				broadcastTransaction(updated); // TODO set up global variable to turn on and off broadcasting
+			}
 			return updated.toJSONtheTransaction();
 		}
+	}
+
+	@PostMapping("/transactt")
+	@ResponseBody
+	public String postDummyTransactions(Model model, @RequestBody Map<String, Object> body) throws InvalidKeyException,
+			NoSuchAlgorithmException, NoSuchProviderException, IOException, InvalidAlgorithmParameterException {
+
+		String numString = (String) body.get("number");
+		System.err.println("MAKING TRANSACTION FROM TRANSACTT");
+		System.err.println("MAKING TRANSACTION FROM TRANSACTT");
+		System.err.println("MAKING TRANSACTION FROM TRANSACTT");
+		System.err.println("MAKING TRANSACTION FROM TRANSACTT");
+		List<Transaction> list = new ArrayList();
+		int n = 1;
+		if (numString != null) {
+			n = new Random().nextInt(999);
+		}
+		String fromaddress = (String) body.get("fromaddress");
+		if (fromaddress == null) {
+			list = new Initializer().postNTransactions(n);
+		} else {
+			list = new Initializer().postNTransactions(n, fromaddress);
+		}
+
+		pool = tService.getAllTransactionsAsTransactionPoolService();
+		model.addAttribute("pool", pool);
+		return new Gson().toJson(list);
+
 	}
 
 	public void broadcastTransaction(Transaction t) {

@@ -71,18 +71,15 @@ public class StringUtils {
 	}
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		final String[] stringArray = { "foo", "bar", "baz" };
-		System.out.println(stringArray.toString());
-		for (String s : stringArray) {
-			System.out.println(s);
-		}
-		byte[] byteArray = StringUtils.stringArrayToByteArray(stringArray);
-		String[] reconstitutedStringArray = StringUtils.byteArrayToStringArray(byteArray);
-		for (String s : reconstitutedStringArray) {
-			System.out.println(s);
-		}
+		
+
 	}
 
+	/**
+	 * Gets the first 8 chars of a random UUID
+	 * 
+	 * @return
+	 */
 	public static String getUUID8() {
 		return String.valueOf(UUID.randomUUID()).substring(0, 8);
 	}
