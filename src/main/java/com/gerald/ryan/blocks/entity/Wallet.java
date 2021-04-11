@@ -220,6 +220,13 @@ public class Wallet {
 		return pkRestored;
 	}
 
+	public static double calculateBalance() {
+
+		double balance = STARTING_BALANCE;
+
+		return balance;
+	}
+
 	public double getBalance() {
 		return balance;
 	}
