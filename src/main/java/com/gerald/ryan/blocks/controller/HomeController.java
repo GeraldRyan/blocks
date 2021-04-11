@@ -49,7 +49,7 @@ import com.pubnub.api.PubNubException;
 
 /*
  * Key Data Model Session attributes:
- * On register -- should be logged in, hence everything that login has plus ??
+ * On register -- should be logged in, hence everything that login has plus ?nothing else?
  * On Login(success) -- Session: wallet, username, isloggedin=true, failed=false
  * On Login(fail) -- Session: failed=true, msg="various string"
  * On logout -- Session: wallet=null, username=null, isloggedin=false

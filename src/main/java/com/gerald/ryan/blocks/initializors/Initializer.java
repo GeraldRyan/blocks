@@ -22,7 +22,7 @@ import java.util.Random;
 public class Initializer {
 
 	/**
-	 * Used to load a new blockchain up with 5 valid blocks (or used after loaded)
+	 * Used to load a new blockchain up with 5 valid blocks
 	 * 
 	 * @param nameOfBlockchain
 	 */

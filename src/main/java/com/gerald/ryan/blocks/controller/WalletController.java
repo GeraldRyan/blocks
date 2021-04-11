@@ -63,8 +63,9 @@ public class WalletController {
 	}
 
 	@GetMapping("/transact")
-	public String getTransact(@ModelAttribute("wallet") Wallet w)
+	public String getTransact(Model model)
 			throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, IOException {
+		
 		return "wallet/transact";
 	}
 
