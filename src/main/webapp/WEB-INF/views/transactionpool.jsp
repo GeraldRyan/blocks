@@ -23,6 +23,9 @@ th, td {
 tr:nth-child(even) {
 	background-color: Lightgreen;
 }
+tr:nth-child(odd) {
+	background-color: #EFEFEF;
+}
 </style>
 <body>
 	<h1>Transaction Pool</h1>
@@ -45,7 +48,8 @@ tr:nth-child(even) {
 				<td>${t.getInput().get("address")}</td>
 				<td>${t.getInput().get("timestamp")}</td>
 				<td>${t.getUuid()}</td>
-				</td><td>
+				</td>
+				<td>
 			</tr>
 		</c:forEach>
 	</table>
