@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="com.gerald.ryan.blocks.entity.Blockchain"%>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json"%>
 
@@ -70,7 +70,12 @@ h3 {
 				ml-4 px-4 text-whitehover:bg-gray-400">copy
 				to clipboard</button>
 		</div>
-		<p>Balance: ${wallet.getBalance() }</p>
+		<p>
+			Balance:
+			<fmt:formatNumber type="number" maxFractionDigits="0"
+				value="${wallet.getBalance()}">
+			</fmt:formatNumber>
+		</p>
 		<p>public key: ${wallet.getPublickey().toString() }</p>
 	</div>
 	<h3>
