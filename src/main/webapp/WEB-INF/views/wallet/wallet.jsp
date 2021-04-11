@@ -56,7 +56,7 @@ h3 {
 </head>
 <body>
 	<nav>
-		<a href="./">Home</a>
+		<a href="/blocks">Home</a>
 	</nav>
 	<h1>Your Wallet</h1>
 

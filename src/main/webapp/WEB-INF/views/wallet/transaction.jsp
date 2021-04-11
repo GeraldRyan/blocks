@@ -10,7 +10,7 @@
 </head>
 <body>
 	<h1>Transact on the blockchain</h1>
-	<a href="../">Home</a>
+	<a href="/blocks">Home</a>
 	<br>
 	<h2>You made a transaction</h2>
 	${transaction.toJSONtheTransaction() }
