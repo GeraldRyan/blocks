@@ -8,8 +8,48 @@
 <title>Index Page</title>
 <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
 	rel="stylesheet">
+<style type="text/css">
+body {
+	background-color: #3D3D3D;
+}
+
+nav {
+	background-color: darkgreen;
+	color: white;
+	font-weight: bold;
+}
+
+.salutations a {
+	font-weight: bold;
+}
+
+.heading {
+	margin: 4rem;
+}
+
+h1 {
+	font-size: 3rem;
+}
+
+h3 {
+	font-weight: bold;
+	font-size: 2.5rem;
+}
+
+.menu-ctn {
+	display: flex;
+	flex-direction: column;
+}
+
+.menu-ctn a {
+	margin: 5px 0;
+	font-size: 1.5rem;
+	color: orange;
+}
+</style>
+
 </head>
-<body class="bg-gray-800 text-white">
+<body class="text-white">
 	<nav>
 		<c:if test="${isloggedin == true }">
 			<a href="./logout">Logout</a>
@@ -23,19 +63,33 @@
 	</nav>
 	<c:if test="${isloggedin == false }">
 		<div class="m-auto text-center">
-			<h1 class="text-2xl m-auto text-center text-red-700">You are not
-				logged in.</h1>
+			<!-- 			<p class="text-2xl m-auto text-center text-red-700">You are not
+				logged in.</p>
+			 -->
 			<c:if test="${failed == true}">
 				<p class="text-red-300">${msg}</p>
 			</c:if>
-			<div class="text-6xl">BeanCoin</div>
-			<br> <a class="mt-48 text-6xl" href="./blockchain">Explore
-				our version of the blockchain</a> <br>
-			<h1>Welcome to the blockchain ${user.getUsername()}</h1>
+
+			<div class="heading">
+				<h1 class="salutations">
+					Welcome to the blockchain. Please <a href="./register">Register</a>
+					or <a class="" href="./login">Login</a>
+				</h1>
+			</div>
+			<h3>Or just look around</h3>
+			<div class="menu-ctn">
+
+
+
+				<a href="./blockchain">Our live blockchain status</a> <a
+					href="./transactionpool">Live Transaction Pool (unmined
+					transactions)</a>
+
+			</div>
 	</c:if>
 	</div>
-	<img class="m-auto rounded-full" alt="coffee bean close up"
-		src="./resources/bean.png">
+	<!-- 	<img class="m-auto rounded-full" alt="coffee bean close up"
+		src="./resources/bean.png"> -->
 
 
 	<c:if test="${isloggedin == true }">
