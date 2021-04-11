@@ -36,19 +36,22 @@ public class RegistrationController {
 		System.out.println(user.toString());
 		System.out.println(user.getEmail());
 		System.out.println(user.getHint());
-		Wallet wallet = Wallet.createWallet(user.getUsername());
 		new UserService().addUserService(user);
+		Wallet wallet = Wallet.createWallet(user.getUsername());
 		new WalletService().addWalletService(wallet);
 		model.addAttribute("isloggedin", true);
 		model.addAttribute("user", user);
 		model.addAttribute("wallet", wallet);
-
+		model.addAttribute("username", user.getUsername());
 		return "registration/welcomepage";
 	}
 
 	@GetMapping("welcome")
 	public String getWelcome(Model model) {
 		User u = ((User) model.getAttribute("user"));
+		Wallet w = (Wallet) new WalletService().getWalletService(u.getUsername()); // I find that extra protection
+																					// prevents unexpected crashes
+		model.addAttribute("wallet", w);
 		return "registration/welcomepage";
 	}
 

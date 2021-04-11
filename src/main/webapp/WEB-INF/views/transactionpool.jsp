@@ -51,11 +51,8 @@ tr:nth-child(odd) {
 		</tr>
 
 		<c:forEach items="${transactionpoollist}" var="t">
-
-			String sAdds = ${t.getInput().get("address")};
-
 			<c:forEach items="${t.getOutput().keySet()}" var="rAdds">
-				<c:if test="${ !sAdds.equals(rAdds)}">
+				<c:if test="${ !rAdds.equals(t.getInput().get(\"address\"))}">
 					<tr>
 						<td>${t.getInput().get("address")}</td>
 						<td>${t.getInput().get("amount")}</td>

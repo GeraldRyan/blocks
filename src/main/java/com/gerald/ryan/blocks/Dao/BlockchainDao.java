@@ -51,8 +51,13 @@ public class BlockchainDao extends DBConnection implements BlockchainDaoI {
 		this.connect();
 		Query query = em.createQuery("select b from Blockchain b where b.instance_name = :name");
 		query.setParameter("name", name);
-		Blockchain blockchain = (Blockchain) query.getSingleResult();
-
+		Blockchain blockchain;
+		try {
+			blockchain = (Blockchain) query.getSingleResult();
+		} catch (NoResultException e) {
+			System.err.println("No result found for blockchain. Returning NULL from query for safety");
+			return null;
+		}
 		System.out.println("I HYPOTHESIZE THIS CHAIN IS OUT OF ORDER");
 		System.out.println(blockchain.toJSONtheChain());
 		return blockchain;

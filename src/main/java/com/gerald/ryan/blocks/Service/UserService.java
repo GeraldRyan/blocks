@@ -22,7 +22,8 @@ public class UserService {
 	}
 
 	/**
-	 * gets user from database based on username Adds
+	 * gets user from database based on username as primary key. Returns null if
+	 * none found;
 	 * 
 	 * @param username
 	 * @return

@@ -76,7 +76,7 @@ public class Wallet {
 	public Wallet(double balance, PrivateKey privatekey, PublicKey publickey, String address, String ownerId) {
 		super();
 		Blockchain bc = new BlockchainService().getBlockchainService("beancoin");
-		if (bc != null) {
+		if (bc != null && !ownerId.equals("anon")) {
 			balance = Wallet.calculateBalance(bc, address);
 		}
 		// can remove param 1 balance now or better yet add the blockchain as a

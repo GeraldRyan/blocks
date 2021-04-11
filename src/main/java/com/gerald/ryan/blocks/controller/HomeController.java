@@ -33,15 +33,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.gerald.ryan.blocks.Service.BlockchainService;
 import com.gerald.ryan.blocks.Service.TransactionService;
 import com.gerald.ryan.blocks.Service.UserService;
 import com.gerald.ryan.blocks.Service.WalletService;
+import com.gerald.ryan.blocks.entity.Blockchain;
 import com.gerald.ryan.blocks.entity.Login;
 import com.gerald.ryan.blocks.entity.Message;
 import com.gerald.ryan.blocks.entity.Transaction;
 import com.gerald.ryan.blocks.entity.TransactionPool;
 import com.gerald.ryan.blocks.entity.User;
 import com.gerald.ryan.blocks.entity.Wallet;
+import com.gerald.ryan.blocks.initializors.Initializer;
 import com.gerald.ryan.blocks.pubsub.PubNubApp;
 import com.google.gson.Gson;
 import com.pubnub.api.PubNubException;
@@ -72,6 +75,16 @@ public class HomeController {
 		return false;
 	}
 
+	@ModelAttribute("blockchain")
+	// this is probaby right way to do it, this side of Dependency Injection. Get it
+	// initialized right quick to avoid buggy sql calls
+	public Blockchain bootupOrCreateBlockchain() {
+		Blockchain bc = new BlockchainService().newBlockchainService("beancoin");
+		Initializer.loadBC("beancoin");
+		bc = new BlockchainService().getBlockchainService("beancoin");
+		return bc;
+	}
+
 	@ModelAttribute("randomnumber")
 	public String randomUUID() {
 		return String.valueOf(UUID.randomUUID()).substring(0, 8);
@@ -87,11 +100,9 @@ public class HomeController {
 //		return new PubNubApp();
 //	}
 
-	@Development // does nothing just a markup annotation
 	public void consoleModelProperties(Model model) {
 		System.out.println("Model class is " + model.getClass());
 		System.out.println(model.toString());
-
 	}
 
 	@GetMapping("")

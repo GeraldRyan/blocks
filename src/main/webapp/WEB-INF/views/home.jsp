@@ -3,12 +3,12 @@
    "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Home</title>
-    </head>
-    <body>
-        <h1>Hello blockchain world!</h1>
-        <p>This is the future site of beancoin!</p>
-    </body>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Home</title>
+</head>
+<body>
+	<h1>Hello blockchain world!</h1>
+	<p>This is the future site of beancoin!</p>
+</body>
 </html>
