@@ -28,10 +28,10 @@
 				<td align="left"><form:button id="login" name="login">Login</form:button>
 				</td>
 			</tr>
-
-			<tr></tr>
 			<tr>
-				<td></td>
+				<td><a href="./register">New here?</a></td>
+			</tr>
+			<tr>
 				<td><a href="./">Home</a></td>
 			</tr>
 		</table>
@@ -41,6 +41,8 @@
 			<td style="font-style: italic; color: red;">${message}</td>
 		</tr>
 	</table>
+
+
 
 </body>
 
