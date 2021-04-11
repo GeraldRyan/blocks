@@ -62,10 +62,16 @@ public class WalletController {
 		return "wallet/wallet";
 	}
 
+	@GetMapping("/betterwallet")
+	public String getBetterWallet(Model model) {
+
+		return "wallet/betterwallet";
+	}
+
 	@GetMapping("/transact")
 	public String getTransact(Model model)
 			throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, IOException {
-		
+
 		return "wallet/transact";
 	}
 
@@ -168,7 +174,6 @@ public class WalletController {
 		pool = tService.getAllTransactionsAsTransactionPoolService();
 		model.addAttribute("pool", pool);
 		return new Gson().toJson(list);
-
 	}
 
 	public void broadcastTransaction(Transaction t) {
