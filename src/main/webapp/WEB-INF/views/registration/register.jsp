@@ -66,8 +66,7 @@ nav {
 
 				<form:button
 					class="shadow-lg pt-3 pb-3 mt-6 w-full text-white bg-green-500 hover:bg-green-400 rounded-full "
-					id="login" name="SIGN IN">Sign In
-				</form:button>
+					id="login" name="SIGN IN">Register				</form:button>
 			</form:form>
 		</div>
 		<div>

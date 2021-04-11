@@ -17,6 +17,7 @@ nav {
 	background-color: darkgreen;
 	color: white;
 	font-weight: bold;
+	font-size: 1.5rem;
 }
 
 .salutations a {
@@ -29,6 +30,10 @@ nav {
 
 h1 {
 	font-size: 3rem;
+}
+
+h2 {
+	font-size: 2.6rem;
 }
 
 h3 {
@@ -93,24 +98,27 @@ h3 {
 
 
 	<c:if test="${isloggedin == true }">
-		<h1>Welcome to the blockchain ${user.getUsername()}</h1>
+		<h1>Welcome to the club ${user.getUsername()}</h1>
 
-		<a class="text-4xl text-green-700" href="./blockchain">See our
-			version of the blockchain</a>
+		<h2>Some things to do</h2>
+
+		<a class="text-4xl text-green-700" href="./wallet/">Open Your
+			wallet</a>
 		<br>
-		<a class="text-4xl text-green-700" href="./blockchain/mine">Mine
+		<a class="text-4xl text-green-700" href="./wallet/transact">Make a
+			Transaction</a>
+		<br>
+		<a class="text-4xl text-green-700" href="./blockchain">Explore our
+			live blockchain</a>
+		<br>
+		<a class="text-4xl text-green-700" href="./blockchain/mine">Mine a
 			Block</a>
 		<br>
-		<a class="text-4xl text-green-700" href="./wallet/">Your wallet</a>
+
+		<a class="text-4xl text-green-700" href="./transactionpool">View
+			the live Transaction Pool</a>
 		<br>
-		<a class="text-4xl text-green-700" href="./wallet/transact">Transact
-			on the blockchain</a>
-		<br>
-		<a class="text-4xl text-green-700" href="./transactionpool">Show
-			Transaction Pool</a>
-		<br>
-		<!-- 		<br>
-		<a href="./logout">Logout</a> -->
+
 
 	</c:if>
 </body>
