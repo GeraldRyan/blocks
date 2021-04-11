@@ -75,6 +75,7 @@ public class TransactionPool {
 		}
 		HashMap<String, Object> tmpinput;
 		for (String uuid : this.getTransactionMap().keySet()) {
+
 			System.err.println("UUID OF TRANSACTION IS " + uuid);
 			Transaction t = (Transaction) this.getTransactionMap().get(uuid);
 			System.err.println("INPUT JSON");
@@ -82,6 +83,9 @@ public class TransactionPool {
 			System.err.println("OUTPUT JSON");
 			System.err.println(t.getOutputjson());
 			tmpinput = new Gson().fromJson(t.getInputjson(), HashMap.class);
+			if (tmpinput == null) {
+				return null; // TODO : empty transaction with only an ID happened. I don't know how.
+			}
 			if (tmpinput.get("address").equals(walletAddress)) {
 				return t;
 			}
