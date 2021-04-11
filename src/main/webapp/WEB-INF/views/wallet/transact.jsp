@@ -45,7 +45,7 @@ input {
 	</nav>
 	<h1 class="text-5xl mb-8">Transact on the blockchain</h1>
 
-	<form action="../transaction" class="border-gray-200 border-2 gap-2">
+	<form action="./transaction" class="border-gray-200 border-2 gap-2">
 		<div>Address to send money to</div>
 		<div>
 			<input type="text" name="address">

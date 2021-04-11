@@ -46,7 +46,6 @@ import com.gerald.ryan.blocks.pubsub.PubNubApp;
 import com.google.gson.Gson;
 import com.pubnub.api.PubNubException;
 
-
 /*
  * Key Data Model Session attributes:
  * On register -- should be logged in, hence everything that login has plus ?nothing else?

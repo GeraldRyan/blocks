@@ -31,7 +31,7 @@ tr:nth-child(odd) {
 <body>
 	<h1>Transaction Pool</h1>
 	<h2>Get as JSON by submitting POST request to this endpoint with
-		payload {"transactionpool":"gimme"}</h2>
+		any payload {}</h2>
 
 
 	<table border="2">
