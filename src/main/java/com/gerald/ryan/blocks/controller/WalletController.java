@@ -63,6 +63,7 @@ public class WalletController {
 //		String username = (String) model.getAttribute("username");
 //		Wallet w = ws.getWalletService(username);
 		Wallet w = (Wallet) model.getAttribute("wallet");
+		System.err.println("WHY IS WALLET NULL 66controller " + w.toString());
 		w = ws.updateWalletBalanceService(w);
 		model.addAttribute("wallet", w);
 		return "wallet/wallet";

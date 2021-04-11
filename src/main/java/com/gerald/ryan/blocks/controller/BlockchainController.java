@@ -32,7 +32,7 @@ import com.google.gson.JsonElement;
 import com.pubnub.api.PubNubException;
 
 @Controller
-@SessionAttributes({ "blockchain", "minedblock" })
+@SessionAttributes({ "blockchain", "minedblock", "wallet" })
 @RequestMapping("blockchain")
 public class BlockchainController {
 

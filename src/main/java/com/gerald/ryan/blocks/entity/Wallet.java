@@ -247,7 +247,11 @@ public class Wallet {
 		double balance = STARTING_BALANCE; // starting balance. static means not touching real wallet.
 		// loop through transactions - yes, every transaction of every block of the
 		// entire chain (minus the dummy data chains)
+		System.err.println("String address" + adds);
 		if (bc == null) {
+			System.err.println("BLOCKCHAIN IS NULL");
+			System.err.println("BLOCKCHAIN IS NULL");
+			System.err.println("String address" + adds);
 			return -1; // if -1 in caller function, leave balance same. Should this have been non
 						// static perhaps?
 		}
@@ -255,15 +259,17 @@ public class Wallet {
 		int i = 0;
 		for (Block b : bc.getChain()) {
 			i++;
-			if (i < 7) { // dummy data blocks - crashes gson
+			if (i < 7) { // dummy data blocks - crashes gson. ALso don't let them get readded. Why I even
+							// have them?
 				continue;
 			}
 			trList = b.deserializeTransactionData();
 			for (TransactionRepr t : trList) {
-				if (t.getInput().get("address") == adds) {
+				if (t.getInput().get("address").equals(adds)) { // wallet is sender -- deduct balance
 					// reset balance after each transaction
-					balance = (double) t.getOutput().get("address");
-				} else if (t.getOutput().containsKey(adds)) {
+					System.err.println("HERE> SHOUDL BE ADDING");
+					balance = (double) t.getOutput().get(adds);
+				} else if (t.getOutput().containsKey(adds)) { // wallet is receiver. Add balance to.
 					balance += (double) t.getOutput().get(adds);
 				}
 			}

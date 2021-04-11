@@ -79,8 +79,12 @@ public class HomeController {
 	// this is probaby right way to do it, this side of Dependency Injection. Get it
 	// initialized right quick to avoid buggy sql calls
 	public Blockchain bootupOrCreateBlockchain() {
-		Blockchain bc = new BlockchainService().newBlockchainService("beancoin");
-		Initializer.loadBC("beancoin");
+		Blockchain bc;
+		bc = new BlockchainService().getBlockchainService("beancoin");
+		if (bc == null) {
+			bc = new BlockchainService().newBlockchainService("beancoin");
+			Initializer.loadBC("beancoin");
+		}
 		bc = new BlockchainService().getBlockchainService("beancoin");
 		return bc;
 	}
