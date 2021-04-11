@@ -10,5 +10,7 @@ public interface WalletDaoI {
 
 	public Wallet getWallet(String walletId);
 
+	public Wallet updateWallet(Wallet wallet);
+
 	public Wallet removeWallet(String walletId);
 }

@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.gerald.ryan.blocks.Service.TransactionService;
+import com.gerald.ryan.blocks.Service.WalletService;
 import com.gerald.ryan.blocks.entity.Transaction;
 import com.gerald.ryan.blocks.entity.TransactionPool;
 import com.gerald.ryan.blocks.entity.Wallet;
@@ -37,7 +38,7 @@ import com.pubnub.api.PubNubException;
 
 @Controller
 @RequestMapping("wallet")
-@SessionAttributes({ "wallet", "latesttransaction", "pool" })
+@SessionAttributes({ "wallet", "latesttransaction", "pool", "username" })
 public class WalletController {
 
 	/*
@@ -51,6 +52,7 @@ public class WalletController {
 	PubNubApp pnapp = new PubNubApp();
 	TransactionService tService = new TransactionService();
 	TransactionPool pool = tService.getAllTransactionsAsTransactionPoolService();
+	WalletService ws = new WalletService();
 
 	public WalletController() throws InterruptedException {
 
@@ -58,7 +60,11 @@ public class WalletController {
 
 	@GetMapping("")
 	public String getWallet(Model model) {
-
+//		String username = (String) model.getAttribute("username");
+//		Wallet w = ws.getWalletService(username);
+		Wallet w = (Wallet) model.getAttribute("wallet");
+		w = ws.updateWalletBalanceService(w);
+		model.addAttribute("wallet", w);
 		return "wallet/wallet";
 	}
 

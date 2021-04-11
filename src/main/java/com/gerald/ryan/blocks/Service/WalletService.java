@@ -20,4 +20,15 @@ public class WalletService {
 		return dao.getWallet(walletId);
 	}
 
+	/**
+	 * 
+	 * Updates balance of wallet by blockchain traversal
+	 * 
+	 * @param wallet
+	 * @return
+	 */
+	public Wallet updateWalletBalanceService(Wallet wallet) {
+		return dao.updateWallet(wallet);
+	}
+
 }

@@ -21,6 +21,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -31,7 +32,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
+import com.gerald.ryan.blocks.Service.BlockchainService;
 import com.gerald.ryan.blocks.utilities.StringUtils;
+import com.gerald.ryan.blocks.utilities.TransactionRepr;
 import com.google.gson.Gson;
 
 /**
@@ -72,6 +75,12 @@ public class Wallet {
 
 	public Wallet(double balance, PrivateKey privatekey, PublicKey publickey, String address, String ownerId) {
 		super();
+		Blockchain bc = new BlockchainService().getBlockchainService("beancoin");
+		if (bc != null) {
+			balance = Wallet.calculateBalance(bc, address);
+		}
+		// can remove param 1 balance now or better yet add the blockchain as a
+		// dependency injection as this is tight coupling
 		this.balance = balance;
 		this.privatekey = privatekey;
 		this.publickey = publickey;
@@ -88,6 +97,9 @@ public class Wallet {
 	 */
 	public Wallet(double balance, PublicKey publickey, String address) {
 		super();
+		balance = Wallet.calculateBalance(new BlockchainService().getBlockchainService("beancoin"), address);
+		// can remove param 1 balance now or better yet add the blockchain as a
+		// dependency injection as this is tight coupling
 		this.balance = balance;
 		this.privatekey = privatekey;
 		this.publickey = null;
@@ -220,10 +232,42 @@ public class Wallet {
 		return pkRestored;
 	}
 
-	public static double calculateBalance() {
+	/**
+	 * Calculates balance of address based on blockchain history.
+	 * 
+	 * Two ways to find balance: calculate all transactions to and fro or trusting
+	 * output values
+	 * 
+	 * @param bc
+	 * @param adds
+	 * @return
+	 */
+	public static double calculateBalance(Blockchain bc, String adds) {
 
-		double balance = STARTING_BALANCE;
-
+		double balance = STARTING_BALANCE; // starting balance. static means not touching real wallet.
+		// loop through transactions - yes, every transaction of every block of the
+		// entire chain (minus the dummy data chains)
+		if (bc == null) {
+			return -1; // if -1 in caller function, leave balance same. Should this have been non
+						// static perhaps?
+		}
+		List<TransactionRepr> trList;
+		int i = 0;
+		for (Block b : bc.getChain()) {
+			i++;
+			if (i < 7) { // dummy data blocks - crashes gson
+				continue;
+			}
+			trList = b.deserializeTransactionData();
+			for (TransactionRepr t : trList) {
+				if (t.getInput().get("address") == adds) {
+					// reset balance after each transaction
+					balance = (double) t.getOutput().get("address");
+				} else if (t.getOutput().containsKey(adds)) {
+					balance += (double) t.getOutput().get(adds);
+				}
+			}
+		}
 		return balance;
 	}
 

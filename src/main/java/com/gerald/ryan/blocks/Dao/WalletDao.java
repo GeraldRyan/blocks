@@ -2,6 +2,7 @@ package com.gerald.ryan.blocks.Dao;
 
 import java.util.NoSuchElementException;
 
+import com.gerald.ryan.blocks.Service.BlockchainService;
 import com.gerald.ryan.blocks.dbConnection.DBConnection;
 import com.gerald.ryan.blocks.entity.User;
 import com.gerald.ryan.blocks.entity.Wallet;
@@ -31,6 +32,18 @@ public class WalletDao extends DBConnection implements WalletDaoI {
 	public Wallet removeWallet(String walletId) {
 
 		return null;
+	}
+
+	@Override
+	public Wallet updateWallet(Wallet wallet) {
+		this.connect();
+		em.getTransaction().begin();
+		double newBalance = Wallet.calculateBalance(new BlockchainService().getBlockchainService("beancoin"),
+				wallet.getAddress());
+		wallet.setBalance(newBalance);
+		em.getTransaction().commit();
+		this.disconnect();
+		return wallet;
 	}
 
 }
