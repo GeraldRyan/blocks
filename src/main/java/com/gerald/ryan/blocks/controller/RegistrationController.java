@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.gerald.ryan.blocks.Service.UserService;
+import com.gerald.ryan.blocks.Service.WalletService;
 import com.gerald.ryan.blocks.entity.User;
 import com.gerald.ryan.blocks.entity.Wallet;
 
-
 @Controller
 @RequestMapping("/register")
-@SessionAttributes({ "user", "isloggedin" })
+@SessionAttributes({ "user", "isloggedin", "wallet", "username" })
 public class RegistrationController {
 	UserService userService = new UserService();
 
@@ -36,11 +36,13 @@ public class RegistrationController {
 		System.out.println(user.toString());
 		System.out.println(user.getEmail());
 		System.out.println(user.getHint());
-		user.setWallet(Wallet.createWallet());
+		Wallet wallet = Wallet.createWallet(user.getUsername());
 		new UserService().addUserService(user);
+		new WalletService().addWalletService(wallet);
 		model.addAttribute("isloggedin", true);
 		model.addAttribute("user", user);
-		
+		model.addAttribute("wallet", wallet);
+
 		return "registration/welcomepage";
 	}
 

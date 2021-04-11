@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.gerald.ryan.blocks.Service.UserService;
+import com.gerald.ryan.blocks.Service.WalletService;
 import com.gerald.ryan.blocks.entity.Login;
 import com.gerald.ryan.blocks.entity.Message;
 import com.gerald.ryan.blocks.entity.TransactionPool;
@@ -44,7 +45,7 @@ import com.pubnub.api.PubNubException;
 
 //@RequestMapping("/admin")
 @Controller
-@SessionAttributes({ "blockchain", "wallet", "randomnumber", "isloggedin", "user", "msg", "transactionpool" })
+@SessionAttributes({ "blockchain", "wallet", "username", "isloggedin", "user", "msg", "transactionpool" })
 public class HomeController {
 
 	// This is not Inversion of Control! This is tight coupling
@@ -57,11 +58,6 @@ public class HomeController {
 	@ModelAttribute("isloggedin")
 	public boolean isLoggedIn() {
 		return false;
-	}
-
-	@ModelAttribute("afb")
-	public String addFooBar() {
-		return "FooAndBar";
 	}
 
 	@ModelAttribute("randomnumber")
@@ -108,7 +104,8 @@ public class HomeController {
 			model.addAttribute("isloggedin", true);
 			model.addAttribute("user", new UserService().getUserService(login.getUsername()));
 			model.addAttribute("failed", false);
-			System.out.println("User found password correct");
+			Wallet w = new WalletService().getWalletService(login.getUsername());
+			model.addAttribute("wallet", w);
 		} else if (result == "user not found") {
 			System.out.println("User not found in records");
 			model.addAttribute("failed", true);
@@ -118,7 +115,6 @@ public class HomeController {
 			model.addAttribute("failed", true);
 			model.addAttribute("msg", "Password incorrect. Please try again");
 		}
-		System.out.println("Hello world");
 		System.err.println("password" + login.getPassword());
 		System.err.println("username" + login.getUsername());
 		return "index";
@@ -127,6 +123,8 @@ public class HomeController {
 	@GetMapping("/logout")
 	public String logOut(Model model, HttpServletRequest request) {
 		model.addAttribute("isloggedin", false);
+		model.addAttribute("wallet", null);
+		model.addAttribute("username", null);
 		HttpSession httpSession = request.getSession();
 		return "redirect:/";
 	}
@@ -188,7 +186,6 @@ public class HomeController {
 
 	public static void main(String[] args)
 			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
-		new UserService().addUserService(
-				new User("zelda", "ganon", "powerwisdom", "love", "zelda@hyrule.hr", Wallet.createWallet()));
+		new UserService().addUserService(new User("zelda", "ganon", "powerwisdom", "love", "zelda@hyrule.hr"));
 	}
 }

@@ -11,7 +11,7 @@
 
 	<br>
 
-	<h3>We created a <a href="./wallet">Wallet</a> for you and initialized it with 1.000 beancoin. Enjoy</h3>
+	<h3>We created a <a href="./wallet/transact">Wallet</a> for you and initialized it with 1.000 beancoin. Enjoy</h3>
 	<br>
 	<br>
 	<a href="./">Home</a>

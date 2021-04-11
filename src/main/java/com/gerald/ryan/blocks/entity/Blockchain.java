@@ -44,7 +44,7 @@ public class Blockchain {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	int id;
-	@Column // (unique = true) doesn't need to be unique but why not
+	@Column // (unique = true) 
 	String instance_name;
 	long date_created;
 	long date_last_modified;

@@ -18,10 +18,8 @@ public class User {
 	String answer;
 	String email;
 	@OneToOne
-	@JoinColumn(name = "walletId")
+	@JoinColumn(name = "ownerID")
 	Wallet wallet;
-	@Embedded
-	WalletForDB walletForDB;
 
 	public User(String username, String password, String hint, String answer, String email, Wallet wallet) {
 		super();
@@ -30,10 +28,6 @@ public class User {
 		this.hint = hint;
 		this.answer = answer;
 		this.email = email;
-		this.walletForDB = new WalletForDB(wallet);
-
-//		this.wallet = new Gson().toJson(wallet); // I think it will through an illegal serialization reflection error -
-		// they don't want serializing private stuff like private key
 	}
 
 	public User(String username, String password, String hint, String answer, String email) {
@@ -43,7 +37,7 @@ public class User {
 		this.hint = hint;
 		this.answer = answer;
 		this.email = email;
-		this.wallet = null;
+//		this.wallet = null;  // is this necessary? 
 	}
 
 	public User() {
@@ -74,14 +68,6 @@ public class User {
 		this.hint = hint;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
 	public String getAnswer() {
 		return answer;
 	}
@@ -90,20 +76,32 @@ public class User {
 		this.answer = answer;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	/**
+	 * this is no longer primary means of using wallet. instead we pull separate
+	 * from database.
+	 * 
+	 * @return
+	 */
 	public Wallet getWallet() {
 		return wallet;
 	}
 
+	/**
+	 * this is no longer primary means of using wallet. instead we pull separate
+	 * from database.
+	 * 
+	 * @return
+	 */
 	public void setWallet(Wallet wallet) {
 		this.wallet = wallet;
-	}
-
-	public WalletForDB getWalletForDB() {
-		return walletForDB;
-	}
-
-	public void setWalletForDB(WalletForDB walletForDB) {
-		this.walletForDB = walletForDB;
 	}
 
 	public static void main(String[] args) {

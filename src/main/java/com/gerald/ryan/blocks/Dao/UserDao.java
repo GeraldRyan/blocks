@@ -56,7 +56,7 @@ public class UserDao extends DBConnection implements UserDaoI {
 		this.connect();
 		User u = em.find(User.class, username);
 		em.getTransaction().begin();
-		u.setWallet(w);
+		em.persist(wallet);
 		em.getTransaction().commit();
 		this.disconnect();
 		return wallet;

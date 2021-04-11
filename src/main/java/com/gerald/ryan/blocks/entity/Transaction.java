@@ -273,13 +273,13 @@ public class Transaction {
 	public static boolean is_valid_transaction(Transaction transaction) throws InvalidTransactionException,
 			InvalidKeyException, SignatureException, NoSuchAlgorithmException, NoSuchProviderException, IOException,
 			CertificateException, InvalidKeySpecException, InvalidAlgorithmParameterException {
-		PublicKey wrongPK = Wallet.createWallet().getPublickey();
+		PublicKey wrongPK = Wallet.createWallet("jeremy").getPublickey();
 //		PublicKey restoredPK = Wallet.restorePK((byte[]) twrongPK.getInput().get("publicKeyByte")); // THROWS EXPECTED @SIGNATURE NOT VALID!!!
 		String signatureString = (String) transaction.getInput().get("signatureString");
 		String publicKeyString = (String) transaction.getInput().get("publicKeyB64");
 		byte[] signatureByte = Base64.getDecoder().decode(signatureString);
 		byte[] publicKeyByte = Base64.getDecoder().decode(publicKeyString);
-		PublicKey reconstructedPK = Wallet.restorePK(publicKeyByte);
+		PublicKey reconstructedPK = Wallet.restorePublicKey(publicKeyByte);
 //		PublicKey restoredPK = Wallet.restorePK((String) transaction.getInput().get("publicKeyB64"));
 //		PublicKey originalPK = (PublicKey) transaction.input.get("publicKey"); // Don't want to wire this clunky thing
 		// over network
@@ -344,7 +344,7 @@ public class Transaction {
 		String publicKeyString = (String) transaction.getInput().get("publicKeyB64");
 		byte[] signatureByte = Base64.getDecoder().decode(signatureString);
 		byte[] publicKeyByte = Base64.getDecoder().decode(publicKeyString);
-		PublicKey reconstructedPK = Wallet.restorePK(publicKeyByte);
+		PublicKey reconstructedPK = Wallet.restorePublicKey(publicKeyByte);
 
 		System.out.println("signature string: " + signatureString);
 		System.out.println("PKSTring string: " + publicKeyString);
@@ -581,7 +581,7 @@ public class Transaction {
 			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException,
 			InvalidKeyException, IOException, SignatureException, TransactionAmountExceedsBalance,
 			InvalidTransactionException, CertificateException, InvalidKeySpecException {
-		Wallet senderWallet = Wallet.createWallet();
+		Wallet senderWallet = Wallet.createWallet("bigsender");
 
 		Transaction t1 = new Transaction(senderWallet, "recipientWalletAddress1920", 15);
 

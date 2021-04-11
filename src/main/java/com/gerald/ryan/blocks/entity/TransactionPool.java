@@ -161,13 +161,13 @@ public class TransactionPool {
 	public static void main(String[] args) throws InvalidKeyException, NoSuchAlgorithmException,
 			NoSuchProviderException, IOException, InvalidAlgorithmParameterException {
 		TransactionPool pool = new TransactionPool();
-		Wallet w = Wallet.createWallet();
-		Wallet unusedWallet = Wallet.createWallet();
+		Wallet w = Wallet.createWallet("sender");
+		Wallet unusedWallet = Wallet.createWallet("u");
 		pool.putTransaction(new Transaction(w, "foo", 15));
-		pool.putTransaction(new Transaction(Wallet.createWallet(), "foo", 15));
-		pool.putTransaction(new Transaction(Wallet.createWallet(), "foo", 15));
-		pool.putTransaction(new Transaction(Wallet.createWallet(), "foo", 15));
-		pool.putTransaction(new Transaction(Wallet.createWallet(), "foo", 15));
+		pool.putTransaction(new Transaction(Wallet.createWallet("1"), "foo", 15));
+		pool.putTransaction(new Transaction(Wallet.createWallet("2"), "foo", 15));
+		pool.putTransaction(new Transaction(Wallet.createWallet("3"), "foo", 15));
+		pool.putTransaction(new Transaction(Wallet.createWallet("4"), "foo", 15));
 		Transaction t = pool.findExistingTransactionByWallet(w.getAddress());
 		System.out.println(t); // expect a string representation of object (or address in memory). Indeed
 		Transaction tnull = pool.findExistingTransactionByWallet(unusedWallet.getAddress());

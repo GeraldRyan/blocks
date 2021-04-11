@@ -53,32 +53,30 @@ public class Wallet {
 	public PrivateKey getPrivatekey() {
 		return privatekey;
 	}
-	
+
 	@Id
-	String ownerName; // maps to username
-	@Lob // just store in binary here for java users. See publickeybyte if language agnostic
-	PrivateKey privatekey;  //
+	String ownerId; // maps to username
 	@Lob
-	PublicKey publickey;
+	PrivateKey privatekey; // try
+	@Lob
+	PublicKey publickey; // try
 	byte[] privatekeyByte; // for language agnosticism
 	byte[] publickeyByte; // for language agnosticism
 	double balance;
 	String address;
-	@OneToOne(mappedBy="username")
-	@JoinColumn()
-	User user;
 
 	static double STARTING_BALANCE = 1000;
 
 	public Wallet() {
 	}
 
-	public Wallet(double balance, PrivateKey privatekey, PublicKey publickey, String address) {
+	public Wallet(double balance, PrivateKey privatekey, PublicKey publickey, String address, String ownerId) {
 		super();
 		this.balance = balance;
 		this.privatekey = privatekey;
 		this.publickey = publickey;
 		this.address = address;
+		this.ownerId = ownerId;
 	}
 
 	/**
@@ -96,7 +94,7 @@ public class Wallet {
 		this.address = address;
 	}
 
-	public static Wallet createWallet()
+	public static Wallet createWallet(String ownerId)
 			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
 		String address = String.valueOf(UUID.randomUUID()).substring(0, 8);
 		KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC", "SunEC");
@@ -104,7 +102,7 @@ public class Wallet {
 		KeyPair keyPair = keyGen.generateKeyPair();
 		PrivateKey privateKey = keyPair.getPrivate();
 		PublicKey publicKey = keyPair.getPublic();
-		Wallet wallet = new Wallet(STARTING_BALANCE, privateKey, publicKey, address);
+		Wallet wallet = new Wallet(STARTING_BALANCE, privateKey, publicKey, address, ownerId);
 		System.out.println("NEW WALLET CREATED");
 		return wallet;
 	}
@@ -128,7 +126,6 @@ public class Wallet {
 		return signatureBytes;
 	}
 
-	// can sign wallet object
 	public byte[] sign(Object dataObj) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException,
 			SignatureException, IOException {
 		byte[] data = StringUtils.objectToByteArray(dataObj);
@@ -183,7 +180,7 @@ public class Wallet {
 	public static void testSign() throws NoSuchAlgorithmException, NoSuchProviderException,
 			InvalidAlgorithmParameterException, UnsupportedEncodingException, SignatureException, InvalidKeyException {
 
-		Wallet wallet1 = Wallet.createWallet();
+		Wallet wallet1 = Wallet.createWallet("joe");
 		System.out.println(wallet1);
 		System.out.println("_________________-");
 		byte[] signatureBytes = wallet1.sign("CATSMEOW".getBytes("UTF-8"));
@@ -206,20 +203,19 @@ public class Wallet {
 	 * @throws NoSuchProviderException
 	 * @throws InvalidKeySpecException
 	 */
-	public static PublicKey restorePK(byte[] pk)
+	public static PublicKey restorePublicKey(byte[] publickey)
 			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException {
 		KeyFactory keyFactory = KeyFactory.getInstance("EC", "SunEC");
 //		KeySpec ks = new X509EncodedKeySpec(pk, "EC");
-		KeySpec ks = new X509EncodedKeySpec(pk);
+		KeySpec ks = new X509EncodedKeySpec(publickey);
 		PublicKey pkRestored = keyFactory.generatePublic(ks);
 		return pkRestored;
 	}
 
-	public static PublicKey restorePK(String pk)
+	public static PublicKey restorePublicKey(String publickey)
 			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException {
 		KeyFactory keyFactory = KeyFactory.getInstance("EC", "SunEC");
-//		KeySpec ks = new X509EncodedKeySpec(pk.getBytes(StandardCharsets.UTF_8), "EC");
-		KeySpec ks = new X509EncodedKeySpec(pk.getBytes(StandardCharsets.UTF_8));
+		KeySpec ks = new X509EncodedKeySpec(publickey.getBytes(StandardCharsets.UTF_8));
 		PublicKey pkRestored = keyFactory.generatePublic(ks);
 		return pkRestored;
 	}

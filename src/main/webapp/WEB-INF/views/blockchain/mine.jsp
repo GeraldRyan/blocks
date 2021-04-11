@@ -12,6 +12,8 @@
 </head>
 <body>
 
+
+	<!-- NOT EVEN USING THIS PAGE. MINE ENDPOINT JUST RETURNS RESPONSE BODY APPLICATION/JSON -->
 	<h2>The dwarves are hard at work mining your Block</h2>
 	<h3>
 		<%
@@ -26,6 +28,7 @@
 	</h3>
 
 	<h4>Newly Mined Block</h4>
-	<%=mined_block.webworthyJson().getAsString()%>
+	
+<%-- 	<%=mined_block.webworthyJson().getAsString()%> --%>
 </body>
 </html>

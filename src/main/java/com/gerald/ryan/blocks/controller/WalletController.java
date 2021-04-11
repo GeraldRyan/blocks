@@ -43,13 +43,6 @@ public class WalletController {
 
 	}
 
-	@ModelAttribute("wallet")
-	public Wallet addWallet()
-			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
-		Wallet wallet = Wallet.createWallet();
-		return wallet;
-	}
-
 	@GetMapping("")
 	public String getWallet(Model model) {
 
@@ -85,7 +78,7 @@ public class WalletController {
 	public String postTransact(Model model, @RequestBody Map<String, Object> body) throws InvalidKeyException,
 			NoSuchAlgorithmException, NoSuchProviderException, IOException, InvalidAlgorithmParameterException {
 
-		Wallet randomWallet = Wallet.createWallet(); // simulate anon wallet on the wire
+		Wallet randomWallet = Wallet.createWallet("anon"); // simulate anon wallet on the wire
 
 		Transaction nu = new Transaction(randomWallet, (String) body.get("address"),
 				(double) ((Integer) body.get("amount")));

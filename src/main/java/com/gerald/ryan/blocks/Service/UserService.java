@@ -8,13 +8,12 @@ import com.gerald.ryan.blocks.Dao.UserDao;
 import com.gerald.ryan.blocks.entity.User;
 import com.gerald.ryan.blocks.entity.Wallet;
 
-
-
 public class UserService {
 	private UserDao userD = new UserDao();
 
 	/**
 	 * Adds new user to Database, user object to be provided and returned
+	 * 
 	 * @param user
 	 * @return
 	 */
@@ -22,9 +21,9 @@ public class UserService {
 		return userD.addUser(user);
 	}
 
-	
-	/**gets user from database based on username
-	 * Adds 
+	/**
+	 * gets user from database based on username Adds
+	 * 
 	 * @param username
 	 * @return
 	 */
@@ -34,7 +33,9 @@ public class UserService {
 	}
 
 	/**
-	 * Adds wallet to database under user by username. One wallet to one user as an embedded
+	 * Adds wallet to database under user by username. One wallet to one user as an
+	 * embedded
+	 * 
 	 * @param username
 	 * @param wallet
 	 * @return
@@ -46,6 +47,7 @@ public class UserService {
 
 	/**
 	 * Removes user from database with username provided
+	 * 
 	 * @param username
 	 * @return
 	 */
@@ -56,6 +58,7 @@ public class UserService {
 
 	/**
 	 * Authenticates user to database provided a username and password
+	 * 
 	 * @param username
 	 * @param password
 	 * @return
@@ -65,8 +68,9 @@ public class UserService {
 
 	}
 
-	public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
-		new UserService().addUserService(new User("zelda", "ganon", "powerwisdom", "love", "zelda@hyrule.hr", Wallet.createWallet()));
+	public static void main(String[] args)
+			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
+
 	}
 
 }
