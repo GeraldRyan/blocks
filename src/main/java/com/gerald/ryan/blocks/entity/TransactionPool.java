@@ -127,12 +127,12 @@ public class TransactionPool {
 		return transactionMap;
 	}
 
-	public void consoleLogAll() {
-		System.err.println("Transactions in Transaction Pool");
-		for (String id : this.getTransactionMap().keySet()) {
-			System.out.println("key: " + id + " value: " + this.getTransactionMap().get(id));
-		}
-	}
+//	public void consoleLogAll() {
+//		System.err.println("Transactions in Transaction Pool");
+//		for (String id : this.getTransactionMap().keySet()) {
+//			System.out.println("key: " + id + " value: " + this.getTransactionMap().get(id));
+//		}
+//	}
 
 	/**
 	 * After successful day in the mines, delete what you have in your pool

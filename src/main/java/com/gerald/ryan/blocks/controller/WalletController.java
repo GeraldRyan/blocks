@@ -31,6 +31,7 @@ import com.gerald.ryan.blocks.Service.WalletService;
 import com.gerald.ryan.blocks.entity.Transaction;
 import com.gerald.ryan.blocks.entity.TransactionPool;
 import com.gerald.ryan.blocks.entity.Wallet;
+import com.gerald.ryan.blocks.initializors.Config;
 import com.gerald.ryan.blocks.initializors.Initializer;
 import com.gerald.ryan.blocks.pubsub.PubNubApp;
 import com.google.gson.Gson;
@@ -38,40 +39,45 @@ import com.pubnub.api.PubNubException;
 
 @Controller
 @RequestMapping("wallet")
-@SessionAttributes({ "wallet", "latesttransaction", "pool", "username" })
+@SessionAttributes({ "wallet", "latesttransaction", "pool", "username", "blockchain" })
+
+/**
+ * ./transact page is for making transactions, GET or POST Completing the form
+ * sends you to /transaction GET page, and completes the transaction through
+ * requestparams. You can also post to /transaction but it can be buggy with
+ * Spring and synchronization
+ */
 public class WalletController {
 
-	/*
-	 * somewhat overloaded, the /transact page is for MAKING transactions, either
-	 * via GET, which brings you to a form to submit, or POST, which returns JSON.
-	 * Completing the form sends you to a /transaction GET page, and completes the
-	 * transaction through requestparams (i.e. URL parameters) POSTing to
-	 * /transaction
-	 */
-
-	PubNubApp pnapp = new PubNubApp();
-	TransactionService tService = new TransactionService();
-	TransactionPool pool = tService.getAllTransactionsAsTransactionPoolService();
+	TransactionPool pool = new TransactionService().getAllTransactionsAsTransactionPoolService();
 	WalletService ws = new WalletService();
 
 	public WalletController() throws InterruptedException {
-
 	}
 
+	/**
+	 * Display wallet console page. Sometimes wallet doesn't load due to session
+	 * state. Just click around, log in and out until loads (until fixed)
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("")
 	public String getWallet(Model model) {
-//		String username = (String) model.getAttribute("username");
-//		Wallet w = ws.getWalletService(username);
 		Wallet w = (Wallet) model.getAttribute("wallet");
-		System.err.println("WHY IS WALLET NULL 66controller " + w.toString());
 		w = ws.updateWalletBalanceService(w);
 		model.addAttribute("wallet", w);
 		return "wallet/wallet";
 	}
 
+	/**
+	 * WIP to make a better wallet console.
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/betterwallet")
 	public String getBetterWallet(Model model) {
-
 		return "wallet/betterwallet";
 	}
 
@@ -85,89 +91,121 @@ public class WalletController {
 	}
 
 	/**
-	 * TODO collect transactions in transaction pool. Where to store? Store each
-	 * transaction in database and the pool equals each one, just instantiate or
-	 * rebuild pool on app startup Make a service.
+	 * This is a simulation of posting transactions from someone who is logged in.
 	 * 
-	 * Or else Make a transaction pool database that is one to many- really one to
-	 * all. Is one to all a thing? I think just track transaction in separate DB
+	 * { "address":"recipient", "amount": "integer" } in future add { "username":
+	 * "username", "password": "password" } to make this official
 	 * 
-	 * Solution- Transactions will be persisted to a transaction database. The
-	 * transaction pool will be loaded in session memory on app startup by getting
-	 * all transactions from database. Could use OneToMany, that way it is easily
-	 * reconstructable as an object, otherwise you can just iterate yourself
-	 * logically simpler way.
+	 * In reality login information would have to be provided to access their wallet
+	 * and post the transaction.
 	 * 
-	 * So need a Transaction Pool in session model. Don't need a transaction
-	 * attribute as they are findable in model.
+	 * @param model
+	 * @param body
+	 * @return
+	 * @throws InvalidKeyException
+	 * @throws NoSuchAlgorithmException
+	 * @throws NoSuchProviderException
+	 * @throws IOException
+	 * @throws InvalidAlgorithmParameterException
+	 * @throws InterruptedException
 	 */
-
 	@PostMapping("/transact")
 	@ResponseBody
-	public String postTransact(Model model, @RequestBody Map<String, Object> body) throws InvalidKeyException,
-			NoSuchAlgorithmException, NoSuchProviderException, IOException, InvalidAlgorithmParameterException {
-
-		Wallet randomWallet = Wallet.createWallet("anon"); // simulate anon wallet on the wire
+	public String postTransact(Model model, @RequestBody Map<String, Object> body)
+			throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, IOException,
+			InvalidAlgorithmParameterException, InterruptedException {
+		Wallet randomWallet = Wallet.createWallet("anon"); // simulate anon wallet on the wire. This exact name is
+		// important as it skips blockchain traversal for balance calculation, which is
+		// still buggy with non stored wallets
 
 		Transaction nu = new Transaction(randomWallet, (String) body.get("address"),
 				(double) ((Integer) body.get("amount")));
-		pool = tService.getAllTransactionsAsTransactionPoolService();
+		pool = new TransactionService().getAllTransactionsAsTransactionPoolService();
 		model.addAttribute("pool", pool);
 		Transaction alt = pool.findExistingTransactionByWallet(nu.getSenderAddress());
 		if (alt == null) {
-			System.err.println("Transaction 2 is null. there is no existing transaction of that sender"
-					+ nu.getSenderAddress() + "==" + randomWallet.getAddress());
 			model.addAttribute("latesttransaction", nu);
-			tService.addTransactionService(nu);
-//			broadcastTransaction(nu);  // switch on and off as desired
+			new TransactionService().addTransactionService(nu);
+			if (Config.BROADCASTING) {
+				broadcastTransaction(nu);
+			}
 			return nu.toJSONtheTransaction();
 		} else {
-			System.out.println("Existing transaction found!");
-			Transaction updated = tService.updateTransactionService(nu, alt);
+			Transaction updated = new TransactionService().updateTransactionService(nu, alt);
 			model.addAttribute("latesttransaction", updated);
-//			broadcastTransaction(updated); // switch on and off as desired
+			if (Config.BROADCASTING) {
+				broadcastTransaction(updated);
+			}
 			return updated.toJSONtheTransaction();
 		}
 	}
 
+	/**
+	 * Very important method, this is how you make a transaction with RequestParams
+	 * from /transact form posting
+	 * 
+	 * @param w
+	 * @param model
+	 * @param address
+	 * @param amount
+	 * @param request
+	 * @return
+	 * @throws InvalidKeyException
+	 * @throws NoSuchAlgorithmException
+	 * @throws NoSuchProviderException
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
 	@RequestMapping(value = "/transaction", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public String postTransaction(@ModelAttribute("wallet") Wallet w, Model model,
 			@RequestParam("address") String address, @RequestParam("amount") double amount, HttpServletRequest request)
-			throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, IOException {
+			throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, IOException,
+			InterruptedException {
 		Transaction nu = new Transaction(w, address, amount);
-		pool = tService.getAllTransactionsAsTransactionPoolService();
+		pool = new TransactionService().getAllTransactionsAsTransactionPoolService();
 		Transaction alt = pool.findExistingTransactionByWallet(nu.getSenderAddress());
 		if (alt == null) {
 			System.err.println("Transaction 2 is null. there is no existing transaction of that sender"
 					+ nu.getSenderAddress() + "==" + w.getAddress());
 			model.addAttribute("latesttransaction", nu);
-			tService.addTransactionService(nu);
-			if (false) {
-				broadcastTransaction(nu); // TODO set up global variable to turn on and off broadcasting
+			new TransactionService().addTransactionService(nu);
+			if (Config.BROADCASTING) {
+				broadcastTransaction(nu);
 			}
 			return nu.toJSONtheTransaction();
 		} else {
 			System.out.println("Existing transaction found!");
-			Transaction updated = tService.updateTransactionService(nu, alt);
+			Transaction updated = new TransactionService().updateTransactionService(nu, alt);
 			model.addAttribute("latesttransaction", updated);
-			if (false) {
-				broadcastTransaction(updated); // TODO set up global variable to turn on and off broadcasting
+			if (Config.BROADCASTING) {
+				broadcastTransaction(updated);
 			}
 			return updated.toJSONtheTransaction();
 		}
 	}
 
+	/**
+	 * Dev method, not necessary. Able to post various combinations to make multiple
+	 * random type dev transactions. Because over the network and server, this can
+	 * get buggy and consume resources. Easier to run dummy transactions in main
+	 * method of initializer. Safest to ignore
+	 * 
+	 * @param model
+	 * @param body
+	 * @return
+	 * @throws InvalidKeyException
+	 * @throws NoSuchAlgorithmException
+	 * @throws NoSuchProviderException
+	 * @throws IOException
+	 * @throws InvalidAlgorithmParameterException
+	 */
 	@PostMapping("/transactt")
 	@ResponseBody
 	public String postDummyTransactions(Model model, @RequestBody Map<String, Object> body) throws InvalidKeyException,
 			NoSuchAlgorithmException, NoSuchProviderException, IOException, InvalidAlgorithmParameterException {
 
 		String numString = (String) body.get("number");
-		System.err.println("MAKING TRANSACTION FROM TRANSACTT");
-		System.err.println("MAKING TRANSACTION FROM TRANSACTT");
-		System.err.println("MAKING TRANSACTION FROM TRANSACTT");
-		System.err.println("MAKING TRANSACTION FROM TRANSACTT");
 		List<Transaction> list = new ArrayList();
 		int n = 1;
 		if (numString != null) {
@@ -180,14 +218,20 @@ public class WalletController {
 			list = new Initializer().postNTransactions(n, fromaddress);
 		}
 
-		pool = tService.getAllTransactionsAsTransactionPoolService();
+		pool = new TransactionService().getAllTransactionsAsTransactionPoolService();
 		model.addAttribute("pool", pool);
 		return new Gson().toJson(list);
 	}
 
-	public void broadcastTransaction(Transaction t) {
+	/**
+	 * Broadcast to pubnub wrapper method
+	 * 
+	 * @param t
+	 * @throws InterruptedException
+	 */
+	public void broadcastTransaction(Transaction t) throws InterruptedException {
 		try {
-			pnapp.broadcastTransaction(t);
+			new PubNubApp().broadcastTransaction(t);
 		} catch (PubNubException e) {
 			System.err.println("Problem broadcasting the transaction.");
 			e.printStackTrace();

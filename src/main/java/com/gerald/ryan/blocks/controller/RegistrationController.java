@@ -30,6 +30,8 @@ public class RegistrationController {
 		return "registration/register";
 	}
 
+	// TODO handle existing user, refresh page with message perhaps. Handle also
+	// null value password and username.
 	@PostMapping("")
 	public String registerUser(Model model, @ModelAttribute("user") User user)
 			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {

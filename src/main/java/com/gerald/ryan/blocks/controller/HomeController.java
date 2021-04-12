@@ -49,22 +49,20 @@ import com.gerald.ryan.blocks.pubsub.PubNubApp;
 import com.google.gson.Gson;
 import com.pubnub.api.PubNubException;
 import com.gerald.ryan.blocks.initializors.Config.*;
-/*
- * Key Data Model Session attributes:
- * On register -- should be logged in, hence everything that login has plus ?nothing else?
- * On Login(success) -- Session: wallet, username, isloggedin=true, failed=false
- * On Login(fail) -- Session: failed=true, msg="various string"
- * On logout -- Session: wallet=null, username=null, isloggedin=false
+
+/* - DEV ONLY, not JAVADOC
+ * Key Data Model Session attributes: On register -- should be logged in, hence
+ * everything that login has plus ?nothing else? On Login(success) -- Session:
+ * wallet, username, isloggedin=true, failed=false On Login(fail) -- Session:
+ * failed=true, msg="various string" On logout -- Session: wallet=null,
+ * username=null, isloggedin=false
  * 
  */
 
-//@RequestMapping("/admin")
 @Controller
 @SessionAttributes({ "blockchain", "wallet", "username", "isloggedin", "user", "msg", "transactionpool" })
 public class HomeController {
-	// This is not Inversion of Control! This is tight coupling
-
-		PubNubApp pnapp = new PubNubApp();
+	// This is not Inversion of Control/Loose coupling? Could refactor?
 	UserService userService = new UserService();
 
 	public HomeController() throws InterruptedException {
@@ -76,22 +74,15 @@ public class HomeController {
 	}
 
 	@ModelAttribute("blockchain")
-	// this is probaby right way to do it, this side of Dependency Injection. Get it
-	// initialized right quick to avoid buggy sql calls
+	// this is probably right way to do it, this side of Dependency Injection.
+	// Initialized right away to avoid buggy sql call dependencies
 	public Blockchain bootupOrCreateBlockchain() {
-		Blockchain bc;
-		bc = new BlockchainService().getBlockchainService("beancoin");
+		Blockchain bc = new BlockchainService().getBlockchainService("beancoin");
 		if (bc == null) {
 			bc = new BlockchainService().newBlockchainService("beancoin");
 			Initializer.loadBC("beancoin");
 		}
-		bc = new BlockchainService().getBlockchainService("beancoin");
-		return bc;
-	}
-
-	@ModelAttribute("randomnumber")
-	public String randomUUID() {
-		return String.valueOf(UUID.randomUUID()).substring(0, 8);
+		return new BlockchainService().getBlockchainService("beancoin");
 	}
 
 	@ModelAttribute("transactionpool")
@@ -99,26 +90,16 @@ public class HomeController {
 		return new TransactionPool();
 	}
 
-//	@ModelAttribute("pubnubapp")
-//	public PubNubApp addPubNub() throws InterruptedException {
-//		return new PubNubApp();
-//	}
-
-	public void consoleModelProperties(Model model) {
-		System.out.println("Model class is " + model.getClass());
-		System.out.println(model.toString());
-	}
-
 	@GetMapping("")
 	public String showIndex(Model model) {
-		consoleModelProperties(model);
-		((TransactionPool) model.getAttribute("transactionpool")).consoleLogAll();
-
 		return "index";
 	}
 
 	@GetMapping("/login")
-	public String showLoginPage(@ModelAttribute("login") Login login) {
+	public String showLoginPage(Model model, @ModelAttribute("login") Login login) {
+		if ((boolean) model.getAttribute(("isloggedin"))) {
+			return "redirect:/";
+		}
 		return "login/login";
 	}
 
@@ -153,49 +134,6 @@ public class HomeController {
 		return "redirect:/";
 	}
 
-	@GetMapping("/publish")
-	public String getPublish(Model model) {
-		model.addAttribute("message", new Message());
-		return "publish";
-	}
-
-	@RequestMapping(value = "homeplay", method = RequestMethod.GET)
-	public String getPlay(Model model) {
-//		StringUtils.mapKeyValue(model.asMap(), "homecontroller 302");
-		System.out.println("Wallet Address " + ((Wallet) model.getAttribute("wallet")).getAddress());
-		System.out.println("random number" + ((String) model.getAttribute("randomnumber")));
-		return "play";
-	}
-
-//	String messages;
-
-	@PostMapping("/publish")
-	public String getPublish(@ModelAttribute("message") Message message, Model model)
-			throws InterruptedException, PubNubException {
-
-		System.out.println("Publish post mapping ran");
-//		messages += message.getMessage() + "\n";
-		pnapp.publish(message.getChannel(), message.getMessage());
-		model.addAttribute("display", message.getMessage());
-//		model.addAttribute("display", messages);
-		return "publish";
-	}
-
-	@GetMapping("/subscribe")
-	public String getSubscribe() {
-		return "subscribe";
-	}
-
-	@PostMapping("/subscribe")
-	public String subToChannel(@RequestParam("channel") String channel) throws InterruptedException, PubNubException {
-		pnapp.subscribe(channel);
-		System.out.println("Publish post mapping ran");
-//		messages += message.getMessage() + "\n";
-
-//		model.addAttribute("display", messages);
-		return "subscribe";
-	}
-
 	@GetMapping("/transactionpool")
 	public String getTransactionPool(Model model) {
 		List<Transaction> transactionList = new TransactionService().getAllTransactionsAsTransactionList();
@@ -217,7 +155,6 @@ public class HomeController {
 
 	public String validateUserAndPassword(String username, String password) {
 		User user = userService.getUserService(username);
-
 		if (user == null) {
 			return "user not found";
 		}
@@ -225,10 +162,5 @@ public class HomeController {
 			return "true";
 		}
 		return "false";
-	}
-
-	public static void main(String[] args)
-			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
-		new UserService().addUserService(new User("zelda", "ganon", "powerwisdom", "love", "zelda@hyrule.hr"));
 	}
 }
