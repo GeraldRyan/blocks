@@ -115,6 +115,12 @@
 		<!-- Database Connectivity -->
 
 		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>4.3.1.Final</version>
+		</dependency>
+
+		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.23</version>
@@ -206,17 +212,6 @@
 
 
 	<build>
-		<resources>
-			<resource>
-				<directory>src</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
 		<finalName>blocks</finalName>
 		<plugins>
 			<plugin>
