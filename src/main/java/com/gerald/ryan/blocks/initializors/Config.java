@@ -13,6 +13,7 @@ public class Config {
 	public static boolean BROADCAST_TRANSACTIONS = false;
 	public static boolean BROADCAST_MINED_BLOCKS = false;
 	public static boolean BROADCASTING = false;
+	public static boolean LISTENING = false;
 
 	public static long MILLISECONDS = 1;
 	public static long SECONDS = 1000 * MILLISECONDS;

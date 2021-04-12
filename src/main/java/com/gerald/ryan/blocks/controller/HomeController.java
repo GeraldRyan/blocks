@@ -46,6 +46,7 @@ import com.gerald.ryan.blocks.entity.Transaction;
 import com.gerald.ryan.blocks.entity.TransactionPool;
 import com.gerald.ryan.blocks.entity.User;
 import com.gerald.ryan.blocks.entity.Wallet;
+import com.gerald.ryan.blocks.initializors.Config;
 import com.gerald.ryan.blocks.initializors.Initializer;
 import com.gerald.ryan.blocks.pubsub.PubNubApp;
 import com.google.gson.Gson;
@@ -62,7 +63,7 @@ import com.gerald.ryan.blocks.initializors.Config.*;
  */
 
 @Controller
-@SessionAttributes({ "blockchain", "wallet", "username", "isloggedin", "user", "msg", "transactionpool" })
+@SessionAttributes({ "blockchain", "wallet", "username", "isloggedin", "user", "msg", "transactionpool", "pubsubapp" })
 public class HomeController {
 	// This is not Inversion of Control/Loose coupling? Could refactor?
 	UserService userService = new UserService();
@@ -90,6 +91,23 @@ public class HomeController {
 	@ModelAttribute("transactionpool")
 	public TransactionPool initTransactionPool() {
 		return new TransactionPool();
+	}
+
+	/**
+	 * 
+	 * PubNub pubsub provider. Can be instantiated as needed for broadcast, but as
+	 * it is also a listener, should be instantiated right away as session variable
+	 * in order to responsond to incoming messages (part of being part of a
+	 * community. Hoping this is the right method of doing so
+	 * 
+	 * @return
+	 */
+	@ModelAttribute("pubsubapp")
+	public PubNubApp startupApp() {
+		if (Config.LISTENING) {
+			return new PubNubApp();
+		}
+		return null;
 	}
 
 	@GetMapping("")
@@ -173,7 +191,7 @@ public class HomeController {
 	public class ControllerAdvisor {
 		@ExceptionHandler(NoHandlerFoundException.class)
 		public String handle(Exception ex) {
-			return "404";	
+			return "404";
 		}
 	}
 
