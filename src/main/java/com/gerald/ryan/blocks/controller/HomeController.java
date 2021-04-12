@@ -48,7 +48,7 @@ import com.gerald.ryan.blocks.initializors.Initializer;
 import com.gerald.ryan.blocks.pubsub.PubNubApp;
 import com.google.gson.Gson;
 import com.pubnub.api.PubNubException;
-
+import com.gerald.ryan.blocks.initializors.Config.*;
 /*
  * Key Data Model Session attributes:
  * On register -- should be logged in, hence everything that login has plus ?nothing else?
@@ -62,9 +62,9 @@ import com.pubnub.api.PubNubException;
 @Controller
 @SessionAttributes({ "blockchain", "wallet", "username", "isloggedin", "user", "msg", "transactionpool" })
 public class HomeController {
-
 	// This is not Inversion of Control! This is tight coupling
-	PubNubApp pnapp = new PubNubApp();
+
+		PubNubApp pnapp = new PubNubApp();
 	UserService userService = new UserService();
 
 	public HomeController() throws InterruptedException {

@@ -103,28 +103,6 @@ public class Block {
 		this.nonce = nonce;
 	}
 
-//	/**
-//	 * A utility constructor for recreating (cloning) block.
-//	 * 
-//	 * @param timestamp
-//	 * @param lastHash
-//	 * @param hash
-//	 * @param data
-//	 * @param difficulty
-//	 * @param nonce
-//	 */
-//	public Block(int id, long timestamp, String lastHash, String hash, String[] data, int difficulty, int nonce) {
-//		super();
-//		this.id = id;
-//		this.timestamp = timestamp;
-//		this.lastHash = lastHash;
-//		this.hash = hash;
-//		this.data = data;
-//		this.difficulty = difficulty;
-//		this.nonce = nonce;
-//	}
-//		
-
 	public Block() {
 	}
 
@@ -152,7 +130,15 @@ public class Block {
 		return String.format("%5s %10s %15s %15s %15s", timestamp, lastHash, hash, data, difficulty, nonce);
 	}
 
-	public String webworthyJson(List<Transaction> tlist) {
+	/**
+	 * This utility serializer function helps deal with the complexities of Gson and
+	 * escape characters for different types of object and list serialization.
+	 * Understand its role by how it is used in this app.
+	 * 
+	 * @param tlist
+	 * @return
+	 */
+	public <Transation> String webworthyJson(List<Transaction> tlist) {
 		HashMap<String, Object> serializeThisBundle = new HashMap<String, Object>();
 		List<TransactionRepr> treprlist = new ArrayList();
 		for (Transaction t : tlist) {
@@ -163,13 +149,19 @@ public class Block {
 		serializeThisBundle.put("lasthash", lastHash);
 		serializeThisBundle.put("difficulty", difficulty);
 		serializeThisBundle.put("nonce", nonce);
-
-		System.out.println(data);
-
 		serializeThisBundle.put("data", treprlist);
 		return new Gson().toJson(serializeThisBundle);
-//		return new Gson().toJsonTree(this, this.getClass());
-//		JsonElement jsonelement = new Gson().toJsonTree(serializeThisBundle, HashMap.class);
+	}
+
+	public <Transation> String webworthyJson(List<TransactionRepr> tlist, String foo) {
+		HashMap<String, Object> serializeThisBundle = new HashMap<String, Object>();
+		serializeThisBundle.put("timestamp", timestamp);
+		serializeThisBundle.put("hash", hash);
+		serializeThisBundle.put("lasthash", lastHash);
+		serializeThisBundle.put("difficulty", difficulty);
+		serializeThisBundle.put("nonce", nonce);
+		serializeThisBundle.put("data", tlist);
+		return new Gson().toJson(serializeThisBundle);
 	}
 
 	/**

@@ -135,7 +135,7 @@ public class TransactionPool {
 	}
 
 	/**
-	 * Will delete blockchain recorded transactions from pool
+	 * After successful day in the mines, delete what you have in your pool
 	 * 
 	 * @param blockchain
 	 */
@@ -151,15 +151,10 @@ public class TransactionPool {
 			trList = b.deserializeTransactionData();
 			for (TransactionRepr t : trList) {
 				if (this.getTransactionMap().containsKey(t.getId())) {
-					System.out.println(
-							"A TRANSACTION IS IN THE POOL, LET'S REMOVE IT from DB and memory!!! TransactionPool");
-					new TransactionService().removeTransactionService(t.getId()); // delete it from database. refresh
-																					// local pool instance elsewhere.
-
+					new TransactionService().removeTransactionService(t.getId());
 				}
 			}
 		}
-
 	}
 
 	public static void main(String[] args) throws InvalidKeyException, NoSuchAlgorithmException,

@@ -44,7 +44,7 @@ public class Blockchain {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	int id;
-	@Column // (unique = true) 
+	@Column // (unique = true)
 	String instance_name;
 	long date_created;
 	long date_last_modified;
@@ -132,8 +132,6 @@ public class Blockchain {
 			System.out.println(e);
 		}
 	}
-	
-
 
 	/**
 	 * 
@@ -327,7 +325,6 @@ public class Blockchain {
 			} else {
 				return this.getChain().get(getLength_of_chain() + n);
 			}
-
 		} else {
 			return this.getChain().get(n);
 		}

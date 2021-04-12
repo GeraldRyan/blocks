@@ -58,8 +58,6 @@ public class BlockchainDao extends DBConnection implements BlockchainDaoI {
 			System.err.println("No result found for blockchain. Returning NULL from query for safety");
 			return null;
 		}
-		System.out.println("I HYPOTHESIZE THIS CHAIN IS OUT OF ORDER");
-		System.out.println(blockchain.toJSONtheChain());
 		return blockchain;
 	}
 
