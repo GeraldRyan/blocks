@@ -36,13 +36,11 @@ import com.google.gson.reflect.TypeToken;
 @Table(name = "block")
 public class Block {
 
-//	public static int blockcount = 0;
 	@Id
 	long timestamp;
 	protected String hash;
 	protected String lastHash;
 	@Lob
-//	@Column(columnDefinition = "varchar(65535) default 'John Snow')
 	@Column(columnDefinition = "LONGTEXT")
 	String data;
 	int difficulty;
@@ -57,7 +55,6 @@ public class Block {
 	@Transient
 	List<TransactionRepr> transactionList;
 
-//	@Transient 
 	public static final HashMap<String, Object> GENESIS_DATA = new HashMap<String, Object>();
 	static {
 		GENESIS_DATA.put("timestamp", Block.GENESIS_TS);
@@ -68,16 +65,6 @@ public class Block {
 		GENESIS_DATA.put("nonce", 1);
 	}
 
-// Nanosecond basis
-//	static long NANOSECONDS = 1;
-//	static long MICROSECONDS = 1000 * NANOSECONDS;
-//	static long MILLISECONDS = 1000 * MICROSECONDS;
-//	static long SECONDS = 1000 * MILLISECONDS;
-//	static long MINE_RATE = 4 * SECONDS;
-//	static long NANOSECONDS = 1;
-
-// Millisecond basis
-	;
 	static long MILLISECONDS = 1;
 	static long SECONDS = 1000 * MILLISECONDS;
 	static long MINE_RATE = 2 * SECONDS;
@@ -94,7 +81,6 @@ public class Block {
 	 */
 	public Block(long timestamp, String lastHash, String hash, String data, int difficulty, int nonce) {
 		super();
-//		this.id = this.blockcount;
 		this.timestamp = timestamp;
 		this.lastHash = lastHash;
 		this.hash = hash;
@@ -170,9 +156,7 @@ public class Block {
 	 * @return
 	 */
 	public String toJSONtheBlock() {
-
 		return new Gson().toJson(this);
-
 	}
 
 	public List<TransactionRepr> deserializeTransactionData() {
@@ -182,11 +166,6 @@ public class Block {
 		List<TransactionRepr> listTR = null;
 		System.out.println(this.getData());
 		listTR = new Gson().fromJson(this.getData(), t);
-		// try {
-//			listTR = new Gson().fromJson(this.getData(), t);
-//		} catch (Exception e) {
-//			System.out.println("Could not deserialize json at block 191)");
-//		}
 		return listTR;
 	}
 
@@ -218,7 +197,6 @@ public class Block {
 		int difficulty = Block.adjust_difficulty(last_block, timestamp);
 		int nonce = 0;
 		String hash = CryptoHash.getSHA256(timestamp, last_block.getHash(), data, difficulty, nonce);
-
 		String proof_of_work = CryptoHash.n_len_string('0', difficulty);
 		String binary_hash = CryptoHash.hex_to_binary(hash);
 		String binary_hash_work_end = binary_hash.substring(0, difficulty);
@@ -242,45 +220,6 @@ public class Block {
 	}
 
 	/**
-	 * Mine a block based on given last block and data until a block hash is found
-	 * that meets the leading 0's Proof of Work requirement.
-	 * 
-	 * @param last_block
-	 * @param data
-	 * @return
-	 * @throws NoSuchAlgorithmException
-	 */
-//	public static Block mine_block(Block last_block, String dataScalar) throws NoSuchAlgorithmException {
-//		String[] data = new String[] { dataScalar };
-//		long timestamp = new Date().getTime();
-//		String last_hash = last_block.getHash();
-//		int difficulty = Block.adjust_difficulty(last_block, timestamp);
-//		int nonce = 0;
-//		String hash = CryptoHash.getSHA256(timestamp, last_block.getHash(), data, difficulty, nonce);
-//
-//		String proof_of_work = CryptoHash.n_len_string('0', difficulty);
-//		String binary_hash = CryptoHash.hex_to_binary(hash);
-//		String binary_hash_work_end = binary_hash.substring(0, difficulty);
-//		System.out.println("Difficulty: " + difficulty);
-//		System.out.println("Working");
-//		while (!proof_of_work.equalsIgnoreCase(binary_hash_work_end)) {
-//			nonce += 1;
-//			timestamp = new Date().getTime();
-//			difficulty = Block.adjust_difficulty(last_block, timestamp);
-//			hash = CryptoHash.getSHA256(timestamp, last_block.getHash(), data, difficulty, nonce);
-//			proof_of_work = CryptoHash.n_len_string('0', difficulty);
-//			binary_hash = CryptoHash.hex_to_binary(hash);
-//			binary_hash_work_end = binary_hash.substring(0, difficulty);
-//		}
-//		System.out.println("Solved at Difficulty: " + difficulty);
-//		System.out.println("Proof of work requirement " + proof_of_work);
-//		System.out.println("binary_Hash_work_end " + binary_hash_work_end);
-//		System.out.println("binary hash " + binary_hash);
-//		System.out.println("BLOCK MINED");
-//		return new Block(timestamp, last_hash, hash, data, difficulty, nonce);
-//	}
-
-	/**
 	 * Generates Genesis block with hard coded data that will be identical for all
 	 * instances of blockchain
 	 * 
@@ -290,10 +229,8 @@ public class Block {
 		long timestamp = 1;
 		String last_hash = GENESIS_LAST_HASH;
 		String hash = GENESIS_HASH;
-//		String[] data = GENESIS_DATA;
 		int difficulty = GENESIS_DIFFICULTY;
 		int nonce = 0;
-//		return new Block(timestamp, last_hash, hash, data, difficulty, nonce);
 		return new Block((Long) GENESIS_DATA.get("timestamp"), (String) GENESIS_DATA.get("last_hash"),
 				(String) GENESIS_DATA.get("hash"), (String) GENESIS_DATA.get("data"),
 				(Integer) GENESIS_DATA.get("difficulty"), (Integer) GENESIS_DATA.get("nonce"));
@@ -310,12 +247,10 @@ public class Block {
 	public static int adjust_difficulty(Block last_block, long new_timestamp) {
 		long time_diff = new_timestamp - last_block.getTimestamp();
 
-//		System.out.println(time_diff);
 		if (time_diff < MINE_RATE) {
-//			System.out.println("Increasing difficulty");
+
 			return last_block.getDifficulty() + 1;
 		} else if (last_block.getDifficulty() - 1 > 0) {
-//			System.out.println("Decreasing difficulty");
 			return last_block.getDifficulty() - 1;
 		} else {
 			return 1;
@@ -445,29 +380,6 @@ public class Block {
 		System.out.println(genesis.toStringFormatted());
 		genesis.setTimestamp(new Date().getTime());
 		new BlockService().addBlockService(genesis);
-
-////		System.out.println(bad_block.toString());
-//		Block good_block = mine_block(genesis, new String[] { "foo", "bar" });
-//		System.out.println(good_block.toString());
-////		System.out.println(mine_block(new_block, new String[] { "crypto", "is", "fun" }).toString());
-////		System.out.println(Block.is_valid_block(genesis, bad_block)); // returns false as expected
-//		System.out.println(Block.is_valid_block(genesis, good_block));
-//		System.out.println(CryptoHash.hex_to_binary(good_block.getHash()));
-//		Block good_block2 = mine_block(good_block, new String[] { "bar", "foo" });
-//		Block good_block3 = mine_block(good_block2, new String[] { "bar", "foo" });
-//		Block good_block4 = mine_block(good_block3, new String[] { "bar", "foo" });
-//		Block good_block5 = mine_block(good_block4, new String[] { "bar", "foo" });
-//		Block good_block6 = mine_block(good_block5, new String[] { "bar", "foo" });
-//		Block good_block7 = mine_block(good_block6, new String[] { "bar", "foo" });
-//		Block good_block8 = mine_block(good_block7, new String[] { "bar", "foo" });
-//		Block good_block9 = mine_block(good_block8, new String[] { "bar", "foo" });
-//		Block good_block10 = mine_block(good_block9, new String[] { "bar", "foo" });
-//		Block good_block11 = mine_block(good_block10, new String[] { "bar", "foo" });
-//		Block bad_block1 = Block.mine_block(genesis, new String[] { "zeke", "yeager" });
-//		bad_block1.lastHash = "evil data";
-//		System.out.println(Block.is_valid_block(bad_block1, genesis));
-//		Block bad_block2 = mine_block(good_block9, new String[] { "hello", "Lviv" });
-//		System.out.println(Block.is_valid_block(bad_block2, good_block8));
 
 	}
 

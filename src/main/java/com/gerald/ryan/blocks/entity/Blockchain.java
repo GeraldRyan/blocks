@@ -44,13 +44,12 @@ public class Blockchain {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	int id;
-	@Column // (unique = true)
+	@Column(unique = true)
 	String instance_name;
 	long date_created;
 	long date_last_modified;
 	int length_of_chain;
 	@OneToMany(targetEntity = Block.class, cascade = CascadeType.ALL, orphanRemoval = true)
-//	@JoinTable(name = "blocks")
 	List<Block> chain;
 
 	/**
@@ -82,16 +81,6 @@ public class Blockchain {
 	 * @throws NoSuchAlgorithmException
 	 */
 	public Block add_block(String dataScalar) throws NoSuchAlgorithmException {
-		System.err.println("DATA SCALAR BLOCKCHAIN CLASS 85");
-		System.err.println("DATA SCALAR BLOCKCHAIN CLASS 85");
-		System.err.println("DATA SCALAR BLOCKCHAIN CLASS 85");
-		System.err.println("DATA SCALAR BLOCKCHAIN CLASS 85");
-		System.out.println(dataScalar);
-		System.err.println("DATA SCALAR BLOCKCHAIN CLASS 85");
-		System.err.println("DATA SCALAR BLOCKCHAIN CLASS 85");
-		System.err.println("DATA SCALAR BLOCKCHAIN CLASS 85");
-		System.err.println("DATA SCALAR BLOCKCHAIN CLASS 85");
-		// this is clean
 		Block new_block = Block.mine_block(this.chain.get(this.chain.size() - 1), dataScalar);
 		this.chain.add(new_block);
 		this.length_of_chain++;
@@ -112,8 +101,6 @@ public class Blockchain {
 	 */
 	public void replace_chain(Blockchain other_blockchain) throws NoSuchAlgorithmException, ChainTooShortException,
 			GenesisBlockInvalidException, BlocksInChainInvalidException {
-		// TODO how will I implement this? Different localhosts will have different
-		// chains?
 		if (other_blockchain.chain.size() <= this.chain.size()) {
 			throw new ChainTooShortException("Chain too short to replace");
 		}
@@ -259,7 +246,6 @@ public class Blockchain {
 			Block current_block = other_chain.get(i);
 			Block last_block = other_chain.get(i - 1);
 			if (!Block.is_valid_block(last_block, current_block)) {
-//				System.out.println("At least one of the blocks in the chain is not valid");
 				throw new BlocksInChainInvalidException("At least one of the blocks in the chain is not valid");
 			}
 		}
@@ -300,7 +286,6 @@ public class Blockchain {
 	 * Uses GSON library to serialize blockchain chain as json string.
 	 */
 	public String toJSONtheChain() {
-//		return "[{\"name\": \"foo\", \"amount\": 4}]";
 		return new Gson().toJson(chain);
 	}
 
@@ -319,7 +304,7 @@ public class Blockchain {
 		int last_index = this.getLength_of_chain() - 1;
 		if (n > last_index) {
 			return this.getChain().get(last_index);
-		} else if (n < 0) { // working backwards from end
+		} else if (n < 0) {
 			if (n * -1 > last_index) {
 				return this.getChain().get(0);
 			} else {
@@ -355,13 +340,7 @@ public class Blockchain {
 	}
 
 	public static void main(String[] args) throws NoSuchAlgorithmException {
-//		Blockchain blockchain = new BlockchainService().newBlockchainService("beancoin");
-//		System.out.println(blockchain.fromJSONtheChain(blockchain.toJSONtheChain()));
-//
-//		new BlockchainService().addBlockService("beancoin", new String[] { "Shakespeare", "wrote", "it" });
-//		
-////		blockchain.add_block(new String[] { "Shakespeare", "wrote", "it" });
-//		System.out.println(blockchain);
+
 	}
 
 }

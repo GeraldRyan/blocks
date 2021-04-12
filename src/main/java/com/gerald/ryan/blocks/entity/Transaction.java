@@ -68,7 +68,6 @@ public class Transaction {
 	 */
 	@Transient
 	HashMap<String, Object> input; // like wire transfer document
-
 	@Column(columnDefinition = "varchar(2000) default 'John Snow'")
 	String outputjson;
 	@Column(columnDefinition = "varchar(2000) default 'John Snow'")
@@ -99,8 +98,6 @@ public class Transaction {
 			this.output = Transaction.createOutput(senderWallet, recipientAddress, amount);
 		} catch (TransactionAmountExceedsBalance e) {
 			e.printStackTrace();
-			System.out.println("No new transaction created. See stack trace above");
-			System.out.println("Returning to main program");
 			return;
 		}
 		try {
@@ -114,7 +111,7 @@ public class Transaction {
 		this.outputjson = new Gson().toJson(output);
 		this.inputjson = new Gson().toJson(input);
 		this.amount = amount;
-		System.out.println("Valid New Transaction created");
+		System.out.println("New valid transaction created");
 	}
 
 	public String getSenderAddress() {
@@ -141,8 +138,6 @@ public class Transaction {
 		this.inputjson = inputjson;
 	}
 
-	// used for recreating a transaction instance without sender wallet
-	// as is reconstructed from over the wire
 	public Transaction(String recipientAddress, double amount, String uuid, HashMap<String, Object> output,
 			HashMap<String, Object> input)
 			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, IOException {
@@ -153,7 +148,6 @@ public class Transaction {
 		this.senderWallet = null;
 		this.recipientAddress = recipientAddress;
 		this.amount = amount;
-		System.out.println("Valid Transaction Record created (no wallet required)");
 	}
 
 	public static Transaction createPublicTransactionFromJSON() {
@@ -177,8 +171,6 @@ public class Transaction {
 			throws TransactionAmountExceedsBalance {
 		if (amount > senderWallet.getBalance()) {
 			System.out.println("Amount exceeds balance");
-			// TODO handle this exception to avoid 500 internal server error when requesting
-			// more than amount
 			throw new TransactionAmountExceedsBalance("The transaction amount exceeds the current balance");
 		}
 		HashMap<String, Object> output = new HashMap<String, Object>();
@@ -249,7 +241,6 @@ public class Transaction {
 		}
 		this.output.put(senderWallet.getAddress(), (double) this.output.get(senderWallet.getAddress()) - amount);
 		this.amount += amount;
-		// sign input over again
 		this.input = this.createInput(senderWallet, output);
 		this.updateOutputInputJson();
 	}
@@ -281,8 +272,7 @@ public class Transaction {
 		byte[] publicKeyByte = Base64.getDecoder().decode(publicKeyString);
 		PublicKey reconstructedPK = Wallet.restorePublicKey(publicKeyByte);
 //		PublicKey restoredPK = Wallet.restorePK((String) transaction.getInput().get("publicKeyB64"));
-//		PublicKey originalPK = (PublicKey) transaction.input.get("publicKey"); // Don't want to wire this clunky thing
-		// over network
+//		PublicKey originalPK = (PublicKey) transaction.input.get("publicKey");
 		double sumOfTransactions = transaction.output.values().stream().mapToDouble(t -> (double) t).sum();
 		System.out.println("Sum of values " + sumOfTransactions);
 		if (sumOfTransactions != (double) transaction.input.get("amount")) {
@@ -469,9 +459,6 @@ public class Transaction {
 		serializeThisBundle.put("output", output);
 		serializeThisBundle.put("id", uuid);
 		return new Gson().toJson(serializeThisBundle);
-//		String withslashes = new Gson().toJson(serializeThisBundle);
-//		System.out.println(withslashes.replace("\\", ""));
-//		return withslashes.replace("\\", "");
 	}
 
 	/**
@@ -510,7 +497,6 @@ public class Transaction {
 		for (Object key : outputLTM.keySet()) {
 			output.put((String) key, outputLTM.get(key));
 		}
-		// NEEDED BECAUSE GOOGLE GSON IS WEIRD- RETURNS LINKEDHASHTREE
 
 		String recipientAddress = (String) info.get("address");
 		double amount = (double) info.get("amount");

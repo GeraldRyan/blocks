@@ -22,8 +22,10 @@ import com.pubnub.api.models.consumer.pubsub.files.PNFileEventResult;
 import com.pubnub.api.models.consumer.pubsub.message_actions.PNMessageActionResult;
 
 /**
- * Pubnub demo code for reference. Run it as main. 
+ * Pubnub demo code as copied from their website.
  * https://www.pubnub.com/docs/sdks/java
+ * 
+ * Run it as main.
  */
 public class PubNubDemoApp {
 	public static void main(String[] args) throws PubNubException {

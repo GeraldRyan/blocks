@@ -26,6 +26,10 @@
 			<param-name>contextConfigLocation</param-name>
 			<param-value>com.gerald.ryan.blocks</param-value>
 		</init-param>
+		<init-param>
+			<param-name>throwExceptionIfNoHandlerFound</param-name>
+			<param-value>true</param-value>
+		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
@@ -38,12 +42,9 @@
 	</session-config>
 
 
-<!-- 	<jsp-config>
-		<jsp-property-group>
-			<url-pattern>*.jsp</url-pattern>
-			<trim-directive-whitespaces>true</trim-directive-whitespaces>
-		</jsp-property-group>
-	</jsp-config> -->
+	<!-- <jsp-config> <jsp-property-group> <url-pattern>*.jsp</url-pattern> 
+		<trim-directive-whitespaces>true</trim-directive-whitespaces> </jsp-property-group> 
+		</jsp-config> -->
 
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>

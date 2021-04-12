@@ -23,6 +23,8 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.gerald.ryan.blocks.Service.BlockchainService;
 import com.gerald.ryan.blocks.Service.TransactionService;
@@ -39,7 +42,6 @@ import com.gerald.ryan.blocks.Service.UserService;
 import com.gerald.ryan.blocks.Service.WalletService;
 import com.gerald.ryan.blocks.entity.Blockchain;
 import com.gerald.ryan.blocks.entity.Login;
-import com.gerald.ryan.blocks.entity.Message;
 import com.gerald.ryan.blocks.entity.Transaction;
 import com.gerald.ryan.blocks.entity.TransactionPool;
 import com.gerald.ryan.blocks.entity.User;
@@ -163,4 +165,16 @@ public class HomeController {
 		}
 		return "false";
 	}
+
+	/**
+	 * 404 pages redirect to home
+	 */
+	@ControllerAdvice
+	public class ControllerAdvisor {
+		@ExceptionHandler(NoHandlerFoundException.class)
+		public String handle(Exception ex) {
+			return "404";	
+		}
+	}
+
 }

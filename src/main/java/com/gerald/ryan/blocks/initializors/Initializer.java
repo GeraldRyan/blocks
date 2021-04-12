@@ -8,6 +8,7 @@ import java.security.NoSuchProviderException;
 
 import com.gerald.ryan.blocks.Service.BlockchainService;
 import com.gerald.ryan.blocks.Service.TransactionService;
+import com.gerald.ryan.blocks.controller.Development;
 import com.gerald.ryan.blocks.entity.Blockchain;
 import com.gerald.ryan.blocks.entity.Transaction;
 import com.gerald.ryan.blocks.entity.TransactionPool;
@@ -18,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-// drop table blocksbychain; drop table block; drop table blockchain;
 public class Initializer {
 
 	/**
@@ -75,6 +75,7 @@ public class Initializer {
 		return l;
 	}
 
+	@Development
 	public static List<Transaction> postNTransactions(int n, String senderAddress) throws NoSuchAlgorithmException,
 			NoSuchProviderException, InvalidAlgorithmParameterException, InvalidKeyException, IOException {
 		List<Transaction> l = new ArrayList();

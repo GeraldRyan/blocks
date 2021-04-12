@@ -33,8 +33,14 @@ import com.google.gson.reflect.TypeToken;
 public class SyncToNetwork {
 
 	/**
-	 * Returns blockchain's chain in the network from default network node
-	 * (localhost:8080 here which is self!!!). Not used in this node for demo
+	 * Returns blockchain's chain in the network from remote node as specified by
+	 * URL.
+	 * 
+	 * In future include set or dictionary of URLs.
+	 * 
+	 * Tight coupled method is slated for deprication and erasure once safe to do
+	 * so.
+	 * 
 	 * purposes, but used in second server repo instance.
 	 * 
 	 * @return
@@ -51,8 +57,8 @@ public class SyncToNetwork {
 			BlocksInChainInvalidException, IllegalStateException, ClientProtocolException, IOException {
 		ArrayList<Block> chain;
 		CloseableHttpClient httpclient = HttpClients.createDefault();
-		
-		// DOES THIS BREAK HEROKU? 
+
+		// DOES THIS BREAK HEROKU?
 		HttpGet httpGet = new HttpGet("http://localhost:8080/CaseStudy/blockchain");
 		CloseableHttpResponse response;
 		String response_string = "";
@@ -65,8 +71,6 @@ public class SyncToNetwork {
 			response_string += next;
 		}
 		String jsonString = response_string.replaceAll("</?[^>]+>", "").trim();
-//			System.out.println(jsonString);
-
 		try {
 			chain = new Gson().fromJson(jsonString, new TypeToken<List<Block>>() {
 			}.getType());
@@ -107,11 +111,13 @@ public class SyncToNetwork {
 				String next = sc.nextLine();
 				response_string += next;
 			}
+			// this should not be necessary anymore as we're submitting (and expecting
+			// submission of) JSON
 			String jsonString = response_string.replaceAll("</?[^>]+>", "").trim();
 			chain = new Gson().fromJson(jsonString, new TypeToken<List<Block>>() {
 			}.getType());
 		} catch (IOException e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 			return null;
 		} catch (Exception e) {
 			return null;

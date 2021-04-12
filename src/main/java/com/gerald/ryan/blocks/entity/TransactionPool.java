@@ -105,7 +105,6 @@ public class TransactionPool {
 		}
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");
-//		String transactionData = "[";
 		this.transactionMap.forEach((uuid, t) -> {
 			sb.append(((Transaction) t).__repr__());
 			sb.append(",");

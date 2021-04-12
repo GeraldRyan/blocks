@@ -41,7 +41,6 @@ public class User {
 		this.hint = hint;
 		this.answer = answer;
 		this.email = email;
-//		this.wallet = null;  // is this necessary? 
 	}
 
 	public User() {

@@ -60,9 +60,9 @@ public class Wallet {
 	@Id
 	String ownerId; // maps to username
 	@Lob
-	PrivateKey privatekey; // try
+	PrivateKey privatekey;
 	@Lob
-	PublicKey publickey; // try
+	PublicKey publickey;
 	byte[] privatekeyByte; // for language agnosticism
 	byte[] publickeyByte; // for language agnosticism
 	double balance;
@@ -296,10 +296,6 @@ public class Wallet {
 
 	public static double getSTARTING_BALANCE() {
 		return STARTING_BALANCE;
-	}
-
-	public static void setSTARTING_BALANCE(double STARTING_BALANCE) {
-		STARTING_BALANCE = STARTING_BALANCE;
 	}
 
 	public PublicKey getPublickey() {

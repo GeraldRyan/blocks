@@ -38,12 +38,11 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * GR- This is an important class that provides a callback function for setting
- * up a pub nub listener Implemnet the methods below to achieve the
- * effects/responses you desire. Use this as a template as you will if you don't
- * want to change this original. Use it by passing pubnub instance
- * pubnub.addlistener(new PubNubSubCallback()). Takes zero args but you can make
- * it take specified args.
+ * Callback function that in PubNub official is inlined. This listener
+ * implements the handling methods for what to do when a message is received.
+ * 
+ * Can take zero args but be extended to take more args if you want it to have
+ * access to other data.
  */
 public class PubNubSubCallback extends com.pubnub.api.callbacks.SubscribeCallback {
 	Blockchain blockchain;
@@ -129,7 +128,8 @@ public class PubNubSubCallback extends com.pubnub.api.callbacks.SubscribeCallbac
 		System.out.println();
 		if (message.getChannel().equals("BLOCK_CHANNEL")) {
 //			String block_string = message.getMessage().toString().replaceAll("^\"|\"$|", "").replace("\\", ""); // no longer needed because .getAsString() fixes .toString() error
-			String block_string = message.getMessage().getAsString();
+			String block_string = message.getMessage().getAsString(); // note: toString() would be wrong in this case
+																		// (bad formatting)
 			ArrayList<Block> potential_chain = new ArrayList<Block>(blockchain.getChain());
 			Block deserialized_block = new Gson().fromJson(block_string, Block.class);
 			potential_chain.add(deserialized_block);
@@ -147,7 +147,7 @@ public class PubNubSubCallback extends com.pubnub.api.callbacks.SubscribeCallbac
 			} catch (BlocksInChainInvalidException e) {
 				System.err.println("DID NOT REPLACE CHAIN. At least one of the blocks in the chain is not valid");
 				System.err.println(
-						"Ignore the above if you mined the block yourself and it's just an echo from remote channel you broadcast to. Chain most likely already up to date. ");
+						"(Ignore the above if you mined the block yourself. You're just hearing your echo and you've already appended).");
 			} catch (GenesisBlockInvalidException e) {
 				System.err.println("DID NOT REPLACE CHAIN. Genesis block invalid exception");
 			}
@@ -157,9 +157,7 @@ public class PubNubSubCallback extends com.pubnub.api.callbacks.SubscribeCallbac
 			System.out.println(raw_transaction);
 			try {
 				Transaction transactionRestored = Transaction.fromJSONToTransaction(message.getMessage().getAsString());
-				System.err.println("New Transaction collected and unpacked from network broadcast");
-
-				// Won't be able to test this until I have another server up and running
+				System.err.println("New Transaction collected and unpacked from network broadcast PUBNUBSUBCALLBACK160");
 				if (new TransactionService().getTransactionService(transactionRestored.getUuid()) != null) {
 					new TransactionService().addTransactionService(transactionRestored);
 				}

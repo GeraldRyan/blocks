@@ -65,6 +65,9 @@ public class WalletController {
 	@GetMapping("")
 	public String getWallet(Model model) {
 		Wallet w = (Wallet) model.getAttribute("wallet");
+		if (w == null) {
+			return "redirect:/";
+		}
 		w = ws.updateWalletBalanceService(w);
 		model.addAttribute("wallet", w);
 		return "wallet/wallet";

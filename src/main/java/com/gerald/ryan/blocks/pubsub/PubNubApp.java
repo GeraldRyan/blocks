@@ -31,11 +31,15 @@ import com.pubnub.api.models.consumer.pubsub.PNSignalResult;
 import com.pubnub.api.models.consumer.pubsub.files.PNFileEventResult;
 import com.pubnub.api.models.consumer.pubsub.message_actions.PNMessageActionResult;
 
+// TODO ---- TOO MANY DARN VARIETIES OF THE SAME APP. NEED TO PARE DOWN TO ONE AND MAKE THE USER CONFORM TO THE SPEC. 
+// FIGURE OUT HOW THIS ALL WORKS BETTER TOO AND MAKE SURE MY CODE IS TIGHT AND THAT IT CAN WORK ON DEPLOY
+
 /**
  * 
  * Listener callback function to work with pubnub API
  * 
- * This class handles the publish/subscribe layer of the application, providing communication between the nodes of the blockchain network.
+ * This class handles the publish/subscribe layer of the application, providing
+ * communication between the nodes of the blockchain network.
  */
 public class PubNubApp {
 	private static String publish_key = "pub-c-74f31a3f-e3da-4cbe-81a6-02e2ba8744bd";
@@ -54,13 +58,13 @@ public class PubNubApp {
 			throws InterruptedException {
 		this.pn = new PubNub(pnConfiguration);
 		this.transactionPool = transactionPool;
-		TEST_CHANNEL = "TEST_CHANNEL";
-		BLOCK_CHANNEL = "BLOCK_CHANNEL";
-		CHANNELS = new HashMap<String, String>();
-		CHANNELS.put("BLOCK", "BLOCK_CHANNEL");
-		CHANNELS.put("TEST", "TEST_CHANNEL");
-		CHANNELS.put("GENERAL", "general");
-		CHANNELS.put("TRANSACTION", "TRANSACTION");
+		this.TEST_CHANNEL = "TEST_CHANNEL";
+		this.BLOCK_CHANNEL = "BLOCK_CHANNEL";
+		this.CHANNELS = new HashMap<String, String>();
+		this.CHANNELS.put("BLOCK", "BLOCK_CHANNEL");
+		this.CHANNELS.put("TEST", "TEST_CHANNEL");
+		this.CHANNELS.put("GENERAL", "general");
+		this.CHANNELS.put("TRANSACTION", "TRANSACTION");
 		this.pn = new PubNub(pnConfiguration);
 		this.pn.addListener(new PubNubSubCallback(blockchain, CHANNELS, transactionPool));
 		Thread.sleep(1000);
@@ -77,7 +81,7 @@ public class PubNubApp {
 		CHANNELS = cHANNELS;
 	}
 
-	/*
+	/**
 	 * Default constructor. Subscribes to general, TEST_CHANNEL and BLOCK_CHANNEL
 	 * channels automatically.
 	 */
@@ -86,12 +90,12 @@ public class PubNubApp {
 		PNConfiguration pnConfiguration = new PNConfiguration();
 		pnConfiguration.setSubscribeKey(subscribe_key);
 		pnConfiguration.setPublishKey(publish_key);
-		pnConfiguration.setUuid("sdfdvsdvsdv"); // unique UUID
+		pnConfiguration.setUuid("BeanMaster");
 		this.transactionPool = transactionPool;
 		TEST_CHANNEL = "TEST_CHANNEL";
 		BLOCK_CHANNEL = "BLOCK_CHANNEL";
 		ArrayList<String> channels = new ArrayList();
-		channels.add(TEST_CHANNEL); // duplicate functionality
+		channels.add(TEST_CHANNEL);
 		channels.add(BLOCK_CHANNEL);
 		channels.add("general");
 		CHANNELS = new HashMap<String, String>();
@@ -132,20 +136,27 @@ public class PubNubApp {
 		this.pn.subscribe().channels(new ArrayList<String>(CHANNELS.values())).execute();
 	}
 
-	/*
-	 * For publishing, what else.
+	/**
+	 * Publish to a channel a given message
+	 * 
+	 * @param channel
+	 * @param message
+	 * @throws PubNubException
 	 */
 	public void publish(String channel, String[] message) throws PubNubException {
 		this.pn.publish().channel(channel).message(message).sync();
+		// delete this version when safe. We only need String or at least Object
 	}
 
-	/*
-	 * Just an overload. Maybe can delete one of these at later date, tbd.
-	 */
 	public void publish(String channel, Object message) throws PubNubException {
 		this.pn.publish().channel(channel).message(message).sync();
 	}
 
+	/**
+	 * Subscribe to pubnub channel, e.g. BLOCK_CHANNEL or "TRANSACTION"
+	 * 
+	 * @param channel
+	 */
 	public void subscribe(String channel) {
 		this.pn.subscribe().channels(Collections.singletonList(channel)).execute();
 	}
@@ -154,6 +165,11 @@ public class PubNubApp {
 		this.pn.subscribe().channels(channels).execute();
 	}
 
+	/**
+	 * Unsubscribe to a channel
+	 * 
+	 * @param channel
+	 */
 	public void unsubscribe(String channel) {
 		this.pn.unsubscribe().channels(Collections.singletonList(channel)).execute();
 	}
@@ -166,8 +182,7 @@ public class PubNubApp {
 		PNConfiguration pnConfiguration = new PNConfiguration();
 		pnConfiguration.setSubscribeKey(subscribe_key);
 		pnConfiguration.setPublishKey(publish_key);
-		pnConfiguration.setUuid("BEANMASTER"); // unique UUID
-
+		pnConfiguration.setUuid("BeanMaster"); // unique UUID
 		return new PubNub(pnConfiguration);
 
 	}
