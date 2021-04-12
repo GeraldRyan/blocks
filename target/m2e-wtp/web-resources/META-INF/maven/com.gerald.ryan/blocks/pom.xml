@@ -206,6 +206,17 @@
 
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
 		<finalName>blocks</finalName>
 		<plugins>
 			<plugin>
