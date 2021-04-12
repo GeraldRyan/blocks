@@ -101,9 +101,10 @@ public class HomeController {
 	 * community. Hoping this is the right method of doing so
 	 * 
 	 * @return
+	 * @throws InterruptedException
 	 */
 	@ModelAttribute("pubsubapp")
-	public PubNubApp startupApp() {
+	public PubNubApp startupApp() throws InterruptedException {
 		if (Config.LISTENING) {
 			return new PubNubApp();
 		}
