@@ -196,4 +196,9 @@ public class HomeController {
 		}
 	}
 
+	@GetMapping("/dashboard/")
+	public String getDashboard(Model model) {
+		return "templates/nightdb";
+	}
+
 }
