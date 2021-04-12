@@ -32,6 +32,7 @@ nav {
 		class="login-form text-center mx-auto my-4 w-64 flex shadow-lg flex-col bg-cover bg-center justify-content bg-white p-6 rounded pt-8 pb-8">
 		<div class="text-center text-gray-500 mb-6">
 			<h2>Register</h2>
+			<h2 style="color: red">${regmsg }</h2>
 		</div>
 		<div>
 			<form:form modelAttribute="user" method="post">

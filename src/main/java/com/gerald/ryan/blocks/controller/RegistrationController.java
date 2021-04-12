@@ -4,6 +4,8 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.gerald.ryan.blocks.Service.UserService;
 import com.gerald.ryan.blocks.Service.WalletService;
@@ -25,19 +28,21 @@ public class RegistrationController {
 	UserService userService = new UserService();
 
 	@GetMapping("")
-	public String showRegisterPage(Model model) {
+	public ModelAndView showRegisterPage(Model model) {
+		ModelAndView mv = new ModelAndView("registration/register");
 		model.addAttribute("user", new User());
-		return "registration/register";
+		return mv;
 	}
 
-	// TODO handle existing user, refresh page with message perhaps. Handle also
-	// null value password and username.
 	@PostMapping("")
-	public String registerUser(Model model, @ModelAttribute("user") User user)
+	public String registerUser(Model model, @ModelAttribute("user") @Valid User user)
 			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
-		System.out.println(user.toString());
-		System.out.println(user.getEmail());
-		System.out.println(user.getHint());
+
+		User existingUser = new UserService().getUserService(user.getUsername());
+		if (existingUser != null) {
+			model.addAttribute("regmsg", "User already exists. Choose another name");
+			return "registration/register";
+		}
 		new UserService().addUserService(user);
 		Wallet wallet = Wallet.createWallet(user.getUsername());
 		new WalletService().addWalletService(wallet);

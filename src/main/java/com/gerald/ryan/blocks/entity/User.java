@@ -1,10 +1,12 @@
 package com.gerald.ryan.blocks.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 import com.gerald.ryan.blocks.Service.UserService;
 import com.google.gson.Gson;
@@ -12,6 +14,8 @@ import com.google.gson.Gson;
 @Entity
 public class User {
 	@Id
+	@NotNull
+	@Column(unique = true)
 	String username;
 	String password;
 	String hint;
