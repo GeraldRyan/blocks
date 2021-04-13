@@ -211,7 +211,7 @@
 			<resource>
 				<directory>src</directory>
 				<includes>
-					<include>**</include>
+					<include>main/java/META-INF/persistence.xml</include>
 				</includes>
 			</resource>
 		</resources>
