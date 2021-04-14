@@ -12,7 +12,7 @@ public class Config {
 	double STARTING_BALANCE = 1000;
 	public static boolean BROADCAST_TRANSACTIONS = false; // not using
 	public static boolean BROADCAST_MINED_BLOCKS = false; // not using
-	public static boolean BROADCASTING = true;
+	public static boolean BROADCASTING = false;
 	public static boolean LISTENING = false;
 
 	public static long MILLISECONDS = 1;
