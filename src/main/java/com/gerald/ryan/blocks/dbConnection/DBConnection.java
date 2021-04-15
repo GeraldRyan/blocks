@@ -23,7 +23,7 @@ public abstract class DBConnection {
 		System.err.println("Persistence Class: " + Persistence.class);
 //		if (com.gerald.ryan.blocks.initializors.Config.DB_DEV) {
 		System.out.println("DEV ENV IS " + System.getenv("DEV"));
-		if (System.getenv("DEV").equals("true")) {
+		if (System.getenv("DEV") != null) {
 			System.out.println("Running local database");
 			this.emf = Persistence.createEntityManagerFactory(pUNameDev);
 		} else {
