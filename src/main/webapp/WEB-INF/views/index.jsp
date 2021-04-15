@@ -6,8 +6,8 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Index Page</title>
-<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
-	rel="stylesheet">
+<!-- <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
+	rel="stylesheet"> -->
 <style type="text/css">
 body {
 	background-color: #3D3D3D;
@@ -28,15 +28,15 @@ nav {
 	margin: 4rem;
 }
 
-h1 {
+h1, .h1 {
 	font-size: 3rem;
 }
 
-h2 {
+h2, .h2 {
 	font-size: 2.6rem;
 }
 
-h3 {
+h3, .h3 {
 	font-weight: bold;
 	font-size: 2.5rem;
 }
@@ -56,7 +56,7 @@ h3 {
 </head>
 <body class="text-white">
 	<jsp:include page="common/navbar.jsp"></jsp:include>
-	<nav>
+	<%-- 	<nav>
 		<c:if test="${isloggedin == true }">
 			<a href="./logout">Logout</a>
 		</c:if>
@@ -66,7 +66,7 @@ h3 {
 			</nav>
 		</c:if>
 
-	</nav>
+	</nav> --%>
 	<c:if test="${isloggedin == false }">
 		<div class="m-auto text-center">
 			<!-- 			<p class="text-2xl m-auto text-center text-red-700">You are not
@@ -99,9 +99,9 @@ h3 {
 
 
 	<c:if test="${isloggedin == true }">
-		<h1>Welcome to the club ${user.getUsername()}</h1>
+		<h1 class="h1">Welcome to the club ${user.getUsername()}</h1>
 
-		<h2>Some things to do</h2>
+		<h2 class="h2">Some things you can do</h2>
 
 		<a class="text-4xl text-green-700" href="./wallet/">Open Your
 			wallet</a>
