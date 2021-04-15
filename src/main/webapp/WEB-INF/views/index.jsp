@@ -55,6 +55,7 @@ h3 {
 
 </head>
 <body class="text-white">
+	<jsp:include page="common/navbar.jsp"></jsp:include>
 	<nav>
 		<c:if test="${isloggedin == true }">
 			<a href="./logout">Logout</a>

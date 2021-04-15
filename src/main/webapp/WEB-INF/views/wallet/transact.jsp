@@ -37,6 +37,7 @@ input {
 </style>
 </head>
 <body class="mx-auto text-center">
+	<jsp:include page="../common/navbar.jsp"></jsp:include>
 	<nav class="flex justify-around mb-10 text-2xl">
 
 		<a href="/blocks">Home</a> <br> <a href="/blocks/blockchain/">Our

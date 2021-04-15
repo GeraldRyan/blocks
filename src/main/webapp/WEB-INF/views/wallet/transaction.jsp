@@ -9,6 +9,7 @@
 <title>Index Page</title>
 </head>
 <body>
+	<jsp:include page="../common/navbar.jsp"></jsp:include>
 	<h1>Transact on the blockchain</h1>
 	<a href="/blocks">Home</a>
 	<br>

@@ -185,6 +185,16 @@ public class HomeController {
 		return "false";
 	}
 
+	@GetMapping("dashboard")
+	public String getDashboard(Model model) {
+		return "account/dashboard";
+	}
+
+	@GetMapping("navbar")
+	public String demoNavbar() {
+		return "common/navbar";
+	}
+
 	/**
 	 * 404 pages redirect to home
 	 */
@@ -195,10 +205,4 @@ public class HomeController {
 			return "404";
 		}
 	}
-
-	@GetMapping("/dashboard/")
-	public String getDashboard(Model model) {
-		return "templates/nightdb";
-	}
-
 }

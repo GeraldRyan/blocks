@@ -24,6 +24,7 @@ nav {
 </style>
 </head>
 <body>
+	<jsp:include page="../common/navbar.jsp"></jsp:include>
 	<nav>
 		<a href="./">Home</a>
 

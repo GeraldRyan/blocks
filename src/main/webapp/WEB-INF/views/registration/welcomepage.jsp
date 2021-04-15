@@ -45,6 +45,7 @@ h3, a {
 </head>
 
 <body>
+	<jsp:include page="../common/navbar.jsp"></jsp:include>
 	<h1>Welcome to the club ${user.getUsername() }</h1>
 
 	<br>

@@ -10,7 +10,8 @@
 <head>
 <meta charset="ISO-8859-1">
 <title></title>
-<link rel="stylesheet" href="./blockchain.css" type="text/css"></link>
+<link rel="style
+sheet" href="./blockchain.css" type="text/css"></link>
 <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
 	rel="stylesheet">
 <style type="text/css">

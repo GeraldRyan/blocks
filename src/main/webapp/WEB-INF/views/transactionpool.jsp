@@ -29,6 +29,7 @@ tr:nth-child(odd) {
 }
 </style>
 <body>
+	<jsp:include page="./common/navbar.jsp"></jsp:include>
 	<h1>Transaction Pool</h1>
 	<h2>Note this displays transactions broken down by individual, for
 		uniform display in table format. It is not displayed in bundles of
