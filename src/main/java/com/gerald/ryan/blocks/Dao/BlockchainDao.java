@@ -59,6 +59,8 @@ public class BlockchainDao extends DBConnection implements BlockchainDaoI {
 		} catch (NoResultException e) {
 			System.err.println("No result found for blockchain. Returning NULL from query for safety");
 			return null;
+		} finally {
+			this.disconnect();
 		}
 		return blockchain;
 	}
@@ -74,14 +76,12 @@ public class BlockchainDao extends DBConnection implements BlockchainDaoI {
 			Block new_block = blockchain.add_block(data);
 			em.persist(new_block);
 			em.getTransaction().commit();
-			System.out.println("Returning true");
-			this.connect();
 			return new_block;
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			this.connect();
 			e.printStackTrace();
 			return null;
+		} finally {
+			this.disconnect();
 		}
 	}
 
