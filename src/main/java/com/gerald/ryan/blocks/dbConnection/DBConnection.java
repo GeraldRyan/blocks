@@ -21,8 +21,10 @@ public abstract class DBConnection {
 	public void connect() {
 		System.err.println("Persistence Class: " + Persistence.class);
 		if (com.gerald.ryan.blocks.initializors.Config.DB_DEV) {
+			System.out.println("Running local database");
 			this.emf = Persistence.createEntityManagerFactory(pUNameDev);
 		} else {
+			System.out.println("Running production database");
 			this.emf = Persistence.createEntityManagerFactory(pUName);
 		}
 		this.em = emf.createEntityManager();

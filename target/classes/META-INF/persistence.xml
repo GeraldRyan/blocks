@@ -22,6 +22,8 @@
 				name="javax.persistence.schema-generation.database.action"
 				value="create" />
 			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.dialect"
+				value="org.hibernate.dialect.MariaDB103Dialect" />
 			<property name="hibernate.format_sql" value="true" />
 		</properties>
 	</persistence-unit>
@@ -39,12 +41,14 @@
 			<property name="javax.persistence.jdbc.user" value="root" />
 			<property name="javax.persistence.jdbc.password"
 				value="root" />
-			<property name="javax.persistence.cj.jdbc.driver"
-				value="com.mysql.jdbc.Driver" />
+			<property name="javax.persistence.jdbc.driver"
+				value="com.mysql.cj.jdbc.Driver" />
 			<property
 				name="javax.persistence.schema-generation.database.action"
 				value="create" />
 			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.dialect"
+				value="org.hibernate.dialect.MariaDB103Dialect" />
 			<property name="hibernate.format_sql" value="true" />
 		</properties>
 	</persistence-unit>

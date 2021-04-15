@@ -18,7 +18,7 @@ public class Config {
 	public static long MILLISECONDS = 1;
 	public static long SECONDS = 1000 * MILLISECONDS;
 
-	public static boolean DB_DEV = false;
+	public static boolean DB_DEV = true;
 
 	// 2 SECONDS MINE RATE FOR DEBUG AFTER WHICH IT SHOULD ADJUST DIFFICULTY
 	public static long MINE_RATE = 2 * SECONDS;

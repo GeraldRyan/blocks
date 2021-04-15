@@ -32,11 +32,11 @@ nav {
 	z-index: -10;
 }
 
-h1 {
+h1, .h1 {
 	font-size: 4rem;
 }
 
-h3, a {
+h3, a, .h3 {
 	font-size: 3rem;
 	color: darkgreen;
 	text-decoration: none;
@@ -46,11 +46,11 @@ h3, a {
 
 <body>
 	<jsp:include page="../common/navbar.jsp"></jsp:include>
-	<h1>Welcome to the club ${user.getUsername() }</h1>
+	<h1 class="h1">Welcome to the club ${user.getUsername() }</h1>
 
 	<br>
 
-	<h3>
+	<h3 class="h3">
 		We created a <a href="./wallet/">Wallet</a> for you and initialized it
 		with 1.000 beancoin. Enjoy
 	</h3>
