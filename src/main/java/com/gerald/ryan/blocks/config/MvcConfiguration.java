@@ -1,5 +1,22 @@
 package com.gerald.ryan.blocks.config;
 
+/** 
+ * I BELEIVE THIS IS NOT BEING USED! 
+ *  * I BELEIVE THIS IS NOT BEING USED! 
+ *   * I BELEIVE THIS IS NOT BEING USED! 
+ *    * I BELEIVE THIS IS NOT BEING USED! 
+ *     * I BELEIVE THIS IS NOT BEING USED! 
+ *      * I BELEIVE THIS IS NOT BEING USED! 
+ *       * I BELEIVE THIS IS NOT BEING USED! 
+ *        * I BELEIVE THIS IS NOT BEING USED! 
+ *         * I BELEIVE THIS IS NOT BEING USED! 
+ *          * I BELEIVE THIS IS NOT BEING USED! 
+ *           * I BELEIVE THIS IS NOT BEING USED! 
+ *            * I BELEIVE THIS IS NOT BEING USED! 
+ *             * I BELEIVE THIS IS NOT BEING USED! 
+ *      WAS TRYING TO GET PERSISTENCE PROVIDER WORKING ON HEROKU, FROM 500 ERROR. 
+ *      TURNS OUT LOCATION OF META-INF WAS THE ISSUE. CAN PROBABLY DELETE
+ */
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

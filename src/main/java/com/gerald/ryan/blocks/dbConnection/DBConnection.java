@@ -10,15 +10,21 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import jdk.nashorn.internal.runtime.regexp.joni.Config;
+
 public abstract class DBConnection {
 	protected EntityManagerFactory emf = null;
 	protected EntityManager em = null;
 	private String pUName = "blocks";
+	private String pUNameDev = "blocks-dev";
 
 	public void connect() {
-		System.err.println("Persistence Provider: " + Persistence.PERSISTENCE_PROVIDER);
 		System.err.println("Persistence Class: " + Persistence.class);
-		this.emf = Persistence.createEntityManagerFactory(pUName);
+		if (com.gerald.ryan.blocks.initializors.Config.DB_DEV) {
+			this.emf = Persistence.createEntityManagerFactory(pUNameDev);
+		} else {
+			this.emf = Persistence.createEntityManagerFactory(pUName);
+		}
 		this.em = emf.createEntityManager();
 	}
 
