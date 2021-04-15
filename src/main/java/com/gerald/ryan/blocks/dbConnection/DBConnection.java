@@ -17,6 +17,7 @@ public abstract class DBConnection {
 	protected EntityManager em = null;
 	private String pUName = "blocks";
 	private String pUNameDev = "blocks-dev";
+	public static int openConnectionCount = 0;
 
 	public void connect() {
 		System.err.println("Persistence Class: " + Persistence.class);
@@ -30,6 +31,8 @@ public abstract class DBConnection {
 			this.emf = Persistence.createEntityManagerFactory(pUName);
 		}
 		this.em = emf.createEntityManager();
+		DBConnection.openConnectionCount++;
+		System.out.println("Number of Entity Manager instances (Connections): " + DBConnection.openConnectionCount);
 	}
 
 	public void disconnect() {
@@ -39,6 +42,8 @@ public abstract class DBConnection {
 		if (this.emf != null) {
 			emf.close();
 		}
+		DBConnection.openConnectionCount--;
+		System.out.println("Number of Entity Manager instances (Connections): " + DBConnection.openConnectionCount);
 	}
 
 	/**

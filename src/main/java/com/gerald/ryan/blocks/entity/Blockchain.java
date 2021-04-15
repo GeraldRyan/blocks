@@ -49,7 +49,7 @@ public class Blockchain {
 	long date_created;
 	long date_last_modified;
 	int length_of_chain;
-	@OneToMany(targetEntity = Block.class, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(targetEntity = Block.class, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	List<Block> chain;
 
 	/**
