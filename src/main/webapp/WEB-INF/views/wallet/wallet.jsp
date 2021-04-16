@@ -40,11 +40,11 @@ nav {
 	z-index: -10;
 }
 
-h1 {
+h1, .h1 {
 	font-size: 4rem;
 }
 
-h3 {
+h3, .h3 {
 	font-size: 2rem;
 }
 </style>
@@ -70,7 +70,7 @@ h3 {
 	<nav>
 		<a href="/blocks">Home</a>
 	</nav>
-	<h1>Your Wallet</h1>
+	<h1 class="h1">Your Wallet</h1>
 
 	<div class="card">
 		<div class="inline">
@@ -88,9 +88,13 @@ h3 {
 				value="${wallet.getBalance()}">
 			</fmt:formatNumber>
 		</p>
+		<p>Get Public Key</p>
 		<p>public key: ${wallet.getPublickey().toString() }</p>
+		<p>Get Private Key</p>
+		<p>DO NOT SHARE THIS WITH OTHERS!!</p>
+		<p>private key: ${wallet.getPrivatekey().toString() }</p>
 	</div>
-	<h3>
+	<h3 class="h3">
 		<a class="text-green-700" href="./transact/">Make a transaction</a>
 	</h3>
 	<br>

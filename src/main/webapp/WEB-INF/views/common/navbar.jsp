@@ -106,7 +106,7 @@ nav {
 								id="user-menu-button" aria-expanded="false" aria-haspopup="true">
 								<span class="sr-only">Open user menu</span> <img
 									class="h-8 w-8 rounded-full"
-									src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+									src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn1.iconfinder.com%2Fdata%2Ficons%2Fbusiness-users%2F512%2Fcircle-512.png&f=1&nofb=1"
 									alt="">
 							</button>
 						</div>
