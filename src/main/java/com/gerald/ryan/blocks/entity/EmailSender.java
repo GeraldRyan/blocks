@@ -14,7 +14,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.hibernate.mapping.Map;
 
-import com.gerald.ryan.blocks.config.PrivateConfig;
+//import com.gerald.ryan.blocks.config.PrivateConfig;
 import com.gerald.ryan.blocks.utilities.StringUtils;
 
 public class EmailSender {
@@ -62,10 +62,10 @@ public class EmailSender {
 		HashMap<String, String> body = new HashMap<>();
 		body.put("subject", "Your private key");
 		body.put("text", "Send from java application just a simple text email");
-		if (!PrivateConfig.fromEmail.equals(null) && !PrivateConfig.emailPassword.equals(null)) {
-			EmailSender.sendEmail(PrivateConfig.fromEmail, PrivateConfig.emailPassword, "gerald.ryan40@yahoo.com",
-					body);
-		}
+//		if (!PrivateConfig.fromEmail.equals(null) && !PrivateConfig.emailPassword.equals(null)) {
+//			EmailSender.sendEmail(PrivateConfig.fromEmail, PrivateConfig.emailPassword, "gerald.ryan40@yahoo.com",
+//					body);
+//		}
 	}
 
 }
