@@ -5,7 +5,7 @@
 	<display-name>blocks</display-name>
 	<context-param>
 		<param-name>contextClass</param-name>
-		<param-value>
+		<param-value	>
 			org.springframework.web.context.support.AnnotationConfigWebApplicationContext
 		</param-value>
 	</context-param>

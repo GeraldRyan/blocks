@@ -27,9 +27,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.gerald.ryan.blocks.Service.TransactionService;
+import com.gerald.ryan.blocks.Service.UserService;
 import com.gerald.ryan.blocks.Service.WalletService;
+import com.gerald.ryan.blocks.entity.EmailSender;
 import com.gerald.ryan.blocks.entity.Transaction;
 import com.gerald.ryan.blocks.entity.TransactionPool;
+import com.gerald.ryan.blocks.entity.User;
 import com.gerald.ryan.blocks.entity.Wallet;
 import com.gerald.ryan.blocks.initializors.Config;
 import com.gerald.ryan.blocks.initializors.Initializer;
@@ -39,7 +42,7 @@ import com.pubnub.api.PubNubException;
 
 @Controller
 @RequestMapping("wallet")
-@SessionAttributes({ "wallet", "latesttransaction", "pool", "username", "blockchain" })
+@SessionAttributes({ "wallet", "latesttransaction", "pool", "username", "user", "blockchain" })
 
 /**
  * ./transact page is for making transactions, GET or POST Completing the form
@@ -71,6 +74,29 @@ public class WalletController {
 		w = ws.updateWalletBalanceService(w);
 		model.addAttribute("wallet", w);
 		return "wallet/wallet";
+	}
+
+	@PostMapping("")
+	public String postWalletEmailSent(Model model) {
+		Wallet w = (Wallet) model.getAttribute("wallet");
+		if (w == null) {
+			return "redirect:/";
+		}
+		w = ws.updateWalletBalanceService(w);
+		model.addAttribute("wallet", w);
+		emailPrivateKey(model);
+		return "wallet/wallet";
+	}
+
+	public void emailPrivateKey(Model model) {
+		HashMap<String, String> body = new HashMap();
+		body.put("subject", "Your Private key");
+		body.put("text", "Private Key");
+		Object privateKey = ((Wallet) model.getAttribute("wallet")).getPrivatekey().getEncoded();
+		String userEmail = ((User) model.getAttribute("user")).getEmail();
+		String sender = System.getenv("email");
+		String password = System.getenv("password");
+		EmailSender.sendEmail(sender, password, userEmail, body);
 	}
 
 	/**

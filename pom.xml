@@ -186,6 +186,16 @@
 		<!-- use in jsp -->
 
 
+		<!-- https://mvnrepository.com/artifact/com.sun.mail/javax.mail -->
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+
+
+
+
 	</dependencies>
 
 	<repositories>
@@ -207,14 +217,8 @@
 
 	<build>
 
-<!-- 		<resources>
-			<resource>
-				<directory>src</directory>
-				<includes>
-					<include>main/java/META-INF/persistence.xml</include>
-				</includes>
-			</resource>
-		</resources> -->
+		<!-- <resources> <resource> <directory>src</directory> <includes> <include>main/java/META-INF/persistence.xml</include> 
+			</includes> </resource> </resources> -->
 		<finalName>blocks</finalName>
 		<plugins>
 			<plugin>

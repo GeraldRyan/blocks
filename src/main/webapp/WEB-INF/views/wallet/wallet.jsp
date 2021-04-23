@@ -90,9 +90,13 @@ h3, .h3 {
 		</p>
 		<p>Get Public Key</p>
 		<p>public key: ${wallet.getPublickey().toString() }</p>
-		<p>Get Private Key</p>
-		<p>DO NOT SHARE THIS WITH OTHERS!!</p>
-		<p>private key: ${wallet.getPrivatekey().toString() }</p>
+		<br> <br>
+		<p>Get your Private Key emailed to you</p>
+		<form action="./" method="POST">
+			<input type="submit" value="Submit">
+		</form>
+
+		<%-- <p>private key: ${wallet.getPrivatekey().toString() }</p> --%>
 	</div>
 	<h3 class="h3">
 		<a class="text-green-700" href="./transact/">Make a transaction</a>
